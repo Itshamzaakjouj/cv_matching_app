@@ -1,0 +1,41 @@
+[global]
+# Optimisations de performance
+developmentMode = false
+showErrorDetails = false
+
+[server]
+# Configuration du serveur pour de meilleures performances
+maxUploadSize = 200
+maxMessageSize = 200
+enableCORS = false
+enableXsrfProtection = true
+
+[browser]
+# Configuration du navigateur
+gatherUsageStats = false
+serverAddress = "localhost"
+serverPort = 8501
+
+[theme]
+# Thème optimisé
+primaryColor = "#667eea"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f0f2f6"
+textColor = "#262730"
+
+[client]
+# Configuration du client
+caching = true
+displayEnabled = true
+showErrorDetails = false
+
+[runner]
+# Configuration du runner
+magicEnabled = true
+installTracer = false
+fixMatplotlib = true
+
+[logger]
+# Configuration des logs
+level = "error"
+messageFormat = "%(asctime)s.%(msecs)03d %(levelname)s %(name)s: %(message)s"

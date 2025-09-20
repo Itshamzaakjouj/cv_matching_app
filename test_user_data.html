@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test des données utilisateur - TalentScope</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .data-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .data-item {
+            margin: 10px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 3px;
+        }
+        .label {
+            font-weight: bold;
+            color: #333;
+        }
+        .value {
+            color: #666;
+            margin-left: 10px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .clear-btn {
+            background: #dc3545;
+        }
+        .clear-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Test des données utilisateur - TalentScope</h1>
+        
+        <div class="data-section">
+            <h3>📊 Données actuelles dans localStorage</h3>
+            <div id="userDataDisplay">
+                <p>Chargement des données...</p>
+            </div>
+        </div>
+        
+        <div class="data-section">
+            <h3>🛠️ Actions de test</h3>
+            <button onclick="loadUserData()">🔄 Recharger les données</button>
+            <button onclick="createTestUser()">👤 Créer un utilisateur de test</button>
+            <button onclick="testProfilePage()">👤 Tester la page de profil</button>
+            <button onclick="debugLocalStorage()">🔍 Déboguer localStorage</button>
+            <button onclick="clearAllData()" class="clear-btn">🗑️ Effacer toutes les données</button>
+        </div>
+        
+        <div class="data-section">
+            <h3>📝 Instructions</h3>
+            <ol>
+                <li>Cliquez sur "Recharger les données" pour voir les données actuelles</li>
+                <li>Si vous n'avez pas de données, cliquez sur "Créer un utilisateur de test"</li>
+                <li>Retournez sur l'application et vérifiez que les données s'affichent correctement</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function loadUserData() {
+            const userData = localStorage.getItem('userData');
+            const userFullName = localStorage.getItem('userFullName');
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            
+            const display = document.getElementById('userDataDisplay');
+            
+            let html = '<div class="data-item"><span class="label">Authentifié:</span><span class="value">' + (isAuthenticated || 'Non') + '</span></div>';
+            html += '<div class="data-item"><span class="label">Nom complet (legacy):</span><span class="value">' + (userFullName || 'Non défini') + '</span></div>';
+            
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    html += '<div class="data-item"><span class="label">📧 Email:</span><span class="value">' + (user.email || 'Non défini') + '</span></div>';
+                    html += '<div class="data-item"><span class="label">👤 Nom complet:</span><span class="value">' + (user.fullName || 'Non défini') + '</span></div>';
+                    html += '<div class="data-item"><span class="label">🏢 Département:</span><span class="value">' + (user.department || 'Non défini') + '</span></div>';
+                    html += '<div class="data-item"><span class="label">💼 Poste:</span><span class="value">' + (user.position || 'Non défini') + '</span></div>';
+                    html += '<div class="data-item"><span class="label">📞 Téléphone:</span><span class="value">' + (user.phone || 'Non défini') + '</span></div>';
+                    html += '<div class="data-item"><span class="label">🕒 Dernière connexion:</span><span class="value">' + (user.loginTime || 'Non défini') + '</span></div>';
+                    html += '<div class="data-item"><span class="label">🔑 Session ID:</span><span class="value">' + (user.sessionId || 'Non défini') + '</span></div>';
+                } catch (e) {
+                    html += '<div class="data-item"><span class="label">❌ Erreur:</span><span class="value">Données corrompues</span></div>';
+                }
+            } else {
+                html += '<div class="data-item"><span class="label">❌ Aucune donnée:</span><span class="value">Aucune donnée utilisateur trouvée</span></div>';
+            }
+            
+            display.innerHTML = html;
+        }
+        
+        function createTestUser() {
+            const testUserData = {
+                email: "hafsa.elghazouani@example.com",
+                fullName: "Hafsa El Ghazouani",
+                department: "Ministère des Finances",
+                position: "Analyste RH",
+                phone: "+212 6 12 34 56 78",
+                loginTime: new Date().toISOString(),
+                sessionId: 'session_' + Date.now()
+            };
+            
+            localStorage.setItem('userData', JSON.stringify(testUserData));
+            localStorage.setItem('userFullName', testUserData.fullName);
+            localStorage.setItem('isAuthenticated', 'true');
+            
+            alert('✅ Utilisateur de test créé avec succès !\n\nNom: ' + testUserData.fullName + '\nEmail: ' + testUserData.email);
+            loadUserData();
+        }
+        
+        function testProfilePage() {
+            // Ouvrir la page de profil dans un nouvel onglet
+            window.open('/profile', '_blank');
+        }
+        
+        function debugLocalStorage() {
+            console.log('=== DÉBOGAGE LOCALSTORAGE ===');
+            console.log('userData:', localStorage.getItem('userData'));
+            console.log('userFullName:', localStorage.getItem('userFullName'));
+            console.log('isAuthenticated:', localStorage.getItem('isAuthenticated'));
+            
+            // Tester le parsing
+            const userData = localStorage.getItem('userData');
+            if (userData) {
+                try {
+                    const parsed = JSON.parse(userData);
+                    console.log('Données parsées:', parsed);
+                } catch (e) {
+                    console.error('Erreur de parsing:', e);
+                }
+            }
+        }
+        
+        function clearAllData() {
+            if (confirm('Êtes-vous sûr de vouloir effacer toutes les données utilisateur ?')) {
+                localStorage.removeItem('userData');
+                localStorage.removeItem('userFullName');
+                localStorage.removeItem('isAuthenticated');
+                alert('🗑️ Toutes les données ont été effacées');
+                loadUserData();
+            }
+        }
+        
+        // Charger les données au démarrage
+        window.onload = function() {
+            loadUserData();
+        };
+    </script>
+</body>
+</html>

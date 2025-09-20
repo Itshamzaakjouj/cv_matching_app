@@ -1,0 +1,488 @@
+/**
+ * Icônes SVG professionnelles pour TalentScope
+ * Remplace tous les emojis par des icônes modernes
+ */
+
+/* Icônes de navigation */
+.icon-home {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-dashboard {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-analysis {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-history {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-config {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-profile {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+/* Icônes d'actions */
+.icon-login {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-register {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-logout {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-edit {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-delete {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-save {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-cancel {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* Icônes de thème et langue */
+.icon-theme {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.icon-language {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* Icônes de métriques */
+.icon-metric {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-chart {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+/* Icônes de statut */
+.icon-success {
+    width: 16px;
+    height: 16px;
+    fill: #4CAF50;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-warning {
+    width: 16px;
+    height: 16px;
+    fill: #FF9800;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-error {
+    width: 16px;
+    height: 16px;
+    fill: #F44336;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* Icônes de fichiers */
+.icon-file {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-upload {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-download {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+/* Icônes d'interface */
+.icon-menu {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-close {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-arrow-right {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 6px;
+}
+
+.icon-arrow-down {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 6px;
+}
+
+/* Icônes de sécurité */
+.icon-lock {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-key {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-shield {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* Icônes d'utilisateur */
+.icon-user {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-avatar {
+    width: 40px;
+    height: 40px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Icônes de notification */
+.icon-bell {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-info {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* Icônes de recherche */
+.icon-search {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.icon-filter {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* Icônes de communication */
+.icon-email {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-phone {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* Icônes de configuration */
+.icon-settings {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-gear {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* Icônes de navigation avancée */
+.icon-arrow-left {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-refresh {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-plus {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-minus {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* Icônes de statut d'analyse */
+.icon-pending {
+    width: 16px;
+    height: 16px;
+    fill: #FF9800;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-completed {
+    width: 16px;
+    height: 16px;
+    fill: #4CAF50;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-failed {
+    width: 16px;
+    height: 16px;
+    fill: #F44336;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* Icônes de qualité */
+.icon-star {
+    width: 16px;
+    height: 16px;
+    fill: #FFD700;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-star-empty {
+    width: 16px;
+    height: 16px;
+    fill: #E0E0E0;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* Icônes de données */
+.icon-database {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-cloud {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-sync {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+

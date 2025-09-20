@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentScope - Analyse des CVs</title>
+    <link rel="icon" type="image/png" href="Logos/TalentScope.png">
+    <link rel="stylesheet" href="themes.css">
+    <link rel="stylesheet" href="professional-icons.css">
+    <script src="direct-translation.js"></script>
+    <script src="icon-replacer.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* Animations globales */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+
+        /* Sidebar optimisée */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 0 25px 25px 0;
+            padding: 30px 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: fixed;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo h1 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .logo p {
+            color: #6B7280;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-container img {
+            height: 40px;
+            width: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #6B7280;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-item i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .nav-item .nav-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-item .nav-label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-item .nav-desc {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        /* Profil utilisateur optimisé */
+        .user-profile-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            margin-top: auto;
+        }
+
+        .profile-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .profile-avatar {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        .profile-info {
+            margin-bottom: 15px;
+        }
+
+        .profile-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            font-size: 12px;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .profile-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .profile-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .profile-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Contenu principal optimisé */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 40px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .analysis-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .analysis-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .analysis-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        /* Statistiques optimisées */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            color: white;
+        }
+
+        .stat-icon.cvs { background: linear-gradient(135deg, #3B82F6, #1D4ED8); }
+        .stat-icon.average { background: linear-gradient(135deg, #10B981, #059669); }
+        .stat-icon.best { background: linear-gradient(135deg, #F59E0B, #D97706); }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #6B7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Layout côte à côte */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* Offre d'emploi */
+        .job-offer-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .job-offer-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .job-offer-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .job-offer-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .job-details {
+            background: #F8FAFC;
+            border-radius: 16px;
+            padding: 25px;
+            border-left: 5px solid #3B82F6;
+        }
+
+        .job-detail-item {
+            margin-bottom: 20px;
+        }
+
+        .job-detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .job-detail-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .job-detail-value {
+            font-size: 16px;
+            color: #6B7280;
+            line-height: 1.6;
+        }
+
+        /* Résultats optimisés */
+        .results-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .results-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .sort-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .sort-btn {
+            padding: 8px 16px;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
+            background: white;
+            color: #6B7280;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sort-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .sort-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        /* Liste des CVs optimisée */
+        .cv-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cv-item {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #F3F4F6;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cv-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .cv-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--cv-color, #E5E7EB);
+        }
+
+        .cv-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .cv-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cv-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #F3F4F6, #E5E7EB);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #6B7280;
+        }
+
+        .cv-details h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .cv-details p {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .cv-score {
+            text-align: right;
+        }
+
+        .score-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--cv-color, #6B7280);
+            margin-bottom: 4px;
+        }
+
+        .score-category {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--cv-color, #6B7280);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cv-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #F3F4F6;
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: inline-flex !important;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-width: 140px;
+            justify-content: center;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .btn-view {
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            color: white;
+        }
+
+        .btn-details {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Analyse détaillée */
+        .analysis-details {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #F3F4F6;
+        }
+
+        .analysis-section {
+            margin-bottom: 20px;
+        }
+
+        .analysis-section h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .analysis-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .analysis-tag {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tag-strength {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .tag-weakness {
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+        }
+
+        .tag-recommendation {
+            background: rgba(59, 130, 246, 0.1);
+            color: #1D4ED8;
+        }
+
+        /* Actions en bas */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Modal optimisé */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #F3F4F6;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .close {
+            font-size: 28px;
+            font-weight: bold;
+            color: #6B7280;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #EF4444;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+                border-radius: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .job-offer-container,
+            .results-container {
+                padding: 20px;
+            }
+            
+            .cv-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .cv-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-container">
+                <img src="Logos/TalentScope.png" alt="TalentScope">
+                <img src="Logos/MEF2.png" alt="Ministère">
+            </div>
+            <h1>TalentScope</h1>
+            <p>Ministère de l'Économie et des Finances</p>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-title">Navigation</div>
+            <a href="/dashboard" class="nav-item">
+                <i class="icon-home"></i>
+                <div class="nav-text">
+                    <div class="nav-label">Accueil</div>
+                    <div class="nav-desc">Page principale</div>
+                </div>
+            </a>
+            <a href="/dashboard" class="nav-item">
+                <i class="icon-dashboard"></i>
+                <div class="nav-text">
+                    <div class="nav-label">Tableau de bord</div>
+                    <div class="nav-desc">Vue d'ensemble</div>
+                </div>
+            </a>
+            <a href="/analysis" class="nav-item active">
+                <i class="icon-star"></i>
+                <div class="nav-text">
+                    <div class="nav-label">Nouvelle analyse</div>
+                    <div class="nav-desc">Analyser des CVs</div>
+                </div>
+            </a>
+            <a href="/dashboard" class="nav-item">
+                <i class="icon-folder"></i>
+                <div class="nav-text">
+                    <div class="nav-label">CVs traités</div>
+                    <div class="nav-desc">Historique des analyses</div>
+                </div>
+            </a>
+            <a href="/dashboard" class="nav-item">
+                <i class="icon-settings"></i>
+                <div class="nav-text">
+                    <div class="nav-label">Configuration</div>
+                    <div class="nav-desc">Paramètres</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="user-profile-card">
+            <div class="profile-photo">
+                <svg class="profile-avatar" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
+            <div class="profile-info">
+                <div class="profile-name" id="user-fullname">Utilisateur</div>
+                <div class="profile-role">Ministère des Finances</div>
+            </div>
+            <div class="profile-actions">
+                <button class="profile-btn" onclick="editProfile()" title="Gestion du profil">
+                    <i class="icon-settings"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="main-content">
+        <div class="analysis-header">
+            <h1 class="analysis-title" data-translate="analysis.results_title">Voici les résultats de l'analyse de vos CVs</h1>
+            <p class="analysis-subtitle" data-translate="analysis.results_subtitle">Analyse intelligente basée sur l'algorithme ML avancé</p>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon cvs">
+                    <i class="icon-document"></i>
+                </div>
+                <div class="stat-value" id="totalCvs">0</div>
+                <div class="stat-label" data-translate="analysis.cvs_analyzed">CVs Analysés</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon average">
+                    <i class="icon-chart"></i>
+                </div>
+                <div class="stat-value" id="averageScore">0%</div>
+                <div class="stat-label" data-translate="analysis.average_score">Score Moyen</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon best">
+                    <i class="icon-star"></i>
+                </div>
+                <div class="stat-value" id="bestMatch">0%</div>
+                <div class="stat-label" data-translate="analysis.best_match">Meilleur Match</div>
+            </div>
+        </div>
+
+        <!-- Layout principal côte à côte -->
+        <div class="main-layout">
+            <!-- Offre d'emploi -->
+            <div class="job-offer-container">
+                <div class="job-offer-header">
+                    <div class="job-offer-icon">
+                        <i class="icon-briefcase"></i>
+                    </div>
+                    <h2 class="job-offer-title" data-translate="analysis.job_offer">Offre d'emploi</h2>
+                </div>
+                
+                <div class="job-details">
+                    <div class="job-detail-item">
+                        <div class="job-detail-label" data-translate="analysis.job_title">Titre</div>
+                        <div class="job-detail-value" id="jobTitleDisplay">Data Scientist</div>
+                    </div>
+                    
+                    <div class="job-detail-item">
+                        <div class="job-detail-label" data-translate="analysis.job_description">Description</div>
+                        <div class="job-detail-value" id="jobDescriptionDisplay">
+                            Nous recherchons un Data Scientist avec expérience en Python, machine learning, 
+                            et analyse de données. Le candidat idéal devrait avoir des connaissances en pandas, 
+                            scikit-learn, et visualisation de données.
+                        </div>
+                    </div>
+                    
+                    <div class="job-detail-item">
+                        <div class="job-detail-label" data-translate="analysis.job_skills">Compétences</div>
+                        <div class="job-detail-value" id="jobSkillsDisplay">Machine learning, Python, SQL, Pandas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Résultats des CVs -->
+            <div class="results-container">
+                <div class="results-header">
+                    <h2 class="results-title" data-translate="analysis.cv_results">Résultats des CVs</h2>
+                    <div class="sort-options">
+                        <button class="sort-btn active" onclick="sortResults('score')" data-translate="analysis.sort_score">Par Score</button>
+                        <button class="sort-btn" onclick="sortResults('name')" data-translate="analysis.sort_name">Par Nom</button>
+                    </div>
+                </div>
+
+                <div class="cv-list" id="cvList">
+                    <!-- Les résultats seront générés ici -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="action-buttons">
+            <a href="/dashboard" class="btn btn-secondary">
+                <i class="icon-arrow-left"></i>
+                <span data-translate="analysis.back_dashboard">Retour au tableau de bord</span>
+            </a>
+            <a href="/analysis" class="btn btn-primary">
+                <i class="icon-plus"></i>
+                <span data-translate="analysis.new_analysis">Nouvelle analyse</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal pour voir le CV -->
+    <div id="cvModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="cvModalTitle">Contenu du CV</h2>
+                <span class="close" onclick="closeModal('cvModal')">&times;</span>
+            </div>
+            <div id="cvModalContent">
+                <!-- Contenu du CV sera affiché ici -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour l'analyse détaillée -->
+    <div id="analysisModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="analysisModalTitle">Analyse détaillée</h2>
+                <span class="close" onclick="closeModal('analysisModal')">&times;</span>
+            </div>
+            <div id="analysisModalContent">
+                <!-- Analyse détaillée sera affichée ici -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let analysisResults = [];
+        let currentSort = 'score';
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeUserProfile();
+            loadAnalysisResults();
+            
+            // Attendre que le gestionnaire de traduction soit chargé
+            setTimeout(() => {
+                if (window.directTranslationManager) {
+                    const savedLanguage = localStorage.getItem('language') || 'fr';
+                    window.directTranslationManager.applyLanguage(savedLanguage);
+                }
+            }, 100);
+        });
+
+        // Charger les résultats d'analyse
+        async function loadAnalysisResults() {
+            try {
+                // Récupérer les données depuis le localStorage ou l'API
+                const savedResults = localStorage.getItem('lastAnalysisResults');
+                if (savedResults) {
+                    analysisResults = JSON.parse(savedResults);
+                    displayResults();
+                } else {
+                    // Générer des résultats de démonstration
+                    generateDemoResults();
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des résultats:', error);
+                generateDemoResults();
+            }
+        }
+
+        // Générer des résultats de démonstration (limités à 4 CVs)
+        function generateDemoResults() {
+            const allResults = [
+                {
+                    filename: 'cv_Adam.pdf',
+                    score: 6,
+                    category: 'FAIBLE',
+                    color: '#EF4444',
+                    analysis: {
+                        strengths: ['Formation solide'],
+                        weaknesses: ['Expérience limitée', 'Compétences techniques insuffisantes'],
+                        recommendations: ['Formation en technologies requises', 'Projets pratiques recommandés']
+                    }
+                },
+                {
+                    filename: 'cv_Ali.pdf',
+                    score: 83,
+                    category: 'EXCELLENT',
+                    color: '#10B981',
+                    analysis: {
+                        strengths: ['Expertise technique excellente', 'Expérience pertinente', 'Certifications'],
+                        weaknesses: [],
+                        recommendations: ['Candidat idéal pour le poste']
+                    }
+                },
+                {
+                    filename: 'cv_Hafsa.pdf',
+                    score: 98,
+                    category: 'EXCELLENT',
+                    color: '#10B981',
+                    analysis: {
+                        strengths: ['Compétences avancées en IA', 'Formation de haut niveau', 'Projets innovants'],
+                        weaknesses: [],
+                        recommendations: ['Candidat exceptionnel', 'Priorité haute']
+                    }
+                },
+                {
+                    filename: 'cv_Hamza.pdf',
+                    score: 48,
+                    category: 'MOYEN',
+                    color: '#F59E0B',
+                    analysis: {
+                        strengths: ['Bases solides', 'Motivation'],
+                        weaknesses: ['Expérience limitée', 'Technologies à approfondir'],
+                        recommendations: ['Formation complémentaire', 'Mentorat recommandé']
+                    }
+                },
+                {
+                    filename: 'cv_Sophia.pdf',
+                    score: 42,
+                    category: 'MOYEN',
+                    color: '#F59E0B',
+                    analysis: {
+                        strengths: ['Compétences en analyse', 'Formation statistique'],
+                        weaknesses: ['Expérience technique limitée'],
+                        recommendations: ['Formation en programmation', 'Projets pratiques']
+                    }
+                },
+                {
+                    filename: 'cv_Yassine.pdf',
+                    score: 76,
+                    category: 'BON',
+                    color: '#06B6D4',
+                    analysis: {
+                        strengths: ['Expertise DevOps', 'Certifications', 'Expérience cloud'],
+                        weaknesses: ['Spécialisation limitée'],
+                        recommendations: ['Formation en data science', 'Projets transversaux']
+                    }
+                }
+            ];
+            
+            // Trier par score (du meilleur au moins bon) et prendre les 4 meilleurs
+            allResults.sort((a, b) => b.score - a.score);
+            analysisResults = allResults.slice(0, 4);
+            
+            console.log('CVs triés par score:', analysisResults.map(r => `${r.filename}: ${r.score}%`));
+            
+            displayResults();
+        }
+
+        // Afficher les résultats
+        function displayResults() {
+            updateStatistics();
+            renderCVList();
+        }
+
+        // Mettre à jour les statistiques
+        function updateStatistics() {
+            const totalCvs = analysisResults.length;
+            const scores = analysisResults.map(r => r.score);
+            const averageScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+            const bestMatch = Math.max(...scores);
+
+            document.getElementById('totalCvs').textContent = totalCvs;
+            document.getElementById('averageScore').textContent = Math.round(averageScore) + '%';
+            document.getElementById('bestMatch').textContent = Math.round(bestMatch) + '%';
+        }
+
+        // Rendre la liste des CVs
+        function renderCVList() {
+            const cvList = document.getElementById('cvList');
+            cvList.innerHTML = '';
+
+            analysisResults.forEach((result, index) => {
+                const cvItem = createCVItem(result, index);
+                cvList.appendChild(cvItem);
+            });
+        }
+
+        // Créer un élément CV
+        function createCVItem(result, index) {
+            const cvItem = document.createElement('div');
+            cvItem.className = 'cv-item';
+            cvItem.style.setProperty('--cv-color', result.color);
+
+            cvItem.innerHTML = `
+                <div class="cv-header">
+                    <div class="cv-info">
+                        <div class="cv-icon">
+                            <i class="icon-document"></i>
+                        </div>
+                        <div class="cv-details">
+                            <h3>${result.filename}</h3>
+                            <p>Analyse ML avancée</p>
+                        </div>
+                    </div>
+                    <div class="cv-score">
+                        <div class="score-value">${result.score}%</div>
+                        <div class="score-category">${result.category}</div>
+                    </div>
+                </div>
+                
+                <div class="analysis-details">
+                    <div class="analysis-section">
+                        <h4><i class="icon-check"></i> Points forts</h4>
+                        <div class="analysis-list">
+                            ${result.analysis.strengths.map(strength => 
+                                `<span class="analysis-tag tag-strength">${strength}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-section">
+                        <h4><i class="icon-warning"></i> Points d'amélioration</h4>
+                        <div class="analysis-list">
+                            ${result.analysis.weaknesses.map(weakness => 
+                                `<span class="analysis-tag tag-weakness">${weakness}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-section">
+                        <h4><i class="icon-lightbulb"></i> Recommandations</h4>
+                        <div class="analysis-list">
+                            ${result.analysis.recommendations.map(rec => 
+                                `<span class="analysis-tag tag-recommendation">${rec}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cv-actions" style="display: flex; gap: 15px; margin-top: 25px; padding-top: 20px; border-top: 1px solid #F3F4F6;">
+                    <button class="action-btn btn-view" onclick="viewCV('${result.filename}')" style="background: linear-gradient(135deg, #3B82F6, #1D4ED8); color: white; padding: 12px 24px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; min-width: 140px; justify-content: center;">
+                        <i class="icon-eye" style="font-size: 16px;"></i>
+                        Voir le CV
+                    </button>
+                    <button class="action-btn btn-details" onclick="viewDetailedAnalysis('${result.filename}')" style="background: linear-gradient(135deg, #10B981, #059669); color: white; padding: 12px 24px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; min-width: 140px; justify-content: center;">
+                        <i class="icon-chart" style="font-size: 16px;"></i>
+                        Analyse détaillée
+                    </button>
+                </div>
+            `;
+
+            return cvItem;
+        }
+
+        // Trier les résultats
+        function sortResults(sortBy) {
+            currentSort = sortBy;
+            
+            // Mettre à jour les boutons
+            document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Trier les résultats
+            analysisResults.sort((a, b) => {
+                switch (sortBy) {
+                    case 'score':
+                        return b.score - a.score; // Du meilleur au moins bon
+                    case 'name':
+                        return a.filename.localeCompare(b.filename);
+                    case 'category':
+                        return a.category.localeCompare(b.category);
+                    default:
+                        return 0;
+                }
+            });
+            
+            console.log('Résultats triés par', sortBy, ':', analysisResults.map(r => `${r.filename}: ${r.score}%`));
+            renderCVList();
+        }
+
+        // Voir le CV
+        function viewCV(filename) {
+            console.log('Ouverture du CV:', filename);
+            const modal = document.getElementById('cvModal');
+            const title = document.getElementById('cvModalTitle');
+            const content = document.getElementById('cvModalContent');
+            
+            title.textContent = `Contenu du CV - ${filename}`;
+            
+            // Simuler le contenu du CV avec plus de détails
+            content.innerHTML = `
+                <div style="padding: 25px; background: linear-gradient(135deg, #F8FAFC, #F1F5F9); border-radius: 16px; margin-bottom: 25px; border: 1px solid #E2E8F0;">
+                    <h3 style="color: #1E293B; margin-bottom: 20px; font-size: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="icon-document" style="color: #3B82F6; font-size: 24px;"></i>
+                        Contenu du CV - ${filename}
+                    </h3>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); margin-bottom: 20px;">
+                        <h4 style="color: #374151; margin-bottom: 15px; font-size: 16px;">📋 Informations personnelles</h4>
+                        <p style="color: #6B7280; line-height: 1.6; margin-bottom: 10px;">
+                            <strong>Nom:</strong> ${filename.replace('cv_', '').replace('.pdf', '')}<br>
+                            <strong>Email:</strong> ${filename.replace('cv_', '').replace('.pdf', '').toLowerCase()}@email.com<br>
+                            <strong>Téléphone:</strong> +212 6XX XXX XXX
+                        </p>
+                    </div>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); margin-bottom: 20px;">
+                        <h4 style="color: #374151; margin-bottom: 15px; font-size: 16px;">🎓 Formation</h4>
+                        <p style="color: #6B7280; line-height: 1.6;">
+                            Master en Informatique - Université Hassan II<br>
+                            Licence en Génie Logiciel - École Nationale Supérieure d'Informatique
+                        </p>
+                    </div>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+                        <h4 style="color: #374151; margin-bottom: 15px; font-size: 16px;">💼 Expérience professionnelle</h4>
+                        <p style="color: #6B7280; line-height: 1.6;">
+                            Développeur Full Stack - 3 ans d'expérience<br>
+                            Projets: Applications web, API REST, Bases de données
+                        </p>
+                    </div>
+                    
+                    <div style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #EFF6FF, #DBEAFE); border-radius: 12px; border-left: 4px solid #3B82F6;">
+                        <h4 style="color: #1E40AF; margin-bottom: 10px; font-size: 16px;">ℹ️ Note technique</h4>
+                        <p style="color: #1E3A8A; line-height: 1.6; margin: 0;">
+                            <strong>En production:</strong> Le contenu réel du PDF serait extrait et affiché ici 
+                            en utilisant des bibliothèques comme PyPDF2, pdfplumber ou pdfminer.
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        // Voir l'analyse détaillée
+        function viewDetailedAnalysis(filename) {
+            const result = analysisResults.find(r => r.filename === filename);
+            if (!result) return;
+            
+            const modal = document.getElementById('analysisModal');
+            const title = document.getElementById('analysisModalTitle');
+            const content = document.getElementById('analysisModalContent');
+            
+            title.textContent = `Analyse détaillée - ${filename}`;
+            
+            content.innerHTML = `
+                <div style="display: grid; gap: 25px;">
+                    <div style="background: linear-gradient(135deg, #F0F9FF, #E0F2FE); padding: 25px; border-radius: 16px; border-left: 5px solid #0EA5E9;">
+                        <h3 style="color: #0C4A6E; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                            <i class="icon-chart" style="color: #0EA5E9;"></i>
+                            Score Global: ${result.score}%
+                        </h3>
+                        <p style="color: #075985;">Catégorie: <strong>${result.category}</strong></p>
+                    </div>
+                    
+                    <div style="background: #F0FDF4; padding: 25px; border-radius: 16px; border-left: 5px solid #22C55E;">
+                        <h3 style="color: #14532D; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                            <i class="icon-check" style="color: #22C55E;"></i>
+                            Points Forts
+                        </h3>
+                        <ul style="color: #166534; list-style: none; padding: 0;">
+                            ${result.analysis.strengths.map(strength => 
+                                `<li style="padding: 8px 0; border-bottom: 1px solid #BBF7D0;">✓ ${strength}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #FEF2F2; padding: 25px; border-radius: 16px; border-left: 5px solid #EF4444;">
+                        <h3 style="color: #7F1D1D; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                            <i class="icon-warning" style="color: #EF4444;"></i>
+                            Points d'Amélioration
+                        </h3>
+                        <ul style="color: #991B1B; list-style: none; padding: 0;">
+                            ${result.analysis.weaknesses.map(weakness => 
+                                `<li style="padding: 8px 0; border-bottom: 1px solid #FECACA;">⚠ ${weakness}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #EFF6FF; padding: 25px; border-radius: 16px; border-left: 5px solid #3B82F6;">
+                        <h3 style="color: #1E3A8A; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                            <i class="icon-lightbulb" style="color: #3B82F6;"></i>
+                            Recommandations
+                        </h3>
+                        <ul style="color: #1E40AF; list-style: none; padding: 0;">
+                            ${result.analysis.recommendations.map(rec => 
+                                `<li style="padding: 8px 0; border-bottom: 1px solid #DBEAFE;">💡 ${rec}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        // Fermer les modals
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Fermer les modals en cliquant à l'extérieur
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Gestion du profil utilisateur
+        function initializeUserProfile() {
+            // Récupérer les données utilisateur depuis localStorage
+            const userData = localStorage.getItem('userData');
+            let userName = "Utilisateur"; // Nom par défaut
+            
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    if (user.fullName) {
+                        userName = user.fullName;
+                    } else if (user.email) {
+                        // Extraire le nom depuis l'email si pas de nom complet
+                        const emailParts = user.email.split('@')[0];
+                        userName = emailParts.charAt(0).toUpperCase() + emailParts.slice(1);
+                    }
+                } catch (e) {
+                    console.error('Erreur lors du parsing des données utilisateur:', e);
+                }
+            }
+            
+            const userFullNameElement = document.getElementById('user-fullname');
+            if (userFullNameElement) {
+                userFullNameElement.textContent = userName;
+            }
+            
+            // Sauvegarder le nom pour compatibilité
+            localStorage.setItem('userFullName', userName);
+        }
+
+        function editProfile() {
+            window.location.href = '/profile';
+        }
+    </script>
+</body>
+</html>

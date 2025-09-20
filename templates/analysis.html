@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvelle Analyse - TalentScope</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-building"></i>
+                <span>TalentScope</span>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item" data-page="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Tableau de Bord</span>
+            </a>
+            <a href="#" class="nav-item active" data-page="analysis">
+                <i class="fas fa-chart-line"></i>
+                <span>Nouvelle Analyse</span>
+            </a>
+            <a href="#" class="nav-item" data-page="cvs">
+                <i class="fas fa-file-pdf"></i>
+                <span>CVs Traités</span>
+            </a>
+            <a href="#" class="nav-item" data-page="config">
+                <i class="fas fa-cog"></i>
+                <span>Configuration</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <span class="user-name">Utilisateur</span>
+                    <span class="user-role">Admin</span>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="content-header">
+            <div class="header-left">
+                <h1>Nouvelle Analyse</h1>
+                <p>Analysez des CVs avec l'intelligence artificielle</p>
+            </div>
+        </header>
+
+        <!-- Analysis Steps -->
+        <div class="analysis-container">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Offre d'Emploi</h4>
+                        <p>Saisissez la description du poste</p>
+                    </div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Importation CVs</h4>
+                        <p>Uploadez les CVs à analyser</p>
+                    </div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Vérification</h4>
+                        <p>Vérifiez les données</p>
+                    </div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Résultats</h4>
+                        <p>Consultez les résultats</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step Content -->
+            <div class="step-content-container">
+                <!-- Step 1: Job Description -->
+                <div class="step-panel active" id="step-1">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-file-alt"></i> Description de l'Offre d'Emploi</h3>
+                        <p>Décrivez le poste et les compétences recherchées</p>
+                    </div>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <label for="jobDescription">Description du poste *</label>
+                            <textarea 
+                                id="jobDescription" 
+                                class="form-textarea" 
+                                placeholder="Exemple: Nous recherchons un Data Scientist avec 3+ ans d'expérience en Python, Machine Learning et analyse de données..."
+                                rows="8"
+                            ></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" onclick="nextStep(2)">
+                                <i class="fas fa-arrow-right"></i>
+                                Suivant
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: CV Upload -->
+                <div class="step-panel" id="step-2">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-upload"></i> Importation des CVs</h3>
+                        <p>Uploadez les CVs au format PDF</p>
+                    </div>
+                    <div class="panel-content">
+                        <div class="upload-zone" id="uploadZone">
+                            <div class="upload-content">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <h4>Glissez-déposez vos CVs ici</h4>
+                                <p>ou <span class="upload-link">cliquez pour sélectionner</span></p>
+                                <small>Formats acceptés: PDF (max 10MB par fichier)</small>
+                            </div>
+                            <input type="file" id="cvFiles" multiple accept=".pdf" style="display: none;">
+                        </div>
+                        <div class="uploaded-files" id="uploadedFiles" style="display: none;">
+                            <h4>Fichiers sélectionnés:</h4>
+                            <div class="file-list" id="fileList"></div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" onclick="prevStep(1)">
+                                <i class="fas fa-arrow-left"></i>
+                                Précédent
+                            </button>
+                            <button class="btn btn-primary" onclick="nextStep(3)" id="nextStep2" disabled>
+                                <i class="fas fa-arrow-right"></i>
+                                Suivant
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Verification -->
+                <div class="step-panel" id="step-3">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-check-circle"></i> Vérification des Données</h3>
+                        <p>Vérifiez les informations avant l'analyse</p>
+                    </div>
+                    <div class="panel-content">
+                        <div class="verification-grid">
+                            <div class="verification-card">
+                                <h4><i class="fas fa-file-alt"></i> Offre d'Emploi</h4>
+                                <div class="job-preview" id="jobPreview"></div>
+                            </div>
+                            <div class="verification-card">
+                                <h4><i class="fas fa-file-pdf"></i> CVs Sélectionnés</h4>
+                                <div class="cvs-preview" id="cvsPreview"></div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" onclick="prevStep(2)">
+                                <i class="fas fa-arrow-left"></i>
+                                Précédent
+                            </button>
+                            <button class="btn btn-primary" onclick="startAnalysis()">
+                                <i class="fas fa-play"></i>
+                                Lancer l'Analyse
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Results -->
+                <div class="step-panel" id="step-4">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-chart-bar"></i> Résultats de l'Analyse</h3>
+                        <p>Résultats de l'analyse IA des CVs</p>
+                    </div>
+                    <div class="panel-content">
+                        <div class="analysis-progress" id="analysisProgress" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <p id="progressText">Analyse en cours...</p>
+                        </div>
+                        <div class="results-container" id="resultsContainer" style="display: none;">
+                            <div class="results-summary">
+                                <h4>Résumé de l'Analyse</h4>
+                                <div class="summary-stats">
+                                    <div class="stat">
+                                        <span class="stat-value" id="totalAnalyzed">0</span>
+                                        <span class="stat-label">CVs Analysés</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value" id="averageScore">0%</span>
+                                        <span class="stat-label">Score Moyen</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value" id="bestScore">0%</span>
+                                        <span class="stat-label">Meilleur Score</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="results-list" id="resultsList"></div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" onclick="prevStep(3)">
+                                <i class="fas fa-arrow-left"></i>
+                                Précédent
+                            </button>
+                            <button class="btn btn-primary" onclick="newAnalysis()">
+                                <i class="fas fa-plus"></i>
+                                Nouvelle Analyse
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const sessionId = '{{ session_id }}';
+    </script>
+    <script src="/static/js/analysis.js"></script>
+</body>
+</html>

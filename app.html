@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentScope - Ministère de l'Économie et des Finances</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 100vh;
+            display: flex;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #3498db;
+        }
+
+        .nav-menu {
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #bdc3c7;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(52, 152, 219, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .user-info {
+            margin-top: auto;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-details p {
+            font-size: 0.8rem;
+            color: #bdc3c7;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .page {
+            display: none;
+            height: 100%;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-icon.blue { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .stat-icon.green { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .stat-icon.orange { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .stat-icon.purple { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+
+        .stat-content h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-content p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .analysis-steps {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .step-content h4 {
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-content p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+
+        .upload-zone {
+            border: 2px dashed #bdc3c7;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .upload-zone:hover {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+
+        .upload-zone i {
+            font-size: 3rem;
+            color: #bdc3c7;
+            margin-bottom: 1rem;
+        }
+
+        .upload-zone h4 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-zone p {
+            color: #7f8c8d;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #3498db;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .result-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .result-score {
+            background: #3498db;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .result-details {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-building"></i>
+                <span>TalentScope</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <div>
+                        <h4>Tableau de Bord</h4>
+                        <p>Vue d'ensemble</p>
+                    </div>
+                </div>
+                <div class="nav-item" data-page="analysis">
+                    <i class="fas fa-chart-line"></i>
+                    <div>
+                        <h4>Nouvelle Analyse</h4>
+                        <p>Analyser des CVs</p>
+                    </div>
+                </div>
+                <div class="nav-item" data-page="cvs">
+                    <i class="fas fa-file-pdf"></i>
+                    <div>
+                        <h4>CVs Traités</h4>
+                        <p>Historique des analyses</p>
+                    </div>
+                </div>
+                <div class="nav-item" data-page="config">
+                    <i class="fas fa-cog"></i>
+                    <div>
+                        <h4>Configuration</h4>
+                        <p>Paramètres</p>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <h4>Administrateur</h4>
+                    <p>Ministère des Finances</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Page -->
+            <div class="page active" id="dashboard">
+                <div class="page-header">
+                    <h1 class="page-title">Tableau de Bord</h1>
+                    <p class="page-subtitle">Vue d'ensemble de vos analyses et statistiques</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>24</h3>
+                            <p>Analyses Effectuées</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>156</h3>
+                            <p>CVs Traités</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>78.5%</h3>
+                            <p>Score Moyen</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>92.3%</h3>
+                            <p>Taux de Réussite</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-steps">
+                    <h3 style="margin-bottom: 1.5rem; color: #2c3e50;">Actions Rapides</h3>
+                    <div class="step" onclick="showPage('analysis')">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Nouvelle Analyse</h4>
+                            <p>Commencer une nouvelle analyse de CVs</p>
+                        </div>
+                    </div>
+                    <div class="step" onclick="showPage('cvs')">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Consulter l'Historique</h4>
+                            <p>Voir les analyses précédentes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Page -->
+            <div class="page" id="analysis">
+                <div class="page-header">
+                    <h1 class="page-title">Nouvelle Analyse</h1>
+                    <p class="page-subtitle">Analysez des CVs avec l'intelligence artificielle</p>
+                </div>
+
+                <div class="analysis-steps">
+                    <div class="form-group">
+                        <label for="jobDescription">Description de l'Offre d'Emploi</label>
+                        <textarea id="jobDescription" rows="4" placeholder="Décrivez le poste et les compétences recherchées..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Importation des CVs</label>
+                        <div class="upload-zone" onclick="document.getElementById('cvFiles').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h4>Glissez-déposez vos CVs ici</h4>
+                            <p>ou cliquez pour sélectionner des fichiers PDF</p>
+                        </div>
+                        <input type="file" id="cvFiles" multiple accept=".pdf" style="display: none;">
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn" onclick="startAnalysis()">
+                            <i class="fas fa-play"></i>
+                            Lancer l'Analyse
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CVs Page -->
+            <div class="page" id="cvs">
+                <div class="page-header">
+                    <h1 class="page-title">CVs Traités</h1>
+                    <p class="page-subtitle">Historique de vos analyses</p>
+                </div>
+
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-name">cv_hamza.pdf</div>
+                            <div class="result-score">91.3%</div>
+                        </div>
+                        <div class="result-details">
+                            <p><strong>Position:</strong> Data Scientist</p>
+                            <p><strong>Statut:</strong> Excellent</p>
+                            <p><strong>Date:</strong> 18/09/2024</p>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 91.3%"></div>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-name">cv_sophia.pdf</div>
+                            <div class="result-score">76.1%</div>
+                        </div>
+                        <div class="result-details">
+                            <p><strong>Position:</strong> Développeur Python</p>
+                            <p><strong>Statut:</strong> Très bon</p>
+                            <p><strong>Date:</strong> 17/09/2024</p>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 76.1%"></div>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-name">cv_adam.pdf</div>
+                            <div class="result-score">85.2%</div>
+                        </div>
+                        <div class="result-details">
+                            <p><strong>Position:</strong> Analyste Data</p>
+                            <p><strong>Statut:</strong> Excellent</p>
+                            <p><strong>Date:</strong> 16/09/2024</p>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85.2%"></div>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-name">cv_ali.pdf</div>
+                            <div class="result-score">72.8%</div>
+                        </div>
+                        <div class="result-details">
+                            <p><strong>Position:</strong> Ingénieur ML</p>
+                            <p><strong>Statut:</strong> Bon</p>
+                            <p><strong>Date:</strong> 15/09/2024</p>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 72.8%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration Page -->
+            <div class="page" id="config">
+                <div class="page-header">
+                    <h1 class="page-title">Configuration</h1>
+                    <p class="page-subtitle">Paramètres de l'application</p>
+                </div>
+
+                <div class="analysis-steps">
+                    <div class="form-group">
+                        <label for="language">Langue de l'Interface</label>
+                        <select id="language">
+                            <option value="fr">Français</option>
+                            <option value="en">English</option>
+                            <option value="ar">العربية</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="theme">Thème</label>
+                        <select id="theme">
+                            <option value="light">Clair</option>
+                            <option value="dark">Sombre</option>
+                            <option value="auto">Automatique</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notifications">Notifications</label>
+                        <select id="notifications">
+                            <option value="enabled">Activées</option>
+                            <option value="disabled">Désactivées</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-success">
+                            <i class="fas fa-save"></i>
+                            Sauvegarder
+                        </button>
+                        <button class="btn btn-secondary" style="margin-left: 1rem;">
+                            <i class="fas fa-undo"></i>
+                            Réinitialiser
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Add active class to selected nav item
+            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+        }
+
+        // Add click events to nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const pageId = item.getAttribute('data-page');
+                showPage(pageId);
+            });
+        });
+
+        // File upload handling
+        document.getElementById('cvFiles').addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                const uploadZone = document.querySelector('.upload-zone');
+                uploadZone.innerHTML = `
+                    <i class="fas fa-check-circle" style="color: #2ecc71;"></i>
+                    <h4>${files.length} fichier(s) sélectionné(s)</h4>
+                    <p>Prêt pour l'analyse</p>
+                `;
+            }
+        });
+
+        // Analysis simulation
+        function startAnalysis() {
+            const jobDescription = document.getElementById('jobDescription').value;
+            const files = document.getElementById('cvFiles').files;
+            
+            if (!jobDescription.trim()) {
+                alert('Veuillez saisir une description du poste');
+                return;
+            }
+            
+            if (files.length === 0) {
+                alert('Veuillez sélectionner au moins un fichier CV');
+                return;
+            }
+            
+            // Simulate analysis
+            const button = document.querySelector('#analysis .btn');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyse en cours...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-check"></i> Analyse terminée !';
+                button.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
+                
+                setTimeout(() => {
+                    showPage('cvs');
+                    button.innerHTML = '<i class="fas fa-play"></i> Lancer l\'Analyse';
+                    button.style.background = 'linear-gradient(135deg, #3498db, #2980b9)';
+                    button.disabled = false;
+                }, 2000);
+            }, 3000);
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('TalentScope Application loaded successfully!');
+        });
+    </script>
+</body>
+</html>

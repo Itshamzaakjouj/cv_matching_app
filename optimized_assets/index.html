@@ -1,0 +1,298 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TalentScope - Ministère des Finances</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>
+.gradient-bg {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.card-hover {
+transition: all 0.3s ease;
+}
+.card-hover:hover {
+transform: translateY(-4px);
+box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+}
+.btn-primary {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+transition: all 0.3s ease;
+}
+.btn-primary:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+</style></head><body class="bg-gray-50 min-h-screen"><header class="gradient-bg text-white py-6"><div class="container mx-auto px-6"><div class="flex items-center justify-between"><div><h1 class="text-3xl font-bold">TalentScope</h1><p class="text-blue-100">Ministère de l'Économie et des Finances</p></div><div class="flex items-center space-x-4"><span class="text-sm">Utilisateur</span><div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center"><span class="text-sm font-bold">U</span></div></div></div></div></header><nav class="bg-white shadow-sm border-b"><div class="container mx-auto px-6"><div class="flex space-x-8 py-4"><button onclick="showPage('dashboard')" class="nav-item px-4 py-2 rounded-lg font-medium text-blue-600 bg-blue-50">
+🏠 Dashboard
+</button><button onclick="showPage('analysis')" class="nav-item px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
+📊 Nouvelle Analyse
+</button><button onclick="showPage('comparison')" class="nav-item px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
+👥 Comparaison
+</button><button onclick="showPage('cvs')" class="nav-item px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
+📄 CVs Traités
+</button><button onclick="showPage('config')" class="nav-item px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
+⚙️ Configuration
+</button></div></div></nav><main class="container mx-auto px-6 py-8"><div id="dashboard-page" class="page"><div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"><div class="card-hover bg-white rounded-2xl p-6 shadow-lg"><div class="flex items-center justify-between"><div><p class="text-sm text-gray-600">Total CVs</p><p class="text-2xl font-bold text-gray-900" id="total-cvs">0</p></div><div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center"><span class="text-2xl">📄</span></div></div></div><div class="card-hover bg-white rounded-2xl p-6 shadow-lg"><div class="flex items-center justify-between"><div><p class="text-sm text-gray-600">Score Moyen</p><p class="text-2xl font-bold text-gray-900" id="avg-score">0%</p></div><div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center"><span class="text-2xl">📈</span></div></div></div><div class="card-hover bg-white rounded-2xl p-6 shadow-lg"><div class="flex items-center justify-between"><div><p class="text-sm text-gray-600">Analyses</p><p class="text-2xl font-bold text-gray-900" id="total-analyses">0</p></div><div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center"><span class="text-2xl">🔍</span></div></div></div><div class="card-hover bg-white rounded-2xl p-6 shadow-lg"><div class="flex items-center justify-between"><div><p class="text-sm text-gray-600">Meilleur Score</p><p class="text-2xl font-bold text-gray-900" id="best-score">0%</p></div><div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center"><span class="text-2xl">🏆</span></div></div></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 shadow-lg"><h3 class="text-lg font-semibold text-gray-900 mb-4">Performance des Analyses</h3><canvas id="performanceChart" width="400" height="200"></canvas></div><div class="bg-white rounded-2xl p-6 shadow-lg"><h3 class="text-lg font-semibold text-gray-900 mb-4">Top CVs</h3><div id="top-cvs-list" class="space-y-3"></div></div></div></div><div id="analysis-page" class="page hidden"><div class="bg-white rounded-2xl p-8 shadow-lg"><h2 class="text-2xl font-bold text-gray-900 mb-6">Nouvelle Analyse de CVs</h2><div class="space-y-6"><div><label class="block text-sm font-medium text-gray-700 mb-2">
+Description du poste
+</label><textarea 
+id="job-description" 
+class="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+placeholder="Décrivez le poste pour lequel vous souhaitez analyser les CVs..."
+></textarea></div><div><label class="block text-sm font-medium text-gray-700 mb-2">
+Sélectionner les CVs (2-5 CVs)
+</label><div id="cv-selection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div></div><div class="flex justify-end"><button 
+onclick="startAnalysis()" 
+class="btn-primary text-white px-6 py-3 rounded-lg font-medium"
+>
+🚀 Lancer l'analyse
+</button></div></div></div></div><div id="comparison-page" class="page hidden"><div class="bg-white rounded-2xl p-8 shadow-lg"><h2 class="text-2xl font-bold text-gray-900 mb-6">Comparaison des CVs</h2><div class="space-y-6"><div><label class="block text-sm font-medium text-gray-700 mb-2">
+Sélectionner les CVs à comparer (2-5 CVs)
+</label><div id="comparison-cv-selection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div></div><div id="comparison-results" class="hidden"><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div><h3 class="text-lg font-semibold text-gray-900 mb-4">Graphique Radar</h3><canvas id="radarChart" width="400" height="300"></canvas></div><div><h3 class="text-lg font-semibold text-gray-900 mb-4">Comparaison par Catégorie</h3><canvas id="barChart" width="400" height="300"></canvas></div></div></div></div></div></div><div id="cvs-page" class="page hidden"><div class="bg-white rounded-2xl p-8 shadow-lg"><h2 class="text-2xl font-bold text-gray-900 mb-6">CVs Traités</h2><div class="mb-6"><input 
+type="text" 
+id="search-cvs" 
+placeholder="Rechercher par nom ou poste..."
+class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+></div><div id="cvs-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div></div></div><div id="config-page" class="page hidden"><div class="bg-white rounded-2xl p-8 shadow-lg"><h2 class="text-2xl font-bold text-gray-900 mb-6">Configuration</h2><div class="space-y-6"><div><h3 class="text-lg font-semibold text-gray-900 mb-4">Poids des Critères</h3><div class="space-y-4"><div><label class="block text-sm font-medium text-gray-700 mb-2">
+Compétences Techniques: <span id="tech-weight">50%</span></label><input 
+type="range" 
+id="technical-weight" 
+min="0" 
+max="100" 
+value="50" 
+class="w-full"
+oninput="updateWeight('technical', this.value)"
+></div><div><label class="block text-sm font-medium text-gray-700 mb-2">
+Expérience: <span id="exp-weight">30%</span></label><input 
+type="range" 
+id="experience-weight" 
+min="0" 
+max="100" 
+value="30" 
+class="w-full"
+oninput="updateWeight('experience', this.value)"
+></div><div><label class="block text-sm font-medium text-gray-700 mb-2">
+Formation: <span id="edu-weight">20%</span></label><input 
+type="range" 
+id="education-weight" 
+min="0" 
+max="100" 
+value="20" 
+class="w-full"
+oninput="updateWeight('education', this.value)"
+></div></div></div><div class="flex justify-end space-x-4"><button 
+onclick="saveConfig()" 
+class="btn-primary text-white px-6 py-2 rounded-lg font-medium"
+>
+💾 Sauvegarder
+</button><button 
+onclick="resetConfig()" 
+class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+>
+🔄 Réinitialiser
+</button></div></div></div></div></main><script>
+// Global variables
+let cvs = [];
+let selectedCVs = [];
+let comparisonCVs = [];
+// Initialize the application
+async function init() {
+await loadCVs();
+await loadDashboardData();
+showPage('dashboard');
+}
+// Load CVs from API
+async function loadCVs() {
+try {
+const response = await fetch('/api/cvs');
+const data = await response.json();
+cvs = Object.entries(data.cvs).map(([name, cv]) => ({ name, ...cv }));
+renderCVs();
+} catch (error) {
+console.error('Error loading CVs:', error);
+}
+}
+// Load dashboard data
+async function loadDashboardData() {
+try {
+const response = await fetch('/api/dashboard');
+const data = await response.json();
+document.getElementById('total-cvs').textContent = data.total_cvs;
+document.getElementById('avg-score').textContent = data.average_score + '%';
+document.getElementById('total-analyses').textContent = data.recent_analyses.length;
+document.getElementById('best-score').textContent = Math.max(...data.top_cvs.map(cv => cv.score)) + '%';
+renderTopCVs(data.top_cvs);
+renderPerformanceChart();
+} catch (error) {
+console.error('Error loading dashboard data:', error);
+}
+}
+// Render CVs for selection
+function renderCVs() {
+const cvSelection = document.getElementById('cv-selection');
+const comparisonCVSelection = document.getElementById('comparison-cv-selection');
+const cvsList = document.getElementById('cvs-list');
+const cvHTML = cvs.map(cv => `
+<div class="border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors" 
+onclick="toggleCVSelection('${cv.name}')" id="cv-${cv.name}"><div class="flex items-center justify-between mb-2"><h3 class="font-medium text-gray-900">${cv.nom}</h3><div class="w-4 h-4 border-2 border-gray-300 rounded"></div></div><p class="text-sm text-gray-600 mb-1">${cv.poste}</p><p class="text-xs text-gray-500 mb-2">${cv.niveau} • ${cv.expérience_ans}</p><div class="flex items-center justify-between"><span class="text-lg font-bold text-gray-900">${cv.score}%</span><div class="w-16 bg-gray-200 rounded-full h-2"><div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" 
+style="width: ${cv.score}%"></div></div></div></div>
+`).join('');
+const cvCardHTML = cvs.map(cv => `
+<div class="card-hover bg-white rounded-xl p-6 shadow-lg"><div class="flex items-start justify-between mb-4"><div class="flex-1"><h3 class="text-lg font-semibold text-gray-900 mb-1">${cv.nom}</h3><p class="text-sm text-gray-600 mb-2">${cv.poste}</p><div class="flex items-center space-x-2"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">${cv.niveau}</span><span class="text-xs text-gray-500">${cv.expérience_ans}</span></div></div><div class="text-right"><p class="text-2xl font-bold text-gray-900">${cv.score}%</p><p class="text-xs text-gray-500">Score</p></div></div><div class="space-y-2 mb-4"><div class="flex justify-between text-sm"><span class="text-gray-600">Compétences</span><span class="font-medium">${cv.compétences}%</span></div><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full" 
+style="width: ${cv.compétences}%"></div></div></div><div class="flex items-center justify-between pt-4 border-t border-gray-100"><button class="text-sm text-blue-600 hover:text-blue-700 font-medium">
+Voir détails
+</button><button class="text-sm text-gray-400 hover:text-red-600">
+Supprimer
+</button></div></div>
+`).join('');
+cvSelection.innerHTML = cvHTML;
+comparisonCVSelection.innerHTML = cvHTML;
+cvsList.innerHTML = cvCardHTML;
+}
+// Toggle CV selection
+function toggleCVSelection(cvName) {
+const cvElement = document.getElementById(`cv-${cvName}`);
+const checkbox = cvElement.querySelector('div:last-child');
+if (selectedCVs.includes(cvName)) {
+selectedCVs = selectedCVs.filter(name => name !== cvName);
+cvElement.classList.remove('border-blue-500', 'bg-blue-50');
+cvElement.classList.add('border-gray-200');
+checkbox.classList.remove('bg-blue-500');
+checkbox.classList.add('border-gray-300');
+} else if (selectedCVs.length < 5) {
+selectedCVs.push(cvName);
+cvElement.classList.add('border-blue-500', 'bg-blue-50');
+cvElement.classList.remove('border-gray-200');
+checkbox.classList.add('bg-blue-500');
+checkbox.classList.remove('border-gray-300');
+}
+}
+// Show page
+function showPage(pageName) {
+// Hide all pages
+document.querySelectorAll('.page').forEach(page => {
+page.classList.add('hidden');
+});
+// Show selected page
+document.getElementById(`${pageName}-page`).classList.remove('hidden');
+// Update navigation
+document.querySelectorAll('.nav-item').forEach(item => {
+item.classList.remove('text-blue-600', 'bg-blue-50');
+item.classList.add('text-gray-600', 'hover:bg-gray-100');
+});
+event.target.classList.add('text-blue-600', 'bg-blue-50');
+event.target.classList.remove('text-gray-600', 'hover:bg-gray-100');
+}
+// Start analysis
+async function startAnalysis() {
+const jobDescription = document.getElementById('job-description').value;
+if (!jobDescription.trim()) {
+alert('Veuillez saisir une description de poste');
+return;
+}
+if (selectedCVs.length < 2) {
+alert('Veuillez sélectionner au moins 2 CVs');
+return;
+}
+try {
+const selectedCVData = cvs.filter(cv => selectedCVs.includes(cv.name));
+const response = await fetch('/api/analysis', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+},
+body: JSON.stringify({
+job_description: jobDescription,
+cvs: selectedCVData
+})
+});
+const results = await response.json();
+alert(`Analyse terminée ! Meilleur candidat: ${results.results[0].person} (${results.results[0].score}%)`);
+} catch (error) {
+console.error('Error starting analysis:', error);
+alert('Erreur lors de l\'analyse');
+}
+}
+// Render top CVs
+function renderTopCVs(topCVs) {
+const topCVsList = document.getElementById('top-cvs-list');
+topCVsList.innerHTML = topCVs.map((cv, index) => `
+<div class="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg"><div class="flex items-center space-x-3"><div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+${index + 1}
+</div><div><p class="font-medium text-gray-900">${cv.person}</p><p class="text-sm text-gray-500">${cv.position}</p></div></div><div class="text-right"><p class="font-bold text-lg text-gray-900">${cv.score}%</p><p class="text-xs text-gray-500">Score</p></div></div>
+`).join('');
+}
+// Render performance chart
+function renderPerformanceChart() {
+const ctx = document.getElementById('performanceChart').getContext('2d');
+new Chart(ctx, {
+type: 'line',
+data: {
+labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun'],
+datasets: [{
+label: 'CVs Analysés',
+data: [12, 19, 15, 25, 22, 30],
+borderColor: 'rgb(59, 130, 246)',
+backgroundColor: 'rgba(59, 130, 246, 0.1)',
+tension: 0.4
+}, {
+label: 'Score Moyen',
+data: [75, 78, 82, 85, 88, 90],
+borderColor: 'rgb(16, 185, 129)',
+backgroundColor: 'rgba(16, 185, 129, 0.1)',
+tension: 0.4
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: {
+legend: {
+position: 'top',
+}
+}
+}
+});
+}
+// Update weight
+function updateWeight(type, value) {
+const weightElement = document.getElementById(`${type}-weight`);
+weightElement.textContent = value + '%';
+}
+// Save configuration
+async function saveConfig() {
+const config = {
+technical_weight: document.getElementById('technical-weight').value / 100,
+experience_weight: document.getElementById('experience-weight').value / 100,
+education_weight: document.getElementById('education-weight').value / 100,
+language: 'Français',
+theme: 'Clair',
+auto_save: true,
+export_format: 'PDF',
+include_charts: true,
+email_reports: false
+};
+try {
+const response = await fetch('/api/config', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+},
+body: JSON.stringify(config)
+});
+if (response.ok) {
+alert('Configuration sauvegardée avec succès !');
+} else {
+alert('Erreur lors de la sauvegarde');
+}
+} catch (error) {
+console.error('Error saving config:', error);
+alert('Erreur lors de la sauvegarde');
+}
+}
+// Reset configuration
+function resetConfig() {
+document.getElementById('technical-weight').value = 50;
+document.getElementById('experience-weight').value = 30;
+document.getElementById('education-weight').value = 20;
+updateWeight('tech', 50);
+updateWeight('exp', 30);
+updateWeight('edu', 20);
+}
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', init);
+</script></body></html>

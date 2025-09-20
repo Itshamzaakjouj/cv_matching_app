@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic Complet - TalentScope</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        .warning {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+        .data-item {
+            margin: 10px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .label {
+            font-weight: bold;
+            color: #333;
+        }
+        .value {
+            color: #666;
+            margin-left: 10px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .danger-btn {
+            background: #dc3545;
+        }
+        .danger-btn:hover {
+            background: #c82333;
+        }
+        .success-btn {
+            background: #28a745;
+        }
+        .success-btn:hover {
+            background: #218838;
+        }
+        .log {
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Diagnostic Complet - TalentScope</h1>
+        <p>Cette page vous aide à diagnostiquer et résoudre les problèmes de données utilisateur.</p>
+    </div>
+
+    <div class="container">
+        <h2>📊 État actuel des données</h2>
+        <div id="dataStatus" class="section">
+            <p>Chargement...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🛠️ Actions de diagnostic</h2>
+        <div class="section">
+            <button onclick="runFullDiagnostic()">🔍 Diagnostic complet</button>
+            <button onclick="createTestUser()" class="success-btn">👤 Créer utilisateur test</button>
+            <button onclick="testProfilePage()">👤 Tester page profil</button>
+            <button onclick="simulateLogin()" class="success-btn">🔐 Simuler connexion</button>
+            <button onclick="clearAllData()" class="danger-btn">🗑️ Effacer tout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>📝 Logs de débogage</h2>
+        <div class="section">
+            <button onclick="clearLogs()">🧹 Effacer logs</button>
+            <div id="debugLogs" class="log">Logs de débogage apparaîtront ici...\n</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>📋 Instructions de résolution</h2>
+        <div class="section">
+            <h3>Si les données ne s'affichent pas :</h3>
+            <ol>
+                <li>Cliquez sur "Diagnostic complet" pour identifier le problème</li>
+                <li>Si aucune donnée n'existe, cliquez sur "Créer utilisateur test"</li>
+                <li>Si les données existent mais ne s'affichent pas, cliquez sur "Tester page profil"</li>
+                <li>Vérifiez les logs de débogage pour plus de détails</li>
+            </ol>
+            
+            <h3>Si vous avez déjà un compte :</h3>
+            <ol>
+                <li>Cliquez sur "Simuler connexion" pour recréer vos données</li>
+                <li>Ou utilisez "Créer utilisateur test" avec vos vraies informations</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        let debugLogs = [];
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logMessage = `[${timestamp}] ${message}`;
+            debugLogs.push(logMessage);
+            updateLogDisplay();
+            console.log(logMessage);
+        }
+        
+        function updateLogDisplay() {
+            const logElement = document.getElementById('debugLogs');
+            logElement.textContent = debugLogs.join('\n');
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        function clearLogs() {
+            debugLogs = [];
+            updateLogDisplay();
+        }
+        
+        function checkDataStatus() {
+            log('Vérification de l\'état des données...');
+            
+            const userData = localStorage.getItem('userData');
+            const userFullName = localStorage.getItem('userFullName');
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            
+            const statusDiv = document.getElementById('dataStatus');
+            let html = '';
+            
+            // Vérifier l'authentification
+            if (isAuthenticated === 'true') {
+                html += '<div class="data-item success"><span class="label">✅ Authentifié:</span><span class="value">Oui</span></div>';
+                log('Utilisateur authentifié');
+            } else {
+                html += '<div class="data-item error"><span class="label">❌ Authentifié:</span><span class="value">Non</span></div>';
+                log('Utilisateur non authentifié');
+            }
+            
+            // Vérifier le nom complet (legacy)
+            if (userFullName) {
+                html += '<div class="data-item success"><span class="label">✅ Nom complet (legacy):</span><span class="value">' + userFullName + '</span></div>';
+                log('Nom complet trouvé: ' + userFullName);
+            } else {
+                html += '<div class="data-item warning"><span class="label">⚠️ Nom complet (legacy):</span><span class="value">Non défini</span></div>';
+                log('Nom complet (legacy) non trouvé');
+            }
+            
+            // Vérifier les données utilisateur complètes
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    log('Données utilisateur trouvées et parsées avec succès');
+                    
+                    html += '<div class="data-item success"><span class="label">✅ Données utilisateur:</span><span class="value">Trouvées</span></div>';
+                    html += '<div class="data-item"><span class="label">📧 Email:</span><span class="value">' + (user.email || 'Non défini') + '</span></div>';
+                    html += '<div class="data-item"><span class="label">👤 Nom complet:</span><span class="value">' + (user.fullName || 'Non défini') + '</span></div>';
+                    html += '<div class="data-item"><span class="label">🏢 Département:</span><span class="value">' + (user.department || 'Non défini') + '</span></div>';
+                    html += '<div class="data-item"><span class="label">💼 Poste:</span><span class="value">' + (user.position || 'Non défini') + '</span></div>';
+                    html += '<div class="data-item"><span class="label">📞 Téléphone:</span><span class="value">' + (user.phone || 'Non défini') + '</span></div>';
+                    
+                    // Vérifier si les données sont complètes
+                    const missingFields = [];
+                    if (!user.email) missingFields.push('email');
+                    if (!user.fullName) missingFields.push('fullName');
+                    if (!user.department) missingFields.push('department');
+                    if (!user.position) missingFields.push('position');
+                    
+                    if (missingFields.length === 0) {
+                        html += '<div class="data-item success"><span class="label">✅ Complétude:</span><span class="value">Données complètes</span></div>';
+                        log('Toutes les données utilisateur sont présentes');
+                    } else {
+                        html += '<div class="data-item warning"><span class="label">⚠️ Complétude:</span><span class="value">Champs manquants: ' + missingFields.join(', ') + '</span></div>';
+                        log('Champs manquants: ' + missingFields.join(', '));
+                    }
+                    
+                } catch (e) {
+                    html += '<div class="data-item error"><span class="label">❌ Données utilisateur:</span><span class="value">Corrompues</span></div>';
+                    log('Erreur de parsing des données utilisateur: ' + e.message);
+                }
+            } else {
+                html += '<div class="data-item error"><span class="label">❌ Données utilisateur:</span><span class="value">Non trouvées</span></div>';
+                log('Aucune donnée utilisateur trouvée');
+            }
+            
+            statusDiv.innerHTML = html;
+        }
+        
+        function runFullDiagnostic() {
+            log('=== DÉBUT DU DIAGNOSTIC COMPLET ===');
+            checkDataStatus();
+            
+            // Test de la page de profil
+            log('Test de la page de profil...');
+            setTimeout(() => {
+                const profileWindow = window.open('/profile', '_blank');
+                if (profileWindow) {
+                    log('Page de profil ouverte dans un nouvel onglet');
+                } else {
+                    log('Erreur: Impossible d\'ouvrir la page de profil');
+                }
+            }, 1000);
+            
+            log('=== FIN DU DIAGNOSTIC COMPLET ===');
+        }
+        
+        function createTestUser() {
+            log('Création d\'un utilisateur de test...');
+            
+            const testUserData = {
+                email: "hafsa.elghazouani@example.com",
+                fullName: "Hafsa El Ghazouani",
+                department: "Ministère des Finances",
+                position: "Analyste RH",
+                phone: "+212 6 12 34 56 78",
+                loginTime: new Date().toISOString(),
+                sessionId: 'session_' + Date.now()
+            };
+            
+            localStorage.setItem('userData', JSON.stringify(testUserData));
+            localStorage.setItem('userFullName', testUserData.fullName);
+            localStorage.setItem('isAuthenticated', 'true');
+            
+            log('Utilisateur de test créé: ' + testUserData.fullName);
+            log('Email: ' + testUserData.email);
+            
+            alert('✅ Utilisateur de test créé avec succès !\n\nNom: ' + testUserData.fullName + '\nEmail: ' + testUserData.email);
+            checkDataStatus();
+        }
+        
+        function testProfilePage() {
+            log('Ouverture de la page de profil pour test...');
+            const profileWindow = window.open('/profile', '_blank');
+            if (profileWindow) {
+                log('Page de profil ouverte - vérifiez la console pour les logs de débogage');
+            } else {
+                log('Erreur: Impossible d\'ouvrir la page de profil');
+            }
+        }
+        
+        function simulateLogin() {
+            log('Simulation d\'une connexion...');
+            
+            const userData = {
+                email: prompt('Entrez votre email:', 'hafsa.elghazouani@example.com'),
+                fullName: prompt('Entrez votre nom complet:', 'Hafsa El Ghazouani'),
+                department: prompt('Entrez votre département:', 'Ministère des Finances'),
+                position: prompt('Entrez votre poste:', 'Analyste RH'),
+                phone: prompt('Entrez votre téléphone:', '+212 6 12 34 56 78'),
+                loginTime: new Date().toISOString(),
+                sessionId: 'session_' + Date.now()
+            };
+            
+            localStorage.setItem('userData', JSON.stringify(userData));
+            localStorage.setItem('userFullName', userData.fullName);
+            localStorage.setItem('isAuthenticated', 'true');
+            
+            log('Connexion simulée pour: ' + userData.fullName);
+            checkDataStatus();
+        }
+        
+        function clearAllData() {
+            if (confirm('Êtes-vous sûr de vouloir effacer toutes les données utilisateur ?')) {
+                log('Effacement de toutes les données...');
+                localStorage.removeItem('userData');
+                localStorage.removeItem('userFullName');
+                localStorage.removeItem('isAuthenticated');
+                log('Toutes les données ont été effacées');
+                checkDataStatus();
+            }
+        }
+        
+        // Initialisation
+        window.onload = function() {
+            log('Page de diagnostic chargée');
+            checkDataStatus();
+        };
+    </script>
+</body>
+</html>
+

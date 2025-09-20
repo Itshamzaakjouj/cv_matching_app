@@ -1,0 +1,14 @@
+{
+    "users": {
+        "admin@talentscope.com": {
+            "password": "admin123",
+            "full_name": "Administrateur",
+            "created_at": "2024-01-01T00:00:00"
+        },
+        "akjouj17@gmail.com": {
+            "password": "Hamza12345",
+            "full_name": "Hamza Akjouj",
+            "created_at": "2024-01-01T00:00:00"
+        }
+    }
+}

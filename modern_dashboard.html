@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentScope - Tableau de Bord</title>
+    <link rel="icon" type="image/png" href="Logos/TalentScope.png">
+    <link rel="stylesheet" href="themes.css">
+    <link rel="stylesheet" href="professional-icons.css">
+    <script src="user_database.js"></script>
+    <script src="direct-translation.js"></script>
+    <script src="icon-replacer.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 0 20px 20px 0;
+            padding: 30px 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo h1 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+        }
+
+        .nav-title {
+            color: #333;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #666;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item span {
+            font-weight: 500;
+        }
+
+        .nav-item .subtitle {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        .user-info {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            padding: 0;
+        }
+
+        .user-profile-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            backdrop-filter: var(--backdrop-blur);
+        }
+
+        .user-profile-card:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .profile-photo {
+            flex-shrink: 0;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-primary);
+            transition: all 0.3s ease;
+        }
+
+        .profile-avatar:hover {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-role {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-actions {
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .profile-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+        }
+
+        .profile-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+            z-index: 1000;
+            display: none;
+            margin-bottom: 10px;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 16px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+
+        .dashboard-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Metrics Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .metric-icon.blue { background: #DBEAFE; color: #1D4ED8; }
+        .metric-icon.green { background: #D1FAE5; color: #059669; }
+        .metric-icon.orange { background: #FED7AA; color: #EA580C; }
+        .metric-icon.purple { background: #E9D5FF; color: #7C3AED; }
+
+        .metric-trend {
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            color: #6B7280;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            color: #667eea;
+        }
+
+        .actions-list {
+            list-style: none;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #E5E7EB;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-item:last-child {
+            border-bottom: none;
+        }
+
+        .action-item:hover {
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 8px;
+            padding-left: 10px;
+        }
+
+        .action-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 15px;
+        }
+
+        .action-content h4 {
+            color: #1F2937;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .action-content p {
+            color: #6B7280;
+            font-size: 0.9rem;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 20px;
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, #F3F4F6, #E5E7EB);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6B7280;
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            height: 200px;
+            position: relative;
+            width: 100%;
+        }
+
+        /* Recent Analysis */
+        .recent-analysis {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .analysis-table th,
+        .analysis-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .analysis-table th {
+            background: #F9FAFB;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+
+        .analysis-table td {
+            color: #1F2937;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-excellent {
+            background: #D1FAE5;
+            color: #059669;
+        }
+
+        .status-very-good {
+            background: #DBEAFE;
+            color: #1D4ED8;
+        }
+
+        .status-good {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+                border-radius: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .metric-card,
+        .quick-actions,
+        .chart-card,
+        .recent-analysis {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .metric-card:nth-child(2) { animation-delay: 0.1s; }
+        .metric-card:nth-child(3) { animation-delay: 0.2s; }
+        .metric-card:nth-child(4) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- Contrôles de thème et langue - Masqués sur le dashboard -->
+    <div class="theme-toggle" id="theme-toggle" title="Basculer le thème" style="display: none;">
+        🌙
+    </div>
+    
+    <div class="language-selector" style="display: none;">
+        <select id="language-select" onchange="handleLanguageChange(this)">
+            <option value="fr">🇫🇷 FR</option>
+            <option value="en">🇺🇸 EN</option>
+        </select>
+    </div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-icon" style="display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; margin-bottom: 10px;">
+                <img src="Logos/TalentScope.png" alt="TalentScope Logo" style="width: 60px; height: 60px; object-fit: contain;">
+                <img src="Logos/MEF2.png" alt="Ministère Logo" style="width: 60px; height: 60px; object-fit: contain;">
+            </div>
+            <h1>TalentScope</h1>
+            <p>Ministère de l'Économie et des Finances</p>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-title">Navigation</div>
+            <a href="#" class="nav-item" onclick="showSection('home')">
+                <i>🏠</i>
+                <div>
+                    <div>Accueil</div>
+                    <div class="subtitle">Page principale</div>
+                </div>
+            </a>
+            <a href="#" class="nav-item active" onclick="showSection('dashboard')">
+                <i>📊</i>
+                <div>
+                    <div>Tableau de Bord</div>
+                    <div class="subtitle">Vue d'ensemble</div>
+                </div>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('analysis')">
+                <i>🚀</i>
+                <div>
+                    <div>Nouvelle Analyse</div>
+                    <div class="subtitle">Analyser des CVs</div>
+                </div>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('processed')">
+                <i>📁</i>
+                <div>
+                    <div>CVs Traités</div>
+                    <div class="subtitle">Historique des analyses</div>
+                </div>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('config')">
+                <i>⚙️</i>
+                <div>
+                    <div>Configuration</div>
+                    <div class="subtitle">Paramètres</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- User Profile Section -->
+        <div class="user-info">
+            <div class="user-profile-card">
+                <div class="profile-photo">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiM2NjdFRUEiLz4KPHN2ZyB4PSI4IiB5PSI4IiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDEyQzE0LjIwOTEgMTIgMTYgMTAuMjA5MSAxNiA4QzE2IDUuNzkwODYgMTQuMjA5MSA0IDEyIDRDOS43OTA4NiA0IDggNS43OTA4NiA4IDhDOCAxMC4yMDkxIDkuNzkwODYgMTIgMTIgMTJaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTIgMTRDOC42ODYyOSAxNCA2IDE2LjY4NjMgNiAyMFYyMkgxOFYyMEMxOCAxNi42ODYzIDE1LjMxMzcgMTQgMTIgMTRaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4KPC9zdmc+" alt="Photo de profil" class="profile-avatar">
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name" id="user-fullname">Utilisateur</div>
+                    <div class="profile-role">Ministère des Finances</div>
+                </div>
+                <div class="profile-actions">
+                    <button class="profile-btn" onclick="editProfile()" title="Gestion du profil">⚙️</button>
+                    <div class="dropdown-menu" id="profileDropdown">
+                        <div class="dropdown-item" onclick="editProfile()">
+                            <i>✏️</i>
+                            Modifier le profil
+                        </div>
+                        <div class="dropdown-item" onclick="changePassword()">
+                            <i>🔒</i>
+                            Changer le mot de passe
+                        </div>
+                        <div class="dropdown-item" onclick="viewSettings()">
+                            <i>⚙️</i>
+                            Paramètres
+                        </div>
+                        <div class="dropdown-item" onclick="logout()" style="color: #dc2626;">
+                            <i>🚪</i>
+                            Déconnexion
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="content-section">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Tableau de Bord</h1>
+                <p class="dashboard-subtitle">Vue d'ensemble de vos analyses et statistiques</p>
+            </div>
+
+            <!-- Metrics Cards -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon blue">📈</div>
+                        <div class="metric-trend" id="analyses-trend">↗ +0 cette semaine</div>
+                    </div>
+                    <div class="metric-value" id="analyses-count">0</div>
+                    <div class="metric-label">Analyses Effectuées</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon green">📄</div>
+                        <div class="metric-trend" id="cvs-trend">↗ +0 cette semaine</div>
+                    </div>
+                    <div class="metric-value" id="cvs-count">0</div>
+                    <div class="metric-label">CVs Traités</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon orange">📊</div>
+                        <div class="metric-trend" id="score-trend">↗ +0% cette semaine</div>
+                    </div>
+                    <div class="metric-value" id="average-score">0%</div>
+                    <div class="metric-label">Score Moyen</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon purple">✅</div>
+                        <div class="metric-trend" id="success-trend">↗ +0% cette semaine</div>
+                    </div>
+                    <div class="metric-value" id="success-rate">0%</div>
+                    <div class="metric-label">Taux de Réussite</div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-card">
+                    <h3 class="chart-title">📈 Tendance des Analyses</h3>
+                    <div class="chart-container">
+                        <canvas id="analysisTrendChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h3 class="chart-title">📊 Distribution des Scores</h3>
+                    <div class="chart-container">
+                        <canvas id="scoreDistributionChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2 class="section-title">
+                    <i>⚡</i>
+                    Actions Rapides
+                </h2>
+                <ul class="actions-list">
+                    <li class="action-item" onclick="showSection('analysis')">
+                        <div class="action-number">1</div>
+                        <div class="action-content">
+                            <h4>Nouvelle Analyse</h4>
+                            <p>Commencer une nouvelle analyse de CVs</p>
+                        </div>
+                    </li>
+                    <li class="action-item" onclick="showSection('processed')">
+                        <div class="action-number">2</div>
+                        <div class="action-content">
+                            <h4>Consulter l'Historique</h4>
+                            <p>Voir les analyses précédentes</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Recent Analysis -->
+            <div class="recent-analysis">
+                <h2 class="section-title">
+                    <i>📋</i>
+                    Dernières Analyses
+                </h2>
+                <table class="analysis-table">
+                    <thead>
+                        <tr>
+                            <th>Nom du CV</th>
+                            <th>Score</th>
+                            <th>Statut</th>
+                            <th>Poste</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>cv_Hamza.pdf</td>
+                            <td>91.3%</td>
+                            <td><span class="status-badge status-excellent">Excellent</span></td>
+                            <td>Data Scientist</td>
+                            <td>18/09/2024</td>
+                        </tr>
+                        <tr>
+                            <td>cv_Sophia.pdf</td>
+                            <td>76.1%</td>
+                            <td><span class="status-badge status-very-good">Très bon</span></td>
+                            <td>Développeur Python</td>
+                            <td>17/09/2024</td>
+                        </tr>
+                        <tr>
+                            <td>cv_Adam.pdf</td>
+                            <td>85.2%</td>
+                            <td><span class="status-badge status-excellent">Excellent</span></td>
+                            <td>Analyste Data</td>
+                            <td>16/09/2024</td>
+                        </tr>
+                        <tr>
+                            <td>cv_Ali.pdf</td>
+                            <td>72.8%</td>
+                            <td><span class="status-badge status-good">Bon</span></td>
+                            <td>Ingénieur ML</td>
+                            <td>15/09/2024</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Other Sections (Hidden by default) -->
+        <div id="home-section" class="content-section" style="display: none;">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Accueil</h1>
+                <p class="dashboard-subtitle">Guide d'utilisation de TalentScope</p>
+            </div>
+
+            <!-- Section Ministère -->
+            <div class="quick-actions" style="margin-bottom: 30px;">
+                <h2 class="section-title">
+                    <i>🏛️</i>
+                    Ministère de l'Économie et des Finances
+                </h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); padding: 20px; border-radius: 12px; border-left: 4px solid #0ea5e9;">
+                        <h3 style="color: #0c4a6e; margin-bottom: 10px;">🎯 Mission</h3>
+                        <p style="color: #0c4a6e; margin: 0; line-height: 1.6;">
+                            Le Ministère de l'Économie et des Finances du Maroc œuvre pour le développement économique durable, 
+                            la gestion des finances publiques et l'amélioration du climat des affaires.
+                        </p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #f0fdf4, #dcfce7); padding: 20px; border-radius: 12px; border-left: 4px solid #22c55e;">
+                        <h3 style="color: #14532d; margin-bottom: 10px;">📊 Objectifs</h3>
+                        <p style="color: #14532d; margin: 0; line-height: 1.6;">
+                            Moderniser l'administration publique, optimiser les processus de recrutement et 
+                            garantir l'excellence dans la gestion des talents au service de l'État.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guide d'utilisation -->
+            <div class="quick-actions" style="margin-bottom: 30px;">
+                <h2 class="section-title">
+                    <i>📚</i>
+                    Guide d'utilisation de TalentScope
+                </h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                    <!-- Étape 1 -->
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-left: 4px solid #667eea;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 10px;">1</div>
+                            <h3 style="margin: 0; color: #374151;">Préparation de l'offre</h3>
+                        </div>
+                        <p style="color: #6B7280; margin: 0; line-height: 1.6;">
+                            Rédigez une description détaillée du poste, listez les compétences requises et spécifiez le niveau d'expérience souhaité.
+                        </p>
+                    </div>
+
+                    <!-- Étape 2 -->
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-left: 4px solid #10b981;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="background: #10b981; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 10px;">2</div>
+                            <h3 style="margin: 0; color: #374151;">Importation des CVs</h3>
+                        </div>
+                        <p style="color: #6B7280; margin: 0; line-height: 1.6;">
+                            Importez les CVs des candidats en format PDF ou Word. Le système supporte l'analyse de plusieurs fichiers simultanément.
+                        </p>
+                    </div>
+
+                    <!-- Étape 3 -->
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-left: 4px solid #f59e0b;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="background: #f59e0b; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 10px;">3</div>
+                            <h3 style="margin: 0; color: #374151;">Analyse intelligente</h3>
+                        </div>
+                        <p style="color: #6B7280; margin: 0; line-height: 1.6;">
+                            Notre algorithme de Machine Learning analyse chaque CV et calcule un score de compatibilité basé sur plusieurs critères.
+                        </p>
+                    </div>
+
+                    <!-- Étape 4 -->
+                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-left: 4px solid #8b5cf6;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="background: #8b5cf6; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 10px;">4</div>
+                            <h3 style="margin: 0; color: #374151;">Résultats et classement</h3>
+                        </div>
+                        <p style="color: #6B7280; margin: 0; line-height: 1.6;">
+                            Consultez le classement des candidats, visualisez les CVs et accédez à l'analyse détaillée pour chaque profil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fonctionnalités principales -->
+            <div class="quick-actions" style="margin-bottom: 30px;">
+                <h2 class="section-title">
+                    <i>⚡</i>
+                    Fonctionnalités principales
+                </h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <div style="background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <span style="font-size: 1.5rem; margin-right: 10px;">🤖</span>
+                            <h4 style="margin: 0; color: #374151;">IA Avancée</h4>
+                        </div>
+                        <p style="color: #6B7280; margin: 0; font-size: 0.9rem;">Algorithmes de Machine Learning pour une analyse précise</p>
+                    </div>
+
+                    <div style="background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <span style="font-size: 1.5rem; margin-right: 10px;">📊</span>
+                            <h4 style="margin: 0; color: #374151;">Classement intelligent</h4>
+                        </div>
+                        <p style="color: #6B7280; margin: 0; font-size: 0.9rem;">Tri automatique des candidats par pertinence</p>
+                    </div>
+
+                    <div style="background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <span style="font-size: 1.5rem; margin-right: 10px;">🔍</span>
+                            <h4 style="margin: 0; color: #374151;">Analyse détaillée</h4>
+                        </div>
+                        <p style="color: #6B7280; margin: 0; font-size: 0.9rem;">Breakdown complet des scores et recommandations</p>
+                    </div>
+
+                    <div style="background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <span style="font-size: 1.5rem; margin-right: 10px;">📈</span>
+                            <h4 style="margin: 0; color: #374151;">Statistiques</h4>
+                        </div>
+                        <p style="color: #6B7280; margin: 0; font-size: 0.9rem;">Métriques et tendances des analyses</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="analysis-section" class="content-section" style="display: none;">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Nouvelle Analyse</h1>
+                <p class="dashboard-subtitle">Analyser des CVs avec l'IA</p>
+            </div>
+            <div class="quick-actions">
+                <h2 class="section-title">
+                    <i>🚀</i>
+                    Interface d'Analyse Moderne
+                </h2>
+                <p style="color: #6B7280; margin-bottom: 20px;">
+                    Lancez une analyse complète de CVs en 4 étapes simples avec notre interface moderne.
+                </p>
+                <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #F3F4F6, #E5E7EB); border-radius: 12px;">
+                    <h3 style="color: #1F2937; margin-bottom: 20px;">🎯 Prêt à analyser des CVs ?</h3>
+                    <p style="color: #6B7280; margin-bottom: 30px;">Notre interface moderne vous guide à travers 4 étapes simples</p>
+                    <button onclick="window.location.href='/analysis'" 
+                            style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s ease;"
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)'">
+                        🚀 Commencer l'analyse
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="processed-section" class="content-section" style="display: none;">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">CVs Traités</h1>
+                <p class="dashboard-subtitle">Historique des analyses</p>
+            </div>
+            <div class="recent-analysis">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 class="section-title" style="margin: 0;">
+                        <i>📁</i>
+                        Historique Complet
+                    </h2>
+                    <button onclick="clearHistory()" 
+                            style="background: #F59E0B; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 6px; font-size: 0.9rem; transition: all 0.3s ease;"
+                            onmouseover="this.style.background='#D97706'; this.style.transform='translateY(-2px)'"
+                            onmouseout="this.style.background='#F59E0B'; this.style.transform='translateY(0)'">
+                        🗑️ Supprimer l'historique
+                    </button>
+                </div>
+                <table class="analysis-table">
+                    <thead>
+                        <tr>
+                            <th>Nom du CV</th>
+                            <th>Score</th>
+                            <th>Statut</th>
+                            <th>Poste</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Le contenu sera généré dynamiquement par JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="config-section" class="content-section" style="display: none;">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title" data-translate="config.title">Configuration</h1>
+                <p class="dashboard-subtitle" data-translate="config.title">Paramètres de l'application</p>
+            </div>
+            <div class="quick-actions">
+                <h2 class="section-title">
+                    <i>⚙️</i>
+                    <span data-translate="config.title">Paramètres</span>
+                </h2>
+                <div style="display: grid; gap: 20px;">
+                    <div style="background: #F9FAFB; padding: 20px; border-radius: 12px;">
+                        <h4 style="color: #1F2937; margin-bottom: 10px;" data-translate="config.theme">Thème</h4>
+                        <p style="color: #6B7280; margin-bottom: 15px;" data-translate="config.theme_description">Choisissez le thème de l'interface</p>
+                        <select id="theme-select" style="width: 100%; padding: 10px; border: 1px solid #D1D5DB; border-radius: 8px;" onchange="handleThemeChange()">
+                            <option value="light" data-translate="theme.light">Clair</option>
+                            <option value="dark" data-translate="theme.dark">Sombre</option>
+                            <option value="auto" data-translate="theme.auto">Auto</option>
+                        </select>
+                    </div>
+                    <div style="background: #F9FAFB; padding: 20px; border-radius: 12px;">
+                        <h4 style="color: #1F2937; margin-bottom: 10px;" data-translate="config.language">Langue</h4>
+                        <p style="color: #6B7280; margin-bottom: 15px;" data-translate="config.language_description">Sélectionnez la langue de l'interface</p>
+                        <select id="config-language-select" style="width: 100%; padding: 10px; border: 1px solid #D1D5DB; border-radius: 8px;" onchange="handleLanguageChange(this)">
+                            <option value="fr" data-translate="lang.fr">Français</option>
+                            <option value="en" data-translate="lang.en">English</option>
+                        </select>
+                    </div>
+                    <div style="background: #F9FAFB; padding: 20px; border-radius: 12px;">
+                        <h4 style="color: #1F2937; margin-bottom: 10px;" data-translate="config.notifications">Notifications</h4>
+                        <p style="color: #6B7280; margin-bottom: 15px;" data-translate="config.notifications_description">Configurez vos préférences de notification</p>
+                        <label style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <input type="checkbox" checked style="margin-right: 10px;">
+                            <span data-translate="config.email_notifications">Notifications par email</span>
+                        </label>
+                        <label style="display: flex; align-items: center;">
+                            <input type="checkbox" checked style="margin-right: 10px;">
+                            <span data-translate="config.push_notifications">Notifications push</span>
+                        </label>
+                    </div>
+                    
+                    <div style="background: #FEF2F2; padding: 20px; border-radius: 12px; border-left: 4px solid #EF4444;">
+                        <h4 style="color: #DC2626; margin-bottom: 10px;">⚠️ <span data-translate="config.danger_zone">Zone de danger</span></h4>
+                        <p style="color: #7F1D1D; margin-bottom: 15px;" data-translate="config.danger_description">Actions irréversibles - Procédez avec prudence</p>
+                        
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button onclick="clearHistory()" 
+                                    style="background: #F59E0B; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;"
+                                    onmouseover="this.style.background='#D97706'; this.style.transform='translateY(-2px)'"
+                                    onmouseout="this.style.background='#F59E0B'; this.style.transform='translateY(0)'">
+                                🗑️ Supprimer l'historique
+                            </button>
+                            
+                            <button onclick="resetApplication()" 
+                                    style="background: #DC2626; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;"
+                                    onmouseover="this.style.background='#B91C1C'; this.style.transform='translateY(-2px)'"
+                                    onmouseout="this.style.background='#DC2626'; this.style.transform='translateY(0)'">
+                                🔄 <span data-translate="config.reset_site">Réinitialiser le site</span>
+                            </button>
+                        </div>
+                        
+                        <div style="margin-top: 15px; padding: 10px; background: #FEE2E2; border-radius: 6px; border: 1px solid #FECACA;">
+                            <p style="margin: 0; font-size: 0.9rem; color: #991B1B;">
+                                <strong>Attention:</strong> Ces actions supprimeront définitivement toutes les données d'analyse et l'historique. 
+                                Cette action ne peut pas être annulée.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Show selected section
+            const targetSection = document.getElementById(sectionName + '-section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+
+            // Update navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Find and activate the corresponding nav item
+            const activeNavItem = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
+            
+            // Synchroniser les sélecteurs de configuration avec les valeurs actuelles
+            if (sectionName === 'config') {
+                synchronizeConfigSelectors();
+            }
+        }
+
+        // Fonction pour gérer le changement de thème depuis la configuration
+        function handleThemeChange() {
+            const themeSelect = document.getElementById('theme-select');
+            const selectedTheme = themeSelect.value;
+            
+            console.log('Changement de thème vers:', selectedTheme);
+            
+            if (window.themeManager) {
+                window.themeManager.setTheme(selectedTheme);
+                
+                // Synchroniser avec le bouton flottant
+                const themeToggle = document.getElementById('theme-toggle');
+                if (themeToggle) {
+                    themeToggle.innerHTML = selectedTheme === 'dark' ? '☀️' : '🌙';
+                }
+                
+                // Notification de succès
+                const message = window.translationManager ? 
+                    (window.translationManager.getCurrentLanguage() === 'fr' ? 'Thème mis à jour avec succès !' : 'Theme updated successfully!') :
+                    'Thème mis à jour avec succès !';
+                showNotification(message, 'success');
+            } else {
+                console.error('ThemeManager non disponible');
+                // Fallback: appliquer directement
+                document.body.setAttribute('data-theme', selectedTheme);
+                
+                const themeToggle = document.getElementById('theme-toggle');
+                if (themeToggle) {
+                    themeToggle.innerHTML = selectedTheme === 'dark' ? '☀️' : '🌙';
+                }
+                
+                localStorage.setItem('talentscope_theme', selectedTheme);
+                showNotification('Thème mis à jour avec succès !', 'success');
+            }
+        }
+
+        // Fonction pour gérer le changement de langue depuis la configuration
+        function handleLanguageChange(selectElement) {
+            const selectedLanguage = selectElement.value;
+            console.log('Changement de langue vers:', selectedLanguage);
+            
+            // Sauvegarder la langue
+            localStorage.setItem('language', selectedLanguage);
+            
+            // Notification de changement
+            const message = selectedLanguage === 'fr' ? 'Changement vers le français...' : 'Switching to English...';
+            showNotification(message, 'info');
+            
+            // Forcer un rechargement de la page pour appliquer la nouvelle langue
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        }
+
+        // Fonction d'initialisation au chargement de la page
+        function initializeApp() {
+            console.log('Initialisation de l\'application...');
+            
+            // Le système de traduction est déjà initialisé dans force-translation.js
+            // Synchroniser les sélecteurs de configuration
+            synchronizeConfigSelectors();
+        }
+
+        // Fonction pour synchroniser les sélecteurs de configuration
+        function synchronizeConfigSelectors() {
+            // Synchroniser le thème
+            const themeSelect = document.getElementById('theme-select');
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            if (themeSelect) {
+                themeSelect.value = currentTheme;
+            }
+
+            // Synchroniser la langue
+            const configLanguageSelect = document.getElementById('config-language-select');
+            const currentLanguage = localStorage.getItem('language') || 'fr';
+            if (configLanguageSelect) {
+                configLanguageSelect.value = currentLanguage;
+            }
+        }
+
+        // Fonction pour afficher des notifications
+        function showNotification(message, type = 'info') {
+            // Créer l'élément de notification
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                z-index: 1001;
+                background: var(--bg-primary);
+                border: 1px solid var(--border-primary);
+                border-radius: 8px;
+                padding: 15px 20px;
+                box-shadow: var(--shadow-lg);
+                max-width: 300px;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            
+            // Ajouter l'icône selon le type
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.2rem;">${icon}</span>
+                    <span style="color: var(--text-primary);">${message}</span>
+                </div>
+            `;
+            
+            // Ajouter au DOM
+            document.body.appendChild(notification);
+            
+            // Animer l'entrée
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Supprimer après 3 secondes
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+
+        function editProfile() {
+            window.location.href = '/profile';
+        }
+
+        function changePassword() {
+            alert('Fonctionnalité de changement de mot de passe en cours de développement');
+            document.getElementById('profileDropdown').classList.remove('show');
+        }
+
+        function viewSettings() {
+            showSection('config');
+            document.getElementById('profileDropdown').classList.remove('show');
+        }
+
+        function logout() {
+            if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+                window.location.href = 'auth_interface.html';
+            }
+            document.getElementById('profileDropdown').classList.remove('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const userInfo = document.querySelector('.user-info');
+            
+            if (!userInfo.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Données d'historique (simulées)
+        let analysisHistory = [
+            {
+                name: 'cv_Hamza.pdf',
+                score: 91.3,
+                status: 'Excellent',
+                statusClass: 'excellent',
+                position: 'Data Scientist',
+                date: '18/09/2024'
+            },
+            {
+                name: 'cv_Sophia.pdf',
+                score: 76.1,
+                status: 'Très bon',
+                statusClass: 'very-good',
+                position: 'Développeur Python',
+                date: '17/09/2024'
+            },
+            {
+                name: 'cv_Adam.pdf',
+                score: 85.2,
+                status: 'Excellent',
+                statusClass: 'excellent',
+                position: 'Analyste Data',
+                date: '16/09/2024'
+            },
+            {
+                name: 'cv_Ali.pdf',
+                score: 72.8,
+                status: 'Bon',
+                statusClass: 'good',
+                position: 'Ingénieur ML',
+                date: '15/09/2024'
+            }
+        ];
+
+        // Fonctions de gestion de l'historique et de la réinitialisation
+        function clearHistory() {
+            if (confirm('⚠️ Êtes-vous sûr de vouloir supprimer tout l\'historique des analyses ?\n\nCette action est irréversible et supprimera :\n• Toutes les analyses précédentes\n• L\'historique des CVs traités\n• Les statistiques et métriques\n\nVoulez-vous continuer ?')) {
+                // Vider le tableau d'historique
+                analysisHistory = [];
+                
+                // Supprimer les données du localStorage
+                localStorage.removeItem('talentScope_history');
+                localStorage.removeItem('talentScope_analyses');
+                localStorage.removeItem('talentScope_statistics');
+                localStorage.removeItem('talentScope_metrics');
+                
+                // Sauvegarder l'historique vide
+                localStorage.setItem('talentScope_history', JSON.stringify(analysisHistory));
+                
+                // Mettre à jour l'affichage du tableau
+                updateHistoryTable();
+                
+                // Afficher une notification de succès
+                showNotification('✅ Historique supprimé avec succès', 'success');
+            }
+        }
+        
+        function updateHistoryTable() {
+            const tbody = document.querySelector('#processed-section .analysis-table tbody');
+            if (!tbody) return;
+            
+            if (analysisHistory.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: #6B7280; font-style: italic;">
+                            📭 Aucun historique d'analyse disponible
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = analysisHistory.map(item => `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.score}%</td>
+                        <td><span class="status-badge status-${item.statusClass}">${item.status}</span></td>
+                        <td>${item.position}</td>
+                        <td>${item.date}</td>
+                        <td><button style="background: #667eea; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;">Voir</button></td>
+                    </tr>
+                `).join('');
+            }
+        }
+        
+        function addToHistory(cvData) {
+            // Ajouter une nouvelle analyse à l'historique
+            const newEntry = {
+                name: cvData.name || 'Nouveau CV',
+                score: cvData.score || 0,
+                status: cvData.status || 'En cours',
+                statusClass: cvData.statusClass || 'pending',
+                position: cvData.position || 'Non spécifié',
+                date: new Date().toLocaleDateString('fr-FR')
+            };
+            
+            analysisHistory.unshift(newEntry); // Ajouter au début
+            
+            // Limiter à 50 entrées maximum
+            if (analysisHistory.length > 50) {
+                analysisHistory = analysisHistory.slice(0, 50);
+            }
+            
+            // Sauvegarder dans localStorage
+            localStorage.setItem('talentScope_history', JSON.stringify(analysisHistory));
+            
+            // Mettre à jour l'affichage
+            updateHistoryTable();
+        }
+        
+        function resetApplication() {
+            if (confirm('🚨 ATTENTION - RÉINITIALISATION COMPLÈTE\n\nÊtes-vous absolument sûr de vouloir réinitialiser complètement l\'application ?\n\nCette action supprimera :\n• Tout l\'historique des analyses\n• Toutes les données utilisateur\n• Toutes les préférences\n• Toutes les configurations\n• Toutes les statistiques\n\nL\'application sera remise à zéro comme au premier lancement.\n\nVoulez-vous vraiment continuer ?')) {
+                // Supprimer toutes les données du localStorage
+                localStorage.clear();
+                
+                // Supprimer les données de session
+                sessionStorage.clear();
+                
+                // Afficher une notification de succès
+                showNotification('🔄 Application réinitialisée avec succès', 'success');
+                
+                // Rediriger vers la page d'authentification
+                setTimeout(() => {
+                    window.location.href = 'auth_interface.html';
+                }, 2000);
+            }
+        }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#3B82F6';
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${bgColor};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                z-index: 1000;
+                max-width: 400px;
+                font-weight: 600;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.2rem;">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            // Ajouter l'animation CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInRight {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // Supprimer automatiquement après 5 secondes
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+                    setTimeout(() => {
+                        notification.remove();
+                        style.remove();
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        // Charger l'historique depuis localStorage au démarrage
+        function loadHistoryFromStorage() {
+            const savedHistory = localStorage.getItem('talentScope_history');
+            if (savedHistory) {
+                try {
+                    analysisHistory = JSON.parse(savedHistory);
+                } catch (e) {
+                    console.error('Erreur lors du chargement de l\'historique:', e);
+                    analysisHistory = [];
+                }
+            }
+            updateHistoryTable();
+        }
+
+        // Gestion du nom utilisateur
+        function initializeUserProfile() {
+            console.log('=== INITIALISATION PROFIL DASHBOARD ===');
+            
+            // Récupérer l'utilisateur actuel depuis la base de données
+            const currentUser = window.userDatabase.getCurrentUser();
+            
+            if (currentUser) {
+                console.log('Utilisateur actuel dans le dashboard:', currentUser);
+                
+                const userFullNameElement = document.getElementById('user-fullname');
+                if (userFullNameElement) {
+                    userFullNameElement.textContent = currentUser.fullName;
+                }
+                
+                // Sauvegarder le nom pour compatibilité
+                localStorage.setItem('userFullName', currentUser.fullName);
+            } else {
+                console.log('Aucun utilisateur connecté dans le dashboard');
+                
+                const userFullNameElement = document.getElementById('user-fullname');
+                if (userFullNameElement) {
+                    userFullNameElement.textContent = 'Utilisateur';
+                }
+                
+                localStorage.setItem('userFullName', 'Utilisateur');
+            }
+        }
+
+        // Fonction pour mettre à jour le nom dans toutes les interfaces
+        function updateUserName(newName) {
+            localStorage.setItem('userFullName', newName);
+            // Mettre à jour l'élément actuel s'il existe
+            const userFullNameElement = document.getElementById('user-fullname');
+            if (userFullNameElement) {
+                userFullNameElement.textContent = newName;
+            }
+        }
+
+        // Initialize dashboard on load
+        // Fonction pour récupérer les données réelles de l'application
+        function getRealAnalysisData() {
+            const history = JSON.parse(localStorage.getItem('talentScope_history') || '[]');
+            
+            // Grouper les analyses par semaine (dernières 8 semaines)
+            const weeklyData = {};
+            const now = new Date();
+            
+            // Initialiser les 8 dernières semaines
+            for (let i = 7; i >= 0; i--) {
+                const weekStart = new Date(now);
+                weekStart.setDate(now.getDate() - (i * 7));
+                const weekKey = `Sem ${8-i}`;
+                weeklyData[weekKey] = 0;
+            }
+            
+            // Compter les analyses par semaine
+            history.forEach(analysis => {
+                if (analysis.date) {
+                    const analysisDate = new Date(analysis.date);
+                    const weeksAgo = Math.floor((now - analysisDate) / (7 * 24 * 60 * 60 * 1000));
+                    if (weeksAgo >= 0 && weeksAgo < 8) {
+                        const weekKey = `Sem ${8-weeksAgo}`;
+                        weeklyData[weekKey] = (weeklyData[weekKey] || 0) + 1;
+                    }
+                }
+            });
+            
+            return {
+                labels: Object.keys(weeklyData),
+                data: Object.values(weeklyData)
+            };
+        }
+
+        // Fonction pour récupérer la distribution des scores
+        function getRealScoreDistribution() {
+            const history = JSON.parse(localStorage.getItem('talentScope_history') || '[]');
+            const distribution = [0, 0, 0, 0, 0]; // 0-20%, 21-40%, 41-60%, 61-80%, 81-100%
+            
+            history.forEach(analysis => {
+                if (analysis.results && analysis.results.length > 0) {
+                    analysis.results.forEach(result => {
+                        if (result.score !== undefined) {
+                            const score = parseFloat(result.score);
+                            if (score >= 0 && score <= 20) distribution[0]++;
+                            else if (score <= 40) distribution[1]++;
+                            else if (score <= 60) distribution[2]++;
+                            else if (score <= 80) distribution[3]++;
+                            else if (score <= 100) distribution[4]++;
+                        }
+                    });
+                }
+            });
+            
+            return distribution;
+        }
+
+        // Fonction pour mettre à jour les métriques avec les vraies données
+        function updateRealMetrics() {
+            const history = JSON.parse(localStorage.getItem('talentScope_history') || '[]');
+            
+            // Calculer les métriques
+            const totalAnalyses = history.length;
+            let totalCVs = 0;
+            let totalScore = 0;
+            let scoreCount = 0;
+            let successCount = 0;
+            
+            // Calculer les analyses de cette semaine
+            const now = new Date();
+            const weekStart = new Date(now);
+            weekStart.setDate(now.getDate() - 7);
+            const thisWeekAnalyses = history.filter(analysis => {
+                if (analysis.date) {
+                    const analysisDate = new Date(analysis.date);
+                    return analysisDate >= weekStart;
+                }
+                return false;
+            });
+            
+            history.forEach(analysis => {
+                if (analysis.results && analysis.results.length > 0) {
+                    totalCVs += analysis.results.length;
+                    
+                    analysis.results.forEach(result => {
+                        if (result.score !== undefined) {
+                            const score = parseFloat(result.score);
+                            totalScore += score;
+                            scoreCount++;
+                            
+                            // Considérer comme réussi si score >= 70%
+                            if (score >= 70) {
+                                successCount++;
+                            }
+                        }
+                    });
+                }
+            });
+            
+            const averageScore = scoreCount > 0 ? (totalScore / scoreCount) : 0;
+            const successRate = scoreCount > 0 ? (successCount / scoreCount * 100) : 0;
+            
+            // Mettre à jour les éléments DOM
+            document.getElementById('analyses-count').textContent = totalAnalyses;
+            document.getElementById('cvs-count').textContent = totalCVs;
+            document.getElementById('average-score').textContent = averageScore.toFixed(1) + '%';
+            document.getElementById('success-rate').textContent = successRate.toFixed(1) + '%';
+            
+            // Mettre à jour les tendances
+            document.getElementById('analyses-trend').textContent = `↗ +${thisWeekAnalyses.length} cette semaine`;
+            document.getElementById('cvs-trend').textContent = `↗ +${thisWeekAnalyses.reduce((sum, a) => sum + (a.results ? a.results.length : 0), 0)} cette semaine`;
+            document.getElementById('score-trend').textContent = `↗ +${averageScore.toFixed(1)}% cette semaine`;
+            document.getElementById('success-trend').textContent = `↗ +${successRate.toFixed(1)}% cette semaine`;
+        }
+
+        // Initialisation des graphiques avec données réelles
+        function initializeCharts() {
+            // Récupérer les données réelles
+            const trendData = getRealAnalysisData();
+            const scoreDistribution = getRealScoreDistribution();
+            
+            // Graphique de tendance des analyses
+            const trendCtx = document.getElementById('analysisTrendChart');
+            if (trendCtx) {
+                new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: trendData.labels,
+                        datasets: [{
+                            label: 'Analyses par semaine',
+                            data: trendData.data,
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#667eea',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                },
+                                ticks: {
+                                    color: '#6B7280'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: '#6B7280'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Graphique de distribution des scores
+            const distributionCtx = document.getElementById('scoreDistributionChart');
+            if (distributionCtx) {
+                new Chart(distributionCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
+                        datasets: [{
+                            label: 'Nombre de CVs',
+                            data: scoreDistribution,
+                            backgroundColor: [
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(245, 158, 11, 0.8)',
+                                'rgba(59, 130, 246, 0.8)',
+                                'rgba(16, 185, 129, 0.8)',
+                                'rgba(34, 197, 94, 0.8)'
+                            ],
+                            borderColor: [
+                                '#EF4444',
+                                '#F59E0B',
+                                '#3B82F6',
+                                '#10B981',
+                                '#22C55E'
+                            ],
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                },
+                                ticks: {
+                                    color: '#6B7280'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: '#6B7280'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            initializeUserProfile();
+            showSection('dashboard');
+            loadHistoryFromStorage();
+            
+            // Mettre à jour les métriques avec les vraies données
+            updateRealMetrics();
+            
+            // Initialiser les graphiques après un court délai pour s'assurer que les canvas sont créés
+            setTimeout(() => {
+                initializeCharts();
+            }, 100);
+        });
+    </script>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
