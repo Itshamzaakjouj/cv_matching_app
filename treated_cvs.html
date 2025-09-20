@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVs Traités - TalentScope</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="analysis_storage.js"></script>
+    <script src="history_manager.js"></script>
+    <style>
+        .update-animation {
+            animation: highlight 1s ease-in-out;
+        }
+        @keyframes highlight {
+            0% { background-color: rgba(59, 130, 246, 0.1); }
+            100% { background-color: transparent; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <img src="Logos/TalentScope.png" alt="TalentScope" class="h-8">
+                        <h1 class="text-xl font-semibold text-gray-800">CVs Traités</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span id="user-fullname" class="text-gray-600"></span>
+                        <button id="profile-btn" class="text-gray-600 hover:text-gray-800">
+                            <i class="fas fa-user-circle text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <!-- En-tête de la section -->
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg mb-8">
+                <div class="px-8 py-6">
+                    <h2 class="text-2xl font-bold text-white mb-2">CVs Traités</h2>
+                    <p class="text-blue-100">Historique des analyses</p>
+                </div>
+            </div>
+
+            <!-- Section de l'historique -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800">
+                        <i class="fas fa-folder-open mr-2"></i>
+                        Historique Complet
+                    </h3>
+                    <button onclick="window.historyManager.clearHistory()"
+                            class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
+                        <i class="fas fa-trash-alt mr-2"></i>
+                        Supprimer l'historique
+                    </button>
+                </div>
+
+                <!-- Tableau des analyses -->
+                <div class="overflow-x-auto">
+                    <table id="historyTable" class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Nom du CV</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Score</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Statut</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Poste</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Date</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <!-- Le contenu sera inséré dynamiquement par HistoryManager -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialiser le nom de l'utilisateur
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                document.getElementById('user-fullname').textContent = currentUser.fullName;
+            }
+        });
+    </script>
+</body>
+</html>

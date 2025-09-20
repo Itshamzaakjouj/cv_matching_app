@@ -1,0 +1,203 @@
+/* Styles généraux */
+.step-content {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.step-content.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Styles pour la barre de progression */
+.progress-step {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6B7280;
+    transition: all 0.3s ease;
+}
+
+.progress-step.active {
+    background-color: #3B82F6;
+    color: white;
+}
+
+.progress-step.completed {
+    background-color: #10B981;
+    color: white;
+}
+
+.progress-line {
+    flex: 1;
+    height: 2px;
+    background-color: #E5E7EB;
+    margin: 0 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.progress-step.completed + .progress-line {
+    background-color: #10B981;
+}
+
+/* Styles pour la zone de dépôt des fichiers */
+#dropZone {
+    border: 2px dashed #E5E7EB;
+    transition: all 0.3s ease;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#dropZone:hover {
+    border-color: #3B82F6;
+    background-color: #F3F4F6;
+}
+
+#dropZone.drag-over {
+    border-color: #3B82F6;
+    background-color: #EFF6FF;
+}
+
+/* Animation pour la liste des fichiers */
+#fileList > div {
+    transition: all 0.3s ease;
+}
+
+/* Styles pour les cartes */
+.card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation pour les transitions entre étapes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.step-content.active {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Styles pour les tags de compétences */
+.skill-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    background-color: #EFF6FF;
+    color: #2563EB;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    margin: 0.25rem;
+    transition: all 0.2s ease;
+}
+
+.skill-tag button {
+    margin-left: 0.5rem;
+    color: #2563EB;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.skill-tag button:hover {
+    opacity: 1;
+}
+
+/* Styles pour la zone de fichiers */
+.file-preview {
+    position: relative;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.file-preview:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.file-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.file-actions button {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+}
+
+/* Animation de chargement */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Styles pour les résultats */
+.result-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.result-card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Styles pour les métriques */
+.metric-card {
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1E40AF;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: #3B82F6;
+}
+
+/* Styles pour la barre de navigation fixe */
+.fixed-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-top: 1px solid #E5E7EB;
+    padding: 1rem;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - TalentScope</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <img src="Logos/TalentScope.png" alt="TalentScope" class="h-8">
+                        <h1 class="text-xl font-semibold text-gray-800">Accueil</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span id="user-fullname" class="text-gray-600"></span>
+                        <button id="profile-btn" class="text-gray-600 hover:text-gray-800">
+                            <i class="fas fa-user-circle text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <!-- En-tête de la section -->
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg mb-8">
+                <div class="px-8 py-6">
+                    <h2 class="text-2xl font-bold text-white mb-2">Accueil</h2>
+                    <p class="text-blue-100">Guide d'utilisation de TalentScope</p>
+                </div>
+            </div>
+
+            <!-- Section Ministère -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-landmark text-blue-600 mr-3"></i>
+                    Ministère de l'Économie et des Finances
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Mission -->
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-blue-800 mb-4 flex items-center">
+                            <i class="fas fa-bullseye text-blue-600 mr-2"></i>
+                            Mission
+                        </h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Le Ministère de l'Économie et des Finances du Maroc œuvre pour le développement économique durable, la gestion des finances publiques et l'amélioration du climat des affaires.
+                        </p>
+                    </div>
+
+                    <!-- Objectifs -->
+                    <div class="bg-green-50 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-green-800 mb-4 flex items-center">
+                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                            Objectifs
+                        </h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Moderniser l'administration publique, optimiser les processus de recrutement et garantir l'excellence dans la gestion des talents au service de l'État.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guide d'utilisation -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-book text-purple-600 mr-3"></i>
+                    Guide d'utilisation de TalentScope
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Étape 1 -->
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-1"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-blue-800">Préparation de l'offre</h3>
+                        </div>
+                        <p class="text-gray-700">
+                            Rédigez une description détaillée du poste, listez les compétences requises et spécifiez le niveau d'expérience souhaité.
+                        </p>
+                    </div>
+
+                    <!-- Étape 2 -->
+                    <div class="bg-green-50 rounded-lg p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-2"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-green-800">Importation des CVs</h3>
+                        </div>
+                        <p class="text-gray-700">
+                            Importez les CVs des candidats en format PDF ou Word. Le système supporte l'analyse de plusieurs fichiers simultanément.
+                        </p>
+                    </div>
+
+                    <!-- Étape 3 -->
+                    <div class="bg-yellow-50 rounded-lg p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 bg-yellow-600 text-white rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-3"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-yellow-800">Analyse intelligente</h3>
+                        </div>
+                        <p class="text-gray-700">
+                            Notre algorithme de Machine Learning analyse chaque CV et calcule un score de compatibilité basé sur plusieurs critères.
+                        </p>
+                    </div>
+
+                    <!-- Étape 4 -->
+                    <div class="bg-purple-50 rounded-lg p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-4"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-purple-800">Résultats et classement</h3>
+                        </div>
+                        <p class="text-gray-700">
+                            Consultez le classement des candidats, visualisez les CVs et accédez à l'analyse détaillée pour chaque profil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialiser le nom de l'utilisateur
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                document.getElementById('user-fullname').textContent = currentUser.fullName;
+            }
+        });
+    </script>
+</body>
+</html>

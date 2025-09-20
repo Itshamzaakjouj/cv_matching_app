@@ -1,175 +1,182 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-🚀 TALENTSCOPE - SERVEUR STABLE
-Serveur simple et stable avec comptes existants
+Serveur HTTP simple pour servir les fichiers statiques et gérer les analyses de CVs
 """
 
 import http.server
 import socketserver
 import os
-import urllib.parse
 import json
-from datetime import datetime
+from urllib.parse import urlparse
+import sys
 
-PORT = 8096
+def find_available_port(start_port=8096):
+    """Trouve un port disponible en commençant par start_port"""
+    port = start_port
+    while port < start_port + 10:  # Essaie 10 ports
+        try:
+            with socketserver.TCPServer(("", port), None) as test_server:
+                return port
+        except OSError:
+            port += 1
+    raise OSError("Aucun port disponible trouvé")
 
-class StableHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=os.getcwd(), **kwargs)
-    
+class RequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        parsed_path = urllib.parse.urlparse(self.path)
-        path = parsed_path.path
-        
-        print(f"🌐 Requête: {path}")
+        """Gère les requêtes GET"""
+        parsed_path = urlparse(self.path)
         
         # Routes principales
-        if path == '/' or path == '/auth' or path == '/login':
-            self.serve_auth_page()
-        elif path == '/dashboard' or path == '/home':
-            self.serve_file('modern_dashboard.html')
-        elif path == '/analysis':
-            self.serve_file('analysis_interface_ml_integrated.html')
-        elif path == '/profile':
-            self.serve_file('profile_management.html')
-        elif path == '/config':
-            self.serve_file('modern_dashboard.html')
-        else:
-            # Servir les fichiers statiques
-            super().do_GET()
-    
-    def serve_auth_page(self):
-        """Servir la page d'authentification avec comptes existants"""
-        try:
-            with open('auth_interface.html', 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # Injecter le script pour créer les comptes existants
-            accounts_script = """
-            <script>
-            // Créer automatiquement les comptes existants
-            document.addEventListener('DOMContentLoaded', function() {
-                console.log('🔧 Configuration des comptes existants...');
-                
-                if (window.userDatabase) {
-                    // Vérifier si les comptes existent déjà
-                    const users = window.userDatabase.getAllUsers();
-                    
-                    // Créer le compte akjouj17@gmail.com s'il n'existe pas
-                    if (!users['akjouj17@gmail.com']) {
-                        window.userDatabase.createUser(
-                            'akjouj17@gmail.com',
-                            'Hamza12345',
-                            'Akjouj Hamza',
-                            'Développement',
-                            'Développeur Senior',
-                            '+212 6 12 34 56 78'
-                        );
-                        console.log('✅ Compte akjouj17@gmail.com créé');
-                    }
-                    
-                    // Créer le compte elhafsaghazouani@gmail.com s'il n'existe pas
-                    if (!users['elhafsaghazouani@gmail.com']) {
-                        window.userDatabase.createUser(
-                            'elhafsaghazouani@gmail.com',
-                            'Hafsa2003',
-                            'Hafsa El Ghazouani',
-                            'Ressources Humaines',
-                            'Analyste RH',
-                            '+212 6 87 65 43 21'
-                        );
-                        console.log('✅ Compte elhafsaghazouani@gmail.com créé');
-                    }
-                    
-                    console.log('🎯 Comptes existants configurés automatiquement');
-                    console.log('📋 Comptes disponibles:');
-                    console.log('   • akjouj17@gmail.com / Hamza12345');
-                    console.log('   • elhafsaghazouani@gmail.com / Hafsa2003');
-                } else {
-                    console.log('❌ userDatabase non disponible');
-                }
-            });
-            </script>
-            """
-            
-            # Injecter le script avant la fermeture du body
-            if '</body>' in content:
-                content = content.replace('</body>', accounts_script + '</body>')
-            else:
-                content += accounts_script
-            
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html; charset=utf-8')
-            self.end_headers()
-            self.wfile.write(content.encode('utf-8'))
-            
-            print("✅ Page d'authentification servie avec comptes existants")
-            
-        except Exception as e:
-            print(f"❌ Erreur: {e}")
-            self.send_error(500, f"Erreur: {str(e)}")
-    
-    def serve_file(self, filename):
-        """Servir un fichier HTML"""
-        try:
-            if os.path.exists(filename):
-                with open(filename, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                
-                self.send_response(200)
-                self.send_header('Content-type', 'text/html; charset=utf-8')
-                self.end_headers()
-                self.wfile.write(content.encode('utf-8'))
-                
-                print(f"✅ {filename} servi")
-            else:
-                self.send_error(404, f"Fichier non trouvé: {filename}")
-                print(f"❌ Fichier non trouvé: {filename}")
-                
-        except Exception as e:
-            print(f"❌ Erreur: {e}")
-            self.send_error(500, f"Erreur: {str(e)}")
-    
-    def log_message(self, format, *args):
-        """Log personnalisé"""
-        timestamp = datetime.now().strftime('%H:%M:%S')
-        print(f"[{timestamp}] {format % args}")
+        routes = {
+            '/': 'auth_interface.html',
+            '/auth': 'auth_interface.html',
+            '/dashboard': 'modern_dashboard.html',
+            '/analysis': 'analysis_interface_ml_integrated.html',
+            '/profile': 'profile_management.html'
+        }
 
-def main():
-    """Fonction principale"""
-    print("🚀 TALENTSCOPE - SERVEUR STABLE")
-    print("=" * 50)
-    print("🎯 Comptes existants inclus automatiquement:")
-    print("   • akjouj17@gmail.com / Hamza12345")
-    print("   • elhafsaghazouani@gmail.com / Hafsa2003")
-    print("=" * 50)
-    
+        if parsed_path.path in routes:
+            self.serve_html_file(routes[parsed_path.path])
+        else:
+            super().do_GET()
+
+    def do_POST(self):
+        """Gère les requêtes POST"""
+        if self.path == '/analyze_cvs':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            
+            try:
+                # Simuler une analyse avec des données de test
+                analysis_results = {
+                    "averageScore": 0.75,
+                    "bestScore": 0.92,
+                    "scoreDistribution": [2, 4, 8, 5, 3],
+                    "candidates": [
+                        {
+                            "name": "CV_Senior_Dev.pdf",
+                            "score": 0.92,
+                            "skillsScore": 0.95,
+                            "experienceScore": 0.90,
+                            "details": {
+                                "matchingSkills": ["Python", "Machine Learning", "SQL"],
+                                "missingSkills": ["Spark"],
+                                "yearsOfExperience": 5
+                            }
+                        },
+                        {
+                            "name": "CV_Data_Engineer.pdf",
+                            "score": 0.85,
+                            "skillsScore": 0.88,
+                            "experienceScore": 0.82,
+                            "details": {
+                                "matchingSkills": ["Python", "SQL", "Data Visualization"],
+                                "missingSkills": ["Machine Learning", "Spark"],
+                                "yearsOfExperience": 3
+                            }
+                        },
+                        {
+                            "name": "CV_ML_Engineer.pdf",
+                            "score": 0.78,
+                            "skillsScore": 0.80,
+                            "experienceScore": 0.75,
+                            "details": {
+                                "matchingSkills": ["Python", "Machine Learning"],
+                                "missingSkills": ["SQL", "Spark"],
+                                "yearsOfExperience": 2
+                            }
+                        }
+                    ],
+                    "skillsAnalysis": {
+                        "labels": ["Python", "ML", "SQL", "Data Viz", "Cloud"],
+                        "required": [1, 1, 1, 0.8, 0.6],
+                        "found": [0.9, 0.8, 0.7, 0.6, 0.5]
+                    }
+                }
+
+                # Envoyer la réponse
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps(analysis_results).encode())
+                
+            except Exception as e:
+                print(f"Erreur lors de l'analyse: {e}")
+                self.send_error(500, f"Erreur serveur: {str(e)}")
+        else:
+            self.send_error(404)
+
+    def serve_html_file(self, filename):
+        """Sert un fichier HTML avec injection de code si nécessaire"""
+        try:
+            with open(filename, 'r', encoding='utf-8') as file:
+                content = file.read()
+
+                # Injection de code pour auth_interface.html
+                if filename == 'auth_interface.html':
+                    injection_script = """
+                    <script>
+                        if (!window.userDatabase.emailExists("akjouj17@gmail.com")) {
+                            window.userDatabase.createUser("akjouj17@gmail.com", "Hamza12345", "Akjouj Hamza", "Développement", "Développeur Senior", "0631249765");
+                        }
+                        if (!window.userDatabase.emailExists("elhafsaghazouani@gmail.com")) {
+                            window.userDatabase.createUser("elhafsaghazouani@gmail.com", "Hafsa2003", "Hafsa El Ghazouani", "Ressources Humaines", "Analyste RH", "0600000000");
+                        }
+                    </script>
+                    </body>
+                    """
+                    content = content.replace('</body>', injection_script)
+
+                self.send_response(200)
+                self.send_header('Content-type', 'text/html')
+                self.send_header('Cache-Control', 'no-store, must-revalidate')
+                self.send_header('Pragma', 'no-cache')
+                self.send_header('Expires', '0')
+                self.end_headers()
+                self.wfile.write(content.encode())
+                
+                if filename == 'auth_interface.html':
+                    print("✅ Page d'authentification servie avec comptes existants")
+                elif filename == 'modern_dashboard.html':
+                    print("✅ modern_dashboard.html servi")
+                elif filename == 'analysis_interface_ml_integrated.html':
+                    print("✅ analysis_interface_ml_integrated.html servi")
+
+        except FileNotFoundError:
+            self.send_error(404, f"File not found: {filename}")
+        except Exception as e:
+            self.send_error(500, f"Server error: {str(e)}")
+
+def run_server():
+    """Démarre le serveur HTTP"""
     try:
-        with socketserver.TCPServer(("", PORT), StableHandler) as httpd:
-            print(f"✅ Serveur démarré sur http://localhost:{PORT}")
-            print("=" * 50)
+        # Trouve un port disponible
+        port = find_available_port()
+        
+        with socketserver.TCPServer(("", port), RequestHandler) as httpd:
+            print("🚀 TALENTSCOPE - SERVEUR STABLE")
+            print("="*50)
+            print("🎯 Comptes existants inclus automatiquement:")
+            print("   • akjouj17@gmail.com / Hamza12345")
+            print("   • elhafsaghazouani@gmail.com / Hafsa2003")
+            print("="*50)
+            print(f"✅ Serveur démarré sur http://localhost:{port}")
+            print("="*50)
             print("🌐 URLs disponibles:")
-            print(f"   • Authentification: http://localhost:{PORT}/auth")
-            print(f"   • Dashboard: http://localhost:{PORT}/dashboard")
-            print(f"   • Analyse: http://localhost:{PORT}/analysis")
-            print(f"   • Profil: http://localhost:{PORT}/profile")
-            print("=" * 50)
+            print(f"   • Authentification: http://localhost:{port}/auth")
+            print(f"   • Dashboard: http://localhost:{port}/dashboard")
+            print(f"   • Analyse: http://localhost:{port}/analysis")
+            print(f"   • Profil: http://localhost:{port}/profile")
+            print("="*50)
             print("🔄 Le serveur est en cours d'exécution...")
             print("📝 Appuyez sur Ctrl+C pour arrêter")
-            print("=" * 50)
-            
+            print("="*50)
             httpd.serve_forever()
-            
+    except Exception as e:
+        print(f"❌ Erreur lors du démarrage du serveur: {e}")
+        sys.exit(1)
     except KeyboardInterrupt:
         print("\n🛑 Arrêt du serveur...")
-    except OSError as e:
-        if e.errno == 10048:
-            print(f"❌ Port {PORT} déjà utilisé.")
-        else:
-            print(f"❌ Erreur: {e}")
+        sys.exit(0)
 
 if __name__ == "__main__":
-    main()
-
-
+    run_server()
