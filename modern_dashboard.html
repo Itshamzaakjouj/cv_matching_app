@@ -780,21 +780,21 @@
             font-size: 0.85rem;
         }
 
-        .security-item, .preference-item {
+        .security-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 0;
         }
 
-        .security-info h4, .preference-info h4 {
+        .security-info h4 {
             color: var(--text-primary);
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 5px;
         }
 
-        .security-info p, .preference-info p {
+        .security-info p {
             color: var(--text-secondary);
             font-size: 0.85rem;
         }
@@ -1441,7 +1441,7 @@
                             <button type="button" class="btn btn-secondary" onclick="resetProfileForm()">
                                 <i class="fas fa-undo"></i> Annuler
                             </button>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="button" class="btn btn-primary" onclick="updateUserProfile()">
                                 <i class="fas fa-save"></i> Enregistrer
                             </button>
                         </div>
@@ -1500,47 +1500,6 @@
                     </div>
                 </div>
 
-                <!-- Préférences -->
-                <div class="profile-card">
-                    <div class="profile-card-header">
-                        <div class="profile-card-icon">
-                            <i class="fas fa-cog"></i>
-                        </div>
-                        <h3>Préférences</h3>
-                    </div>
-
-                    <div class="preference-item">
-                        <div class="preference-info">
-                            <h4>Notifications par e-mail</h4>
-                            <p>Recevoir des notifications importantes</p>
-                        </div>
-                        <div class="toggle-switch active" onclick="togglePreference(this, 'email-notifications')"></div>
-                    </div>
-
-                    <div class="section-divider"></div>
-
-                    <div class="preference-item">
-                        <div class="preference-info">
-                            <h4>Mode sombre</h4>
-                            <p>Interface en thème sombre</p>
-                        </div>
-                        <div class="toggle-switch" onclick="togglePreference(this, 'dark-mode')"></div>
-                    </div>
-
-                    <div class="section-divider"></div>
-
-                    <div class="preference-item">
-                        <div class="preference-info">
-                            <h4>Langue de l'interface</h4>
-                            <p>Français (FR)</p>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-outline btn-sm" onclick="changeLanguage()">
-                                <i class="fas fa-language"></i> Changer
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -1644,14 +1603,7 @@
         function updateUserInfo() {
             const currentUser = window.userDatabase?.getCurrentUser();
             if (currentUser) {
-                document.getElementById('user-fullname').textContent = currentUser.fullName || 'Utilisateur';
-                document.getElementById('user-role').textContent = currentUser.department || 'Ministère des Finances';
-                
-                // Mettre à jour l'avatar si une photo de profil existe
-                const sidebarAvatar = document.querySelector('.profile-avatar');
-                if (currentUser.profilePicture && sidebarAvatar) {
-                    sidebarAvatar.src = currentUser.profilePicture;
-                }
+                updateAllUserInfo(currentUser);
             }
         }
 
@@ -1659,22 +1611,7 @@
         function loadUserProfile() {
             const currentUser = window.userDatabase?.getCurrentUser();
             if (currentUser) {
-                // Mettre à jour l'avatar principal
-                const mainAvatar = document.getElementById('profile-avatar-large');
-                if (currentUser.profilePicture && mainAvatar) {
-                    mainAvatar.innerHTML = `<img src="${currentUser.profilePicture}" alt="Photo de profil">`;
-                }
-                
-                // Mettre à jour les champs du formulaire
-                document.getElementById('full-name').value = currentUser.fullName || '';
-                document.getElementById('email').value = currentUser.email || '';
-                document.getElementById('department').value = currentUser.department || 'development';
-                document.getElementById('position').value = currentUser.position || '';
-                document.getElementById('phone').value = currentUser.phone || '';
-                
-                // Mettre à jour l'affichage du profil
-                document.getElementById('profile-name').textContent = currentUser.fullName || 'Utilisateur';
-                document.getElementById('profile-role').textContent = currentUser.position || 'Utilisateur';
+                updateAllUserInfo(currentUser);
             }
         }
 
@@ -1807,11 +1744,6 @@
             document.getElementById('phone').value = '+212 6 12 34 56 78';
         }
 
-        function togglePreference(element, preference) {
-            element.classList.toggle('active');
-            const isActive = element.classList.contains('active');
-            console.log(`Préférence ${preference}: ${isActive ? 'activée' : 'désactivée'}`);
-        }
 
         function enable2FA() {
             if (confirm('Voulez-vous vraiment activer l\'authentification à deux facteurs ?')) {
@@ -1852,23 +1784,67 @@
                 return;
             }
 
+            // Récupérer les valeurs du formulaire
+            const fullName = document.getElementById('full-name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const department = document.getElementById('department').value;
+            const position = document.getElementById('position').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+
+            // Validation basique
+            if (!fullName || !email) {
+                alert('Le nom complet et l\'email sont obligatoires');
+                return;
+            }
+
             const profileData = {
-                fullName: document.getElementById('full-name').value,
-                email: document.getElementById('email').value,
-                department: document.getElementById('department').value,
-                position: document.getElementById('position').value,
-                phone: document.getElementById('phone').value
+                fullName: fullName,
+                email: email,
+                department: department,
+                position: position,
+                phone: phone
             };
 
             const updatedUser = window.userDatabase.updateCurrentUserProfile(profileData);
             if (updatedUser) {
-                // Update UI elements
-                updateUserInfo();
-                updateProfileDisplay();
+                // Mettre à jour tous les éléments UI
+                updateAllUserInfo(updatedUser);
                 alert('Profil mis à jour avec succès !');
             } else {
                 alert('Erreur lors de la mise à jour du profil');
             }
+        }
+
+        // Function to update all user info across the entire site
+        function updateAllUserInfo(user) {
+            // Mettre à jour la sidebar
+            const sidebarName = document.getElementById('user-fullname');
+            const sidebarRole = document.getElementById('user-role');
+            if (sidebarName) sidebarName.textContent = user.fullName;
+            if (sidebarRole) sidebarRole.textContent = user.department;
+
+            // Mettre à jour la section profil
+            const profileName = document.getElementById('profile-name');
+            const profileRole = document.getElementById('profile-role');
+            if (profileName) profileName.textContent = user.fullName;
+            if (profileRole) profileRole.textContent = user.position;
+
+            // Mettre à jour les champs du formulaire
+            document.getElementById('full-name').value = user.fullName;
+            document.getElementById('email').value = user.email;
+            document.getElementById('department').value = user.department;
+            document.getElementById('position').value = user.position;
+            document.getElementById('phone').value = user.phone || '';
+
+            // Mettre à jour l'avatar si une photo existe
+            if (user.profilePicture) {
+                const sidebarAvatar = document.querySelector('.profile-avatar');
+                const mainAvatar = document.getElementById('profile-avatar-large');
+                if (sidebarAvatar) sidebarAvatar.src = user.profilePicture;
+                if (mainAvatar) mainAvatar.innerHTML = `<img src="${user.profilePicture}" alt="Photo de profil">`;
+            }
+
+            console.log('Informations utilisateur mises à jour dans tout le site');
         }
 
         // Function to update profile display
