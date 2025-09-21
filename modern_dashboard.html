@@ -556,6 +556,317 @@
         .metric-card:nth-child(2) { animation-delay: 0.1s; }
         .metric-card:nth-child(3) { animation-delay: 0.2s; }
         .metric-card:nth-child(4) { animation-delay: 0.3s; }
+
+        /* Profile Management Styles */
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .profile-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: var(--backdrop-blur);
+        }
+
+        .profile-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-primary);
+        }
+
+        .profile-card-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .profile-card-header h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .profile-picture-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-picture {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .profile-avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            margin: 0 auto;
+            border: 4px solid white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .profile-avatar-large img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .upload-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 35px;
+            height: 35px;
+            background: #10B981;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-info {
+            text-align: center;
+        }
+
+        .profile-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .profile-role {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .info-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-primary);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-primary);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background: #10B981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+
+        .security-item, .preference-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .security-info h4, .preference-info h4 {
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .security-info p, .preference-info p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-inactive {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: var(--border-primary);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: #10B981;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(26px);
+        }
+
+        .section-divider {
+            height: 1px;
+            background: var(--border-primary);
+            margin: 20px 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .profile-card {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -638,7 +949,7 @@
                     <div class="profile-role">Ministère des Finances</div>
                 </div>
                 <div class="profile-actions">
-                    <button class="profile-btn" onclick="editProfile()" title="Gestion du profil"><i class="fas fa-cog"></i></button>
+                    <button class="profile-btn" onclick="showSection('profile')" title="Gestion du profil"><i class="fas fa-cog"></i></button>
                     <div class="dropdown-menu" id="profileDropdown">
                         <div class="dropdown-item" onclick="editProfile()">
                             <i>✏️</i>
@@ -1063,6 +1374,181 @@
                 </div>
             </div>
         </div>
+
+        <!-- Profile Management Section -->
+        <div id="profile-section" class="content-section" style="display: none;">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Gestion du Profil</h1>
+                <p class="dashboard-subtitle">Gérez vos informations personnelles et paramètres de sécurité</p>
+            </div>
+            
+            <div class="profile-content">
+                <!-- Informations Personnelles -->
+                <div class="profile-card">
+                    <div class="profile-card-header">
+                        <div class="profile-card-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3>Informations Personnelles</h3>
+                    </div>
+                    
+                    <div class="profile-picture-section">
+                        <div class="profile-picture">
+                            <div class="profile-avatar-large" id="profile-avatar-large">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <button class="upload-btn" onclick="uploadProfilePicture()">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                        <div class="profile-info">
+                            <div class="profile-name" id="profile-name">Akjouj Hamza</div>
+                            <div class="profile-role" id="profile-role">Développeur Senior</div>
+                            <div class="info-badge">
+                                <i class="fas fa-shield-alt"></i>
+                                Compte vérifié
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label for="full-name">Nom complet</label>
+                            <input type="text" id="full-name" class="form-control" value="Akjouj Hamza" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Adresse e-mail professionnelle</label>
+                            <input type="email" id="email" class="form-control" value="akjouj17@gmail.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="department">Département</label>
+                            <select id="department" class="form-control" required>
+                                <option value="development">Développement</option>
+                                <option value="finance">Finance</option>
+                                <option value="hr">Ressources Humaines</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="operations">Opérations</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="position">Poste</label>
+                            <input type="text" id="position" class="form-control" value="Développeur Senior" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Téléphone professionnel</label>
+                            <input type="tel" id="phone" class="form-control" value="+212 6 12 34 56 78">
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary" onclick="resetProfileForm()">
+                                <i class="fas fa-undo"></i> Annuler
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Enregistrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Sécurité -->
+                <div class="profile-card">
+                    <div class="profile-card-header">
+                        <div class="profile-card-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Sécurité du Compte</h3>
+                    </div>
+
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>Mot de passe</h4>
+                            <p>Dernière modification il y a 30 jours</p>
+                        </div>
+                        <div class="security-status">
+                            <span class="status-badge status-active">Sécurisé</span>
+                            <button class="btn btn-outline btn-sm" onclick="changePassword()">
+                                <i class="fas fa-key"></i> Modifier
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>Authentification à deux facteurs</h4>
+                            <p>Ajoutez une couche de sécurité supplémentaire</p>
+                        </div>
+                        <div class="security-status">
+                            <span class="status-badge status-inactive">Non activé</span>
+                            <button class="btn btn-success btn-sm" onclick="enable2FA()">
+                                <i class="fas fa-mobile-alt"></i> Activer
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>Sessions actives</h4>
+                            <p>2 appareils connectés actuellement</p>
+                        </div>
+                        <div class="security-status">
+                            <button class="btn btn-outline btn-sm" onclick="viewSessions()">
+                                <i class="fas fa-desktop"></i> Gérer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Préférences -->
+                <div class="profile-card">
+                    <div class="profile-card-header">
+                        <div class="profile-card-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <h3>Préférences</h3>
+                    </div>
+
+                    <div class="preference-item">
+                        <div class="preference-info">
+                            <h4>Notifications par e-mail</h4>
+                            <p>Recevoir des notifications importantes</p>
+                        </div>
+                        <div class="toggle-switch active" onclick="togglePreference(this, 'email-notifications')"></div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="preference-item">
+                        <div class="preference-info">
+                            <h4>Mode sombre</h4>
+                            <p>Interface en thème sombre</p>
+                        </div>
+                        <div class="toggle-switch" onclick="togglePreference(this, 'dark-mode')"></div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="preference-item">
+                        <div class="preference-info">
+                            <h4>Langue de l'interface</h4>
+                            <p>Français (FR)</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-outline btn-sm" onclick="changeLanguage()">
+                                <i class="fas fa-language"></i> Changer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -1227,13 +1713,78 @@
 
 
         function editProfile() {
-            window.location.href = '/profile';
+            showSection('profile');
         }
 
         function changePassword() {
             alert('Fonctionnalité de changement de mot de passe en cours de développement');
             document.getElementById('profileDropdown').classList.remove('show');
         }
+
+        // Profile Management Functions
+        function uploadProfilePicture() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const avatar = document.getElementById('profile-avatar-large');
+                        avatar.innerHTML = `<img src="${e.target.result}" alt="Photo de profil">`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        }
+
+        function resetProfileForm() {
+            document.getElementById('profile-form').reset();
+            document.getElementById('full-name').value = 'Akjouj Hamza';
+            document.getElementById('email').value = 'akjouj17@gmail.com';
+            document.getElementById('department').value = 'development';
+            document.getElementById('position').value = 'Développeur Senior';
+            document.getElementById('phone').value = '+212 6 12 34 56 78';
+        }
+
+        function togglePreference(element, preference) {
+            element.classList.toggle('active');
+            const isActive = element.classList.contains('active');
+            console.log(`Préférence ${preference}: ${isActive ? 'activée' : 'désactivée'}`);
+        }
+
+        function enable2FA() {
+            if (confirm('Voulez-vous vraiment activer l\'authentification à deux facteurs ?')) {
+                alert('Authentification à deux facteurs activée !');
+                // Ici vous pourriez ajouter la logique pour activer la 2FA
+            }
+        }
+
+        function viewSessions() {
+            alert('Gestion des sessions en cours de développement');
+        }
+
+        function changeLanguage() {
+            const languages = ['Français', 'English', 'Español'];
+            const currentLang = 'Français';
+            const newLang = prompt(`Langue actuelle: ${currentLang}\nNouvelles langues disponibles: ${languages.join(', ')}`);
+            if (newLang && languages.includes(newLang)) {
+                console.log(`Langue changée vers ${newLang}`);
+            }
+        }
+
+        // Handle profile form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileForm = document.getElementById('profile-form');
+            if (profileForm) {
+                profileForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Profil mis à jour avec succès !');
+                });
+            }
+        });
 
         function viewSettings() {
             showSection('config');
