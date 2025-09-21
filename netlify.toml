@@ -1,0 +1,8 @@
+[build]
+  publish = "."
+  command = "npm install"
+
+[[redirects]]
+  from = "/*"
+  to = "/auth_interface.html"
+  status = 200
