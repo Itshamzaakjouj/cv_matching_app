@@ -46,8 +46,7 @@ VALID_USERS = {
 def login_page():
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
-        st.image("Logos/TalentScope.png", width=150)
-        st.title("TalentScope")
+        st.title("🎯 TalentScope")
         st.markdown("### Ministère de l'Économie et des Finances")
         st.markdown("#### Plateforme de gestion des talents")
 
