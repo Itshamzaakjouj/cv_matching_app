@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="Logos/TalentScope.png">
     <link rel="stylesheet" href="professional-icons.css">
     <script src="user_database.js"></script>
-    <script src="direct-translation.js"></script>
+    <script src="translations-system.js"></script>
     <script src="icon-replacer.js"></script>
     <style>
         * {
@@ -394,9 +394,9 @@
     <!-- Contrôles de thème et langue -->
     <div class="top-controls">
         <div class="language-selector">
-            <select id="language-select" onchange="handleLanguageChange(this)">
-                <option value="fr">Français</option>
-                <option value="en">English</option>
+            <select id="languageSelector">
+                <option value="fr" data-translate="french">Français</option>
+                <option value="en" data-translate="english">English</option>
             </select>
         </div>
     </div>
@@ -408,17 +408,17 @@
                 <img src="Logos/TalentScope.png" alt="TalentScope Logo" style="width: 80px; height: 80px; object-fit: contain;">
                 <img src="Logos/MEF2.png" alt="Ministère Logo" style="width: 80px; height: 80px; object-fit: contain;">
             </div>
-            <h1>TalentScope</h1>
+            <h1 data-translate="app-title">TalentScope</h1>
             <p>
-                <span data-translate="profile.ministry">Ministère de l'Économie et des Finances</span><br>
-                <span data-translate="dashboard.subtitle">Plateforme de gestion des talents</span>
+                <span data-translate="ministry-name">Ministère de l'Économie et des Finances</span><br>
+                <span data-translate="platform-description">Plateforme de gestion des talents</span>
             </p>
         </div>
 
         <!-- Onglets -->
         <div class="form-tabs">
-            <button class="tab-button active" onclick="switchTab('login')" data-translate="auth.login">Connexion</button>
-            <button class="tab-button" onclick="switchTab('register')" data-translate="auth.register">Inscription</button>
+            <button class="tab-button active" onclick="switchTab('login')" data-translate="login-tab">Connexion</button>
+            <button class="tab-button" onclick="switchTab('register')" data-translate="register-tab">Inscription</button>
         </div>
 
         <!-- Messages -->
@@ -429,30 +429,30 @@
         <div id="login-form" class="form-content active">
             <form onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label for="login-email" data-translate="auth.email">Adresse e-mail</label>
-                    <input type="email" id="login-email" class="form-control" placeholder="votre.email@finances.gov.ma" required>
+                    <label for="login-email" data-translate="email-label">Adresse mail</label>
+                    <input type="email" id="login-email" class="form-control" data-translate-placeholder="email-placeholder" placeholder="Entrez votre adresse e-mail" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="login-password" data-translate="auth.password">Mot de passe</label>
+                    <label for="login-password" data-translate="password-label">Mot de passe</label>
                     <div class="input-wrapper">
-                        <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+                        <input type="password" id="login-password" class="form-control" data-translate-placeholder="password-placeholder" placeholder="Entrez votre mot de passe" required>
                         <button type="button" class="password-toggle" onclick="togglePassword('login-password')">👁️</button>
                     </div>
                 </div>
 
                 <div class="forgot-password">
-                    <a href="#" onclick="showForgotPassword()" data-translate="auth.forgot_password">Mot de passe oublié ?</a>
+                    <a href="#" onclick="showForgotPassword()" data-translate="forgot-password">Mot de passe oublié ?</a>
                 </div>
 
-                <button type="submit" class="btn btn-primary" id="login-btn" data-translate="auth.login">Se connecter</button>
+                <button type="submit" class="btn btn-primary" id="login-btn" data-translate="login-button">Se connecter</button>
             </form>
 
             <div class="divider"><span data-translate="auth.or">ou</span></div>
 
             <div class="social-login">
                 <button type="button" class="social-btn" onclick="socialLogin('ministry')">
-                    🏛️ <span data-translate="profile.ministry">Ministère</span>
+                    🏛️ <span data-translate="ministry-sso">Ministère</span>
                 </button>
             </div>
         </div>
@@ -461,109 +461,40 @@
         <div id="register-form" class="form-content">
             <form onsubmit="handleRegister(event)">
                 <div class="form-group">
-                    <label for="register-name" data-translate="auth.fullname">Nom complet</label>
-                    <input type="text" id="register-name" class="form-control" placeholder="Prénom Nom" required>
+                    <label for="register-name" data-translate="name-label">Nom complet</label>
+                    <input type="text" id="register-name" class="form-control" data-translate-placeholder="name-placeholder" placeholder="Entrez votre nom complet" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="register-email" data-translate="auth.email">Adresse mail</label>
-                    <input type="email" id="register-email" class="form-control" placeholder="nom@finances.gov.ma" required>
+                    <label for="register-email" data-translate="email-label">Adresse mail</label>
+                    <input type="email" id="register-email" class="form-control" data-translate-placeholder="email-placeholder" placeholder="Entrez votre adresse e-mail" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="register-password" data-translate="auth.password">Mot de passe</label>
+                    <label for="register-password" data-translate="password-label">Mot de passe</label>
                     <div class="input-wrapper">
-                        <input type="password" id="register-password" class="form-control" placeholder="••••••••" required minlength="8">
+                        <input type="password" id="register-password" class="form-control" data-translate-placeholder="password-placeholder" placeholder="Entrez votre mot de passe" required minlength="8">
                         <button type="button" class="password-toggle" onclick="togglePassword('register-password')">👁️</button>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="register-confirm" data-translate="auth.confirm_password">Confirmer</label>
+                    <label for="register-confirm" data-translate="confirm-password-label">Confirmer le mot de passe</label>
                     <div class="input-wrapper">
-                        <input type="password" id="register-confirm" class="form-control" placeholder="••••••••" required>
+                        <input type="password" id="register-confirm" class="form-control" data-translate-placeholder="confirm-password-placeholder" placeholder="Confirmez votre mot de passe" required>
                         <button type="button" class="password-toggle" onclick="togglePassword('register-confirm')">👁️</button>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" id="register-btn" data-translate="auth.register_title">Créer le compte</button>
-                <button type="button" class="btn btn-secondary" onclick="requestAccess()" data-translate="auth.request_access">Demander l'accès</button>
+                <button type="submit" class="btn btn-primary" id="register-btn" data-translate="register-button">S'inscrire</button>
+                <button type="button" class="btn btn-secondary" onclick="requestAccess()" data-translate="access-request-button">Demander l'accès</button>
             </form>
         </div>
     </div>
 
     <script>
-        // Fonction de traduction
-        function translatePage(lang) {
-            const translations = {
-                fr: {
-                    'auth.login': 'Connexion',
-                    'auth.register': 'Inscription',
-                    'auth.fullname': 'Nom complet',
-                    'auth.email': 'Adresse e-mail',
-                    'auth.password': 'Mot de passe',
-                    'auth.confirm_password': 'Confirmer',
-                    'auth.register_title': 'Créer le compte',
-                    'auth.request_access': 'Demander l\'accès',
-                    'auth.forgot_password': 'Mot de passe oublié ?',
-                    'auth.or': 'ou',
-                    'profile.ministry': 'Ministère',
-                    'dashboard.subtitle': 'Plateforme de gestion des talents'
-                },
-                en: {
-                    'auth.login': 'Login',
-                    'auth.register': 'Register',
-                    'auth.fullname': 'Full Name',
-                    'auth.email': 'Email Address',
-                    'auth.password': 'Password',
-                    'auth.confirm_password': 'Confirm',
-                    'auth.register_title': 'Create Account',
-                    'auth.request_access': 'Request Access',
-                    'auth.forgot_password': 'Forgot Password?',
-                    'auth.or': 'or',
-                    'profile.ministry': 'Ministry',
-                    'dashboard.subtitle': 'Talent Management Platform'
-                }
-            };
-
-            document.querySelectorAll('[data-translate]').forEach(element => {
-                const key = element.getAttribute('data-translate');
-                if (translations[lang] && translations[lang][key]) {
-                    element.textContent = translations[lang][key];
-                }
-            });
-
-            // Sauvegarder la langue sélectionnée
-            localStorage.setItem('language', lang);
-        }
-
-        // Gestionnaire de changement de langue
-        function handleLanguageChange(selectElement) {
-            const lang = selectElement.value;
-            
-            // Ajouter l'effet de transition
-            const container = document.querySelector('.auth-container');
-            
-            // Animation de sortie
-            container.style.opacity = '0';
-            container.style.transform = 'translateY(-20px)';
-            
-            setTimeout(() => {
-                // Traduire pendant que le contenu est invisible
-                translatePage(lang);
-                
-                // Animation d'entrée
-                container.style.opacity = '1';
-                container.style.transform = 'translateY(0)';
-            }, 300);
-
-            // Effet visuel sur le sélecteur de langue
-            const languageSelector = document.querySelector('.language-selector');
-            languageSelector.classList.add('language-change');
-            setTimeout(() => {
-                languageSelector.classList.remove('language-change');
-            }, 500);
-        }
+        // Le système de traduction est maintenant géré par translations-system.js
+        // Pas besoin de code de traduction supplémentaire ici
 
         // Changement d'onglet
         function switchTab(tab) {
@@ -755,13 +686,7 @@
             // Vider les champs
             prefillUserFields();
 
-            // Initialiser la langue
-            const savedLanguage = localStorage.getItem('language') || 'fr';
-            const languageSelect = document.getElementById('language-select');
-            if (languageSelect) {
-                languageSelect.value = savedLanguage;
-                translatePage(savedLanguage);
-            }
+            // L'initialisation de la langue est gérée par TranslationSystem
         });
 
         // S'assurer que les champs sont vides à chaque chargement de la page
