@@ -1,0 +1,12 @@
+{
+  "name": "talentscope",
+  "version": "1.0.0",
+  "description": "TalentScope - Plateforme de gestion des talents",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
