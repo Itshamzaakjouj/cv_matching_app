@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentScope - Paramètres</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="translations.js"></script>
+</head>
+<body>
+    <div class="main-content">
+        <header>
+            <h1 data-translate="settings.app_settings">Paramètres de l'application</h1>
+        </header>
+
+        <section class="settings-section">
+            <h2 data-translate="settings.title">Paramètres</h2>
+
+            <!-- Thème -->
+            <div class="setting-group">
+                <h3 data-translate="settings.theme">Thème</h3>
+                <p class="setting-description" data-translate="settings.theme.description">Choisissez le thème de l'interface</p>
+                <select id="theme-select" class="setting-control">
+                    <option value="light" data-translate="settings.theme.light">Clair</option>
+                    <option value="dark" data-translate="settings.theme.dark">Sombre</option>
+                </select>
+            </div>
+
+            <!-- Langue -->
+            <div class="setting-group">
+                <h3 data-translate="settings.language">Langue</h3>
+                <p class="setting-description" data-translate="settings.language.description">Sélectionnez la langue de l'interface</p>
+                <select id="language-select" class="setting-control" data-translation-select>
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+
+            <!-- Notifications -->
+            <div class="setting-group">
+                <h3 data-translate="settings.notifications">Notifications</h3>
+                <p class="setting-description" data-translate="settings.notifications.description">Configurez vos préférences de notification</p>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" checked>
+                        <span data-translate="settings.notifications.email">Notifications par email</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" checked>
+                        <span data-translate="settings.notifications.push">Notifications push</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Zone de danger -->
+            <div class="setting-group danger-zone">
+                <h3 data-translate="settings.danger_zone">Zone de danger</h3>
+                <p class="warning-text" data-translate="settings.danger_zone.warning">Actions irréversibles - Procédez avec prudence</p>
+            </div>
+        </section>
+    </div>
+
+    <style>
+        .main-content {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .setting-group {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .setting-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .setting-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .danger-zone {
+            border: 1px solid #ff4444;
+            background: #fff5f5;
+        }
+
+        .warning-text {
+            color: #dc3545;
+            font-weight: 500;
+        }
+
+        /* Animation de changement de langue */
+        .language-change {
+            animation: languageChange 0.5s ease;
+        }
+
+        @keyframes languageChange {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+                background: rgba(255, 255, 255, 1);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialiser les traductions
+            window.translationManager.init();
+
+            // Récupérer les préférences sauvegardées
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const themeSelect = document.getElementById('theme-select');
+            if (themeSelect) {
+                themeSelect.value = savedTheme;
+            }
+
+            // Gestionnaire de changement de thème
+            themeSelect.addEventListener('change', (e) => {
+                const theme = e.target.value;
+                localStorage.setItem('theme', theme);
+                document.documentElement.setAttribute('data-theme', theme);
+            });
+        });
+    </script>
+</body>
+</html>

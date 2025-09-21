@@ -8,15 +8,16 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="analysis_styles.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="analysis_storage.js"></script>
     <script src="cv_matching_client.js"></script>
     <script src="cv_upload_handler.js"></script>
     <script src="skill_manager.js"></script>
     <script src="navigation_manager.js"></script>
 </head>
-<body class="bg-gray-50">
-    <div class="min-h-screen">
+<body class="bg-gray-50 min-h-screen">
+    <div class="pb-24">
         <!-- Header -->
-        <header class="bg-white shadow-sm">
+        <header class="bg-white shadow-sm fixed top-0 left-0 right-0 z-50">
             <div class="container mx-auto px-4 py-4">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
@@ -32,9 +33,11 @@
                 </div>
             </div>
         </header>
+        <!-- Spacer pour le header fixe -->
+        <div class="h-16"></div>
 
         <!-- Main Content -->
-        <main class="container mx-auto px-4 py-8">
+        <main class="container mx-auto px-4 py-4 mt-20">
 
             <!-- Step 1: Job Offer -->
             <div id="step1-content" class="step-content active">
@@ -265,7 +268,7 @@
             </div>
 
             <!-- Navigation Bar -->
-            <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
+            <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
                 <div class="container mx-auto px-4 py-4">
                     <div class="flex items-center justify-between max-w-5xl mx-auto">
                         <!-- Bouton Précédent -->

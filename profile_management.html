@@ -3,710 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalentScope - Gestion du Profil</title>
-    <link rel="icon" type="image/png" href="Logos/TalentScope.png">
-    <link rel="stylesheet" href="themes.css">
-    <link rel="stylesheet" href="professional-icons.css">
+    <title>TalentScope - Gestion du profil</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <script src="user_database.js"></script>
-    <script src="direct-translation.js"></script>
-    <script src="icon-replacer.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-secondary);
-            min-height: 100vh;
-            display: flex;
-            color: var(--text-primary);
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: var(--bg-glass);
-            backdrop-filter: var(--backdrop-blur);
-            border-radius: 0 20px 20px 0;
-            padding: 30px 20px;
-            box-shadow: var(--shadow-xl);
-            border: 1px solid var(--border-primary);
-            position: fixed;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .logo h1 {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .logo p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .nav-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .nav-title {
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
         .nav-item {
             display: flex;
             align-items: center;
             padding: 12px 16px;
             margin-bottom: 8px;
             border-radius: 12px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: var(--transition);
             cursor: pointer;
+            transition: all 0.3s ease;
+            color: #666;
+            text-decoration: none;
+            gap: 45px;
         }
-
-        .nav-item:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .nav-item.active {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: #ffffff !important;
-        }
-
-        .nav-item.active div {
-            color: #ffffff !important;
-        }
-
-        .nav-item.active .subtitle {
-            color: rgba(255, 255, 255, 0.9) !important;
-        }
-
         .nav-item i {
             font-size: 1.2rem;
-            margin-right: 12px;
-            width: 20px;
+            width: 24px;
             text-align: center;
-        }
-
-        .subtitle {
-            font-size: 0.8rem;
-            color: var(--text-tertiary);
-            margin-top: 2px;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 280px;
-            padding: 30px;
-            background: var(--bg-secondary);
-        }
-
-        /* Profile Header */
-        .profile-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 30px;
-            border-radius: var(--border-radius);
-            margin-bottom: 30px;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .profile-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 8px;
-        }
-
-        .profile-subtitle {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 400;
-        }
-
-        /* Profile Content */
-        .profile-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .profile-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-primary);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            box-shadow: var(--shadow-md);
-            transition: var(--transition);
-        }
-
-        .profile-card:hover {
-            box-shadow: var(--shadow-xl);
-            transform: translateY(-3px);
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-title i {
-            color: var(--primary-color);
-        }
-
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border-secondary);
-            border-radius: var(--border-radius-sm);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--border-focus);
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-control:hover {
-            border-color: var(--border-hover);
-        }
-
-        .form-control::placeholder {
-            color: var(--text-muted);
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: var(--border-radius-sm);
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: var(--transition);
+            min-width: 24px;
             display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: var(--text-inverse);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-xl);
-            filter: brightness(1.05);
-        }
-
-        .btn-secondary {
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-secondary);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-tertiary);
-            transform: translateY(-1px);
-        }
-
-        .btn-danger {
-            background: var(--danger-color);
-            color: var(--text-inverse);
-        }
-
-        .btn-danger:hover {
-            filter: brightness(1.1);
-            transform: translateY(-1px);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        /* Avatar Section */
-        .avatar-section {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            align-items: center;
+        }
+        .nav-item:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: #4F46E5;
+        }
+        .nav-item.active {
+            background: #4F46E5;
             color: white;
-            margin: 0 auto 15px;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .avatar-upload {
-            background: var(--bg-secondary);
-            border: 2px dashed var(--border-secondary);
-            border-radius: var(--border-radius-sm);
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .avatar-upload:hover {
-            border-color: var(--primary-color);
-            background: var(--bg-tertiary);
-        }
-
-        /* Security Section */
-        .security-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border-tertiary);
-        }
-
-        .security-item:last-child {
-            border-bottom: none;
-        }
-
-        .security-info h4 {
-            color: var(--text-primary);
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .security-info p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* User Profile Section */
-        .user-info {
-            position: absolute;
-            bottom: 30px;
-            left: 20px;
-            right: 20px;
-            padding: 0;
-        }
-
-        .user-profile-card {
-            background: var(--bg-glass);
-            border: 1px solid var(--border-primary);
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.3s ease;
-            backdrop-filter: var(--backdrop-blur);
-        }
-
-        .user-profile-card:hover {
-            background: var(--bg-tertiary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .profile-photo {
-            flex-shrink: 0;
-        }
-
-        .profile-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--border-primary);
-            transition: all 0.3s ease;
-        }
-
-        .profile-avatar:hover {
-            border-color: var(--primary-color);
-            transform: scale(1.05);
-        }
-
-        .profile-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .profile-name {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .profile-role {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .profile-actions {
-            flex-shrink: 0;
-            position: relative;
-        }
-
-        .profile-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-        }
-
-        .profile-btn:hover {
-            background: var(--bg-tertiary);
-            color: var(--primary-color);
-            transform: scale(1.1);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            bottom: 100%;
-            right: 0;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-primary);
-            border-radius: 8px;
-            box-shadow: var(--shadow-lg);
-            min-width: 200px;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-menu.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .dropdown-item:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .dropdown-item i {
-            margin-right: 10px;
-            font-size: 1rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .profile-content {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-            
-            .sidebar {
-                display: none;
-            }
         }
     </style>
 </head>
-<body>
-    <!-- Contrôles de thème et langue -->
-    <div class="theme-toggle" id="theme-toggle" title="Basculer le thème">
-        🌙
-    </div>
-    
-    <div class="language-selector">
-        <select id="language-select">
-            <option value="fr">🇫🇷 FR</option>
-            <option value="en">🇺🇸 EN</option>
-        </select>
-    </div>
-
+<body class="bg-gray-50">
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">
-            <div class="logo-icon" style="display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; margin-bottom: 10px;">
-                <img src="Logos/TalentScope.png" alt="TalentScope Logo" style="width: 60px; height: 60px; object-fit: contain;">
-                <img src="Logos/MEF2.png" alt="Ministère Logo" style="width: 60px; height: 60px; object-fit: contain;">
+    <div class="fixed left-0 top-0 w-64 h-screen bg-white shadow-lg">
+        <div class="flex flex-col h-full">
+            <!-- Logo -->
+            <div class="p-4">
+                <div class="flex items-center justify-center space-x-4">
+                    <img src="Logos/TalentScope.png" alt="TalentScope" class="h-12">
+                    <img src="Logos/MEF.png" alt="MEF" class="h-12">
+                </div>
+                <div class="text-center mt-4">
+                    <h1 class="text-xl font-bold text-gray-800">TalentScope</h1>
+                    <p class="text-sm text-gray-600">Ministère de l'Économie et des Finances</p>
+                </div>
             </div>
-            <h1>TalentScope</h1>
-            <p data-translate="profile.ministry">Ministère de l'Économie et des Finances</p>
-        </div>
 
-        <div class="nav-section">
-            <div class="nav-title" data-translate="nav.home">Navigation</div>
-            <a href="modern_dashboard.html" class="nav-item">
-                <i>🏠</i>
-                <div>
-                    <div data-translate="nav.home">Accueil</div>
-                    <div class="subtitle" data-translate="nav.home_subtitle">Page principale</div>
-                </div>
-            </a>
-            <a href="modern_dashboard.html" class="nav-item">
-                <i>📊</i>
-                <div>
-                    <div data-translate="nav.dashboard">Tableau de Bord</div>
-                    <div class="subtitle" data-translate="nav.dashboard_subtitle">Vue d'ensemble</div>
-                </div>
-            </a>
-            <a href="analysis_interface.html" class="nav-item">
-                <i>🚀</i>
-                <div>
-                    <div data-translate="nav.new_analysis">Nouvelle Analyse</div>
-                    <div class="subtitle" data-translate="nav.analysis_subtitle">Analyser des CVs</div>
-                </div>
-            </a>
-            <a href="modern_dashboard.html" class="nav-item">
-                <i>📁</i>
-                <div>
-                    <div data-translate="nav.processed_cvs">CVs Traités</div>
-                    <div class="subtitle" data-translate="nav.cvs_subtitle">Historique des analyses</div>
-                </div>
-            </a>
-            <a href="modern_dashboard.html" class="nav-item">
-                <i>⚙️</i>
-                <div>
-                    <div data-translate="nav.configuration">Configuration</div>
-                    <div class="subtitle" data-translate="nav.config_subtitle">Paramètres</div>
-                </div>
-            </a>
-        </div>
+            <!-- Navigation -->
+            <div class="p-4 flex-1">
+                <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">NAVIGATION</h2>
+                <nav class="space-y-2">
+                    <a href="/dashboard" class="nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Accueil</span>
+                    </a>
+                    <a href="/dashboard" class="nav-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Tableau de Bord</span>
+                    </a>
+                    <a href="/analysis" class="nav-item">
+                        <i class="fas fa-search"></i>
+                        <span>Nouvelle Analyse</span>
+                    </a>
+                    <a href="/treated_cvs" class="nav-item">
+                        <i class="fas fa-folder"></i>
+                        <span>CVs Traités</span>
+                    </a>
+                    <a href="/profile" class="nav-item active">
+                        <i class="fas fa-cog"></i>
+                        <span>Configuration</span>
+                    </a>
+                </nav>
+            </div>
 
-        <!-- User Profile Section -->
-        <div class="user-info">
-            <div class="user-profile-card">
-                <div class="profile-photo">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiM2NjdFRUEiLz4KPHN2ZyB4PSI4IiB5PSI4IiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDEyQzE0LjIwOTEgMTIgMTYgMTAuMjA5MSAxNiA4QzE2IDUuNzkwODYgMTQuMjA5MSA0IDEyIDRDOS43OTA4NiA0IDggNS43OTA4NiA4IDhDOCAxMC4yMDkxIDkuNzkwODYgMTIgMTIgMTJaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTIgMTRDOC42ODYyOSAxNCA2IDE2LjY4NjMgNiAyMFYyMkgxOFYyMEMxOCAxNi42ODYzIDE1LjMxMzcgMTQgMTIgMTRaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4KPC9zdmc+" alt="Photo de profil" class="profile-avatar">
-                </div>
-                <div class="profile-info">
-                    <div class="profile-name" id="user-fullname">Utilisateur</div>
-                    <div class="profile-role" data-translate="profile.ministry">Ministère des Finances</div>
-                </div>
-                <div class="profile-actions">
-                    <button class="profile-btn" onclick="editProfile()" title="Gestion du profil">⚙️</button>
-                    <div class="dropdown-menu" id="profileDropdown">
-                        <div class="dropdown-item" onclick="editProfile()">
-                            <i>✏️</i>
-                            <span data-translate="profile.edit">Modifier le profil</span>
-                        </div>
-                        <div class="dropdown-item" onclick="changePassword()">
-                            <i>🔒</i>
-                            <span data-translate="profile.change_password">Changer le mot de passe</span>
-                        </div>
-                        <div class="dropdown-item" onclick="viewSettings()">
-                            <i>⚙️</i>
-                            <span data-translate="profile.settings">Paramètres</span>
-                        </div>
-                        <div class="dropdown-item" onclick="logout()" style="color: #dc2626;">
-                            <i>🚪</i>
-                            <span data-translate="profile.logout">Déconnexion</span>
+            <!-- User Profile -->
+            <div class="p-4 border-t">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0">
+                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                            <i class="fas fa-user"></i>
                         </div>
                     </div>
+                    <div class="flex-1">
+                        <p id="user-fullname" class="text-sm font-medium text-gray-900"></p>
+                        <p class="text-xs text-gray-500">Ministère des Finances</p>
+                    </div>
+                    <button class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-cog"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <!-- Profile Header -->
-        <div class="profile-header">
-            <h1 class="profile-title" data-translate="profile.edit">Gestion du Profil</h1>
-            <p class="profile-subtitle">Modifiez vos informations personnelles et paramètres de sécurité</p>
-        </div>
+    <div class="ml-64 p-8">
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Section Informations Personnelles -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-lg font-medium text-gray-900 mb-6">
+                        <i class="fas fa-user-circle mr-2"></i>
+                        Informations Personnelles
+                    </h2>
 
-        <!-- Profile Content -->
-        <div class="profile-content">
-            <!-- Informations Personnelles -->
-            <div class="profile-card">
-                <h2 class="card-title">
-                    <i>👤</i>
-                    <span data-translate="profile.personal_info">Informations Personnelles</span>
-                </h2>
-
-                <div class="avatar-section">
-                    <div class="avatar">👤</div>
-                    <div class="avatar-upload" onclick="uploadAvatar()">
-                        <p><strong>📷 Changer la photo</strong></p>
-                        <p style="font-size: 0.8rem; color: var(--text-muted);">JPG, PNG - Max 2MB</p>
+                    <!-- Photo de profil -->
+                    <div class="flex justify-center mb-6">
+                        <div class="relative">
+                            <div class="w-32 h-32 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-user text-4xl"></i>
+                            </div>
+                            <div class="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow cursor-pointer">
+                                <i class="fas fa-camera text-gray-600"></i>
+                            </div>
+                            <p class="text-center text-sm text-gray-500 mt-2">JPG, PNG - Max 2MB</p>
+                        </div>
                     </div>
+
+                    <!-- Formulaire -->
+                    <form id="profileForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Nom complet</label>
+                            <input type="text" id="fullName" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Département</label>
+                            <input type="text" id="department" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Poste</label>
+                            <input type="text" id="position" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Téléphone</label>
+                            <input type="tel" id="phone" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="flex justify-end space-x-3">
+                            <button type="button" onclick="resetForm()" class="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                                <i class="fas fa-times mr-2"></i>Annuler
+                            </button>
+                            <button type="submit" class="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                                <i class="fas fa-save mr-2"></i>Enregistrer
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                <form id="profile-form" onsubmit="saveProfile(event)">
-                    <div class="form-group">
-                        <label class="form-label" data-translate="profile.fullname">Nom complet</label>
-                        <input type="text" class="form-control" id="fullname" value="" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" data-translate="auth.email">Email</label>
-                        <input type="email" class="form-control" id="email" value="" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" data-translate="profile.department">Département</label>
-                        <input type="text" class="form-control" id="department" value="" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" data-translate="profile.position">Poste</label>
-                        <input type="text" class="form-control" id="position" value="" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" data-translate="profile.phone">Téléphone</label>
-                        <input type="tel" class="form-control" id="phone" value="">
-                    </div>
-
-                    <div class="btn-group">
-                        <button type="submit" class="btn btn-primary">
-                            <i>💾</i>
-                            <span data-translate="common.save">Enregistrer</span>
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="cancelEdit()">
-                            <i>❌</i>
-                            <span data-translate="common.cancel">Annuler</span>
-                        </button>
-                    </div>
-                </form>
             </div>
 
-            <!-- Sécurité et Mot de Passe -->
-            <div class="profile-card">
-                <h2 class="card-title">
-                    <i>🔒</i>
-                    <span data-translate="profile.security">Sécurité</span>
-                </h2>
-
-                <div class="security-item">
-                    <div class="security-info">
-                        <h4 data-translate="auth.password">Mot de passe</h4>
-                        <p>Dernière modification : Il y a 30 jours</p>
+            <!-- Section Sécurité -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-lg font-medium text-gray-900 mb-6">
+                        <i class="fas fa-shield-alt mr-2"></i>
+                        Sécurité
+                    </h2>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-900">Mot de passe</h3>
+                                    <p class="text-sm text-gray-500">Dernière modification : il y a 30 jours</p>
+                                </div>
+                                <button class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                                    Modifier
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-900">Authentification à deux facteurs</h3>
+                                    <p class="text-sm text-gray-500">Sécurisez votre compte avec 2FA</p>
+                                </div>
+                                <button class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                                    Activer
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <button class="btn btn-secondary" onclick="changePassword()">
-                        <i>🔄</i>
-                        <span data-translate="profile.change_password">Modifier</span>
-                    </button>
                 </div>
+            </div>
 
-                <div class="security-item">
-                    <div class="security-info">
-                        <h4 data-translate="profile.two_factor">Authentification à deux facteurs</h4>
-                        <p>Sécurisez votre compte avec 2FA</p>
-                    </div>
-                    <button class="btn btn-primary" onclick="enable2FA()">
-                        <i>🛡️</i>
-                        <span data-translate="profile.enable">Activer</span>
-                    </button>
-                </div>
-
-                <div class="security-item">
-                    <div class="security-info">
-                        <h4 data-translate="profile.sessions">Sessions actives</h4>
-                        <p>Gérez vos connexions actives</p>
-                    </div>
-                    <button class="btn btn-secondary" onclick="manageSessions()">
-                        <i>📱</i>
-                        <span data-translate="profile.manage">Gérer</span>
-                    </button>
-                </div>
-
-                <!-- Danger Zone -->
-                <div style="margin-top: 30px; padding: 20px; background: #FEF2F2; border-radius: 8px; border-left: 4px solid #EF4444;">
-                    <h4 style="color: #DC2626; margin-bottom: 10px;">
-                        ⚠️ <span data-translate="config.danger_zone">Zone de danger</span>
-                    </h4>
-                    <p style="color: #7F1D1D; margin-bottom: 15px;">
-                        Actions irréversibles qui affecteront votre compte
-                    </p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="btn btn-danger" onclick="deleteAccount()">
-                            <i>🗑️</i>
-                            <span data-translate="profile.delete_account">Supprimer le compte</span>
-                        </button>
-                        <button class="btn" onclick="logout()" style="background: #6c757d; color: white;">
-                            <i>🚪</i>
-                            <span data-translate="profile.logout">Déconnexion</span>
-                        </button>
+            <!-- Zone de danger -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-lg font-medium text-red-600 mb-6">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        Zone de danger
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-900">Supprimer le compte</h3>
+                                <p class="text-sm text-gray-500">Cette action est irréversible</p>
+                            </div>
+                            <button onclick="deleteAccount()" class="px-4 py-2 text-sm text-red-700 bg-red-100 rounded-md hover:bg-red-200">
+                                Supprimer
+                            </button>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-900">Déconnexion</h3>
+                                <p class="text-sm text-gray-500">Se déconnecter de l'application</p>
+                            </div>
+                            <button onclick="logout()" class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                                Déconnexion
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -714,420 +227,65 @@
     </div>
 
     <script>
-        // Initialisation de l'application
-        function initializeProfileApp() {
-            console.log('Initialisation de la page de profil...');
-            
-            // S'assurer que les gestionnaires sont disponibles
-            if (!window.themeManager) {
-                console.log('Initialisation du ThemeManager...');
-                window.themeManager = new ThemeManager();
+        function initializeUserProfile() {
+            const currentUser = window.userDatabase.getCurrentUser();
+            if (!currentUser) {
+                window.location.href = '/auth';
+                return;
             }
-            
-            if (!window.translationManager) {
-                console.log('Initialisation du TranslationManager...');
-                window.translationManager = new TranslationManager();
+
+            // Mettre à jour le nom dans la sidebar
+            const userFullNameElement = document.getElementById('user-fullname');
+            if (userFullNameElement) {
+                userFullNameElement.textContent = currentUser.fullName;
             }
+
+            // Pré-remplir le formulaire
+            document.getElementById('fullName').value = currentUser.fullName || '';
+            document.getElementById('email').value = currentUser.email || '';
+            document.getElementById('department').value = currentUser.department || '';
+            document.getElementById('position').value = currentUser.position || '';
+            document.getElementById('phone').value = currentUser.phone || '';
         }
 
-        // Gestion du profil utilisateur
-
-        function editProfile() {
-            // Déjà sur la page de profil
-            showNotification('Vous êtes déjà sur la page de modification du profil', 'info');
+        function resetForm() {
+            initializeUserProfile();
         }
 
-        function changePassword() {
-            const newPassword = prompt('Nouveau mot de passe :');
-            if (newPassword && newPassword.length >= 8) {
-                showNotification('Mot de passe modifié avec succès !', 'success');
-            } else if (newPassword) {
-                showNotification('Le mot de passe doit contenir au moins 8 caractères', 'error');
-            }
-        }
-
-        function viewSettings() {
-            window.location.href = 'modern_dashboard.html#config';
-        }
-
-        function logout() {
-            if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-                // Déconnecter l'utilisateur de la base de données
-                window.userDatabase.logout();
-                console.log('Utilisateur déconnecté');
-                
-                // Rediriger vers la page d'authentification
+        function deleteAccount() {
+            if (confirm('⚠️ Êtes-vous sûr de vouloir supprimer votre compte ?\n\nCette action est irréversible.')) {
+                window.userDatabase.deleteCurrentUser();
                 window.location.href = '/auth';
             }
         }
 
-        // Fonctions de gestion du profil
-        function saveProfile(event) {
-            event.preventDefault();
+        function logout() {
+            window.userDatabase.logout();
+            window.location.href = '/auth';
+        }
+
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            const formData = {
-                fullname: document.getElementById('fullname').value,
+            const userData = {
+                fullName: document.getElementById('fullName').value,
                 email: document.getElementById('email').value,
                 department: document.getElementById('department').value,
                 position: document.getElementById('position').value,
                 phone: document.getElementById('phone').value
             };
-            
-            // Mettre à jour l'utilisateur dans la base de données
-            const currentUser = window.userDatabase.getCurrentUser();
-            
-            if (currentUser) {
-                const updatedUser = window.userDatabase.updateUser(currentUser.id, {
-                    email: formData.email,
-                    fullName: formData.fullname,
-                    department: formData.department,
-                    position: formData.position,
-                    phone: formData.phone
-                });
-                
-                if (updatedUser) {
-                    // Mettre à jour l'utilisateur actuel
-                    window.userDatabase.setCurrentUser(updatedUser);
-                    console.log('Profil utilisateur mis à jour:', updatedUser);
-                } else {
-                    console.error('Erreur lors de la mise à jour du profil');
-                    showNotification('Erreur lors de la sauvegarde', 'error');
-                    return;
-                }
-            } else {
-                console.error('Aucun utilisateur connecté');
-                showNotification('Erreur: utilisateur non connecté', 'error');
-                return;
+
+            try {
+                window.userDatabase.updateCurrentUser(userData);
+                alert('Profil mis à jour avec succès !');
+                initializeUserProfile(); // Rafraîchir l'affichage
+            } catch (error) {
+                alert('Erreur lors de la mise à jour du profil : ' + error.message);
             }
-            
-            // Mettre à jour le nom dans toutes les interfaces
-            updateUserName(formData.fullname);
-            
-            // Simulation de sauvegarde
-            console.log('Sauvegarde du profil:', formData);
-            showNotification('Profil mis à jour avec succès !', 'success');
-        }
-
-        function cancelEdit() {
-            if (confirm('Annuler les modifications ?')) {
-                // Recharger les valeurs originales
-                document.getElementById('profile-form').reset();
-                showNotification('Modifications annulées', 'info');
-            }
-        }
-
-        function uploadAvatar() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    if (file.size <= 2 * 1024 * 1024) { // 2MB max
-                        showNotification('Photo de profil mise à jour !', 'success');
-                    } else {
-                        showNotification('La taille du fichier doit être inférieure à 2MB', 'error');
-                    }
-                }
-            };
-            input.click();
-        }
-
-        function enable2FA() {
-            showNotification('Authentification à deux facteurs activée !', 'success');
-        }
-
-        function manageSessions() {
-            showNotification('Gestion des sessions - Fonctionnalité à implémenter', 'info');
-        }
-
-        function deleteAccount() {
-            const confirmation = prompt('Tapez "SUPPRIMER" pour confirmer la suppression de votre compte :');
-            if (confirmation === 'SUPPRIMER') {
-                alert('Compte supprimé. Redirection vers la page d\'authentification...');
-                window.location.href = 'auth_interface.html';
-            } else if (confirmation) {
-                showNotification('Suppression annulée - Confirmation incorrecte', 'error');
-            }
-        }
-
-        // Fonction pour afficher des notifications
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                z-index: 1001;
-                background: var(--bg-primary);
-                border: 1px solid var(--border-primary);
-                border-radius: 8px;
-                padding: 15px 20px;
-                box-shadow: var(--shadow-lg);
-                max-width: 300px;
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-            `;
-            
-            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
-            notification.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 1.2rem;">${icon}</span>
-                    <span style="color: var(--text-primary);">${message}</span>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 300);
-            }, 3000);
-        }
-
-        // Gestion du nom utilisateur
-        // Fonction de test pour créer un utilisateur de test
-        function createTestUser() {
-            console.log('🧪 Création d\'un utilisateur de test...');
-            
-            const testUser = {
-                id: 'test-user-001',
-                email: 'test@example.com',
-                fullName: 'Utilisateur Test',
-                department: 'Ministère des Finances',
-                position: 'Testeur',
-                phone: '0123456789',
-                password: 'test123',
-                createdAt: new Date().toISOString(),
-                lastLogin: new Date().toISOString(),
-                isActive: true
-            };
-            
-            // Créer l'utilisateur dans la base de données
-            const users = window.userDatabase.getAllUsers();
-            users[testUser.id] = testUser;
-            window.userDatabase.saveAllUsers(users);
-            
-            // Définir comme utilisateur actuel
-            window.userDatabase.setCurrentUser(testUser);
-            
-            console.log('✅ Utilisateur de test créé:', testUser.fullName);
-            
-            // Recharger la page pour afficher les données
-            setTimeout(() => {
-                location.reload();
-            }, 1000);
-        }
-
-        function initializeUserProfile() {
-            console.log('=== INITIALISATION PROFIL UTILISATEUR ===');
-            
-            // Vérifier si la base de données existe
-            if (!window.userDatabase) {
-                console.error('❌ Base de données utilisateur non trouvée');
-                alert('Erreur: Base de données utilisateur non trouvée. Veuillez recharger la page.');
-                return;
-            }
-            
-            // Récupérer l'utilisateur actuel depuis la base de données
-            const currentUser = window.userDatabase.getCurrentUser();
-            
-            if (currentUser) {
-                console.log('Utilisateur actuel trouvé:', currentUser);
-                
-                // Mettre à jour l'affichage du nom dans la sidebar
-                const userFullNameElement = document.getElementById('user-fullname');
-                if (userFullNameElement) {
-                    userFullNameElement.textContent = currentUser.fullName;
-                    console.log('✅ Nom affiché dans la sidebar:', currentUser.fullName);
-                } else {
-                    console.log('❌ Élément user-fullname non trouvé');
-                }
-                
-                // Remplir tous les champs du formulaire
-                const fullnameInput = document.getElementById('fullname');
-                const emailInput = document.getElementById('email');
-                const departmentInput = document.getElementById('department');
-                const positionInput = document.getElementById('position');
-                const phoneInput = document.getElementById('phone');
-                
-                if (fullnameInput) fullnameInput.value = currentUser.fullName || '';
-                if (emailInput) emailInput.value = currentUser.email || '';
-                if (departmentInput) departmentInput.value = currentUser.department || 'Ministère des Finances';
-                if (positionInput) positionInput.value = currentUser.position || 'Utilisateur';
-                if (phoneInput) phoneInput.value = currentUser.phone || '';
-                
-                console.log('Profil initialisé avec:', {
-                    nom: currentUser.fullName,
-                    email: currentUser.email,
-                    departement: currentUser.department,
-                    poste: currentUser.position,
-                    telephone: currentUser.phone
-                });
-            } else {
-                console.log('Aucun utilisateur connecté trouvé');
-                
-                // Valeurs par défaut
-                const userFullNameElement = document.getElementById('user-fullname');
-                if (userFullNameElement) {
-                    userFullNameElement.textContent = 'Utilisateur';
-                }
-                
-                const fullnameInput = document.getElementById('fullname');
-                const emailInput = document.getElementById('email');
-                const departmentInput = document.getElementById('department');
-                const positionInput = document.getElementById('position');
-                const phoneInput = document.getElementById('phone');
-                
-                if (fullnameInput) fullnameInput.value = '';
-                if (emailInput) emailInput.value = '';
-                if (departmentInput) departmentInput.value = 'Ministère des Finances';
-                if (positionInput) positionInput.value = 'Utilisateur';
-                if (phoneInput) phoneInput.value = '';
-                
-                console.log('Aucun utilisateur connecté - Affichage du bouton de test');
-                
-                // Afficher un message et un bouton de test
-                const messageDiv = document.createElement('div');
-                messageDiv.innerHTML = `
-                    <div style="text-align: center; padding: 20px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; margin: 20px;">
-                        <h3>🔍 Aucun utilisateur connecté</h3>
-                        <p>Pour tester l'interface, vous pouvez créer un utilisateur de test :</p>
-                        <button onclick="createTestUser()" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px;">
-                            🧪 Créer un utilisateur de test
-                        </button>
-                        <br>
-                        <button onclick="window.location.href='/auth'" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px;">
-                            🔐 Aller à la page de connexion
-                        </button>
-                    </div>
-                `;
-                
-                // Insérer le message au début du contenu principal
-                const mainContent = document.querySelector('.main-content');
-                if (mainContent) {
-                    mainContent.insertBefore(messageDiv, mainContent.firstChild);
-                }
-            }
-        }
-
-        // Fonction pour mettre à jour le nom dans toutes les interfaces
-        function updateUserName(newName) {
-            localStorage.setItem('userFullName', newName);
-            // Mettre à jour l'élément actuel s'il existe
-            const userFullNameElement = document.getElementById('user-fullname');
-            if (userFullNameElement) {
-                userFullNameElement.textContent = newName;
-            }
-        }
-
-        // Fonction pour gérer le menu déroulant du profil
-        function toggleProfileDropdown() {
-            const dropdown = document.getElementById('profileDropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('show');
-            }
-        }
-
-        // Fonction pour fermer le menu déroulant
-        function closeProfileDropdown() {
-            const dropdown = document.getElementById('profileDropdown');
-            if (dropdown) {
-                dropdown.classList.remove('show');
-            }
-        }
-
-        // Fonction de déconnexion
-        function logout() {
-            if (window.userDatabase) {
-                window.userDatabase.logout();
-            }
-            // Nettoyer le localStorage
-            localStorage.removeItem('userData');
-            localStorage.removeItem('currentUser');
-            // Rediriger vers la page d'authentification
-            window.location.href = '/auth';
-        }
-
-        // Fonction pour modifier le profil
-        function editProfile() {
-            closeProfileDropdown();
-            // Scroll vers le formulaire de profil
-            const profileForm = document.querySelector('.profile-form');
-            if (profileForm) {
-                profileForm.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Fonction pour changer le mot de passe
-        function changePassword() {
-            closeProfileDropdown();
-            alert('Fonctionnalité de changement de mot de passe à implémenter');
-        }
-
-        // Fonction pour voir les paramètres
-        function viewSettings() {
-            closeProfileDropdown();
-            alert('Fonctionnalité de paramètres à implémenter');
-        }
-
-        // Initialize profile page on load
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('=== INITIALISATION PAGE PROFIL ===');
-            console.log('DOM chargé, initialisation en cours...');
-            
-            initializeProfileApp();
-            initializeUserProfile();
-            
-            // Ajouter les événements pour le menu déroulant
-            const profileBtn = document.querySelector('.profile-btn');
-            if (profileBtn) {
-                profileBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    toggleProfileDropdown();
-                });
-            }
-
-            // Fermer le menu déroulant en cliquant ailleurs
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.profile-actions')) {
-                    closeProfileDropdown();
-                }
-            });
-            
-            // Test supplémentaire après un délai
-            setTimeout(() => {
-                console.log('=== VÉRIFICATION APRÈS DÉLAI ===');
-                const userData = localStorage.getItem('userData');
-                console.log('userData dans localStorage:', userData);
-                
-                if (userData) {
-                    try {
-                        const parsed = JSON.parse(userData);
-                        console.log('Données parsées:', parsed);
-                        
-                        // Vérifier les champs du formulaire
-                        const fullnameInput = document.getElementById('fullname');
-                        const emailInput = document.getElementById('email');
-                        console.log('Champ nom complet:', fullnameInput ? fullnameInput.value : 'NON TROUVÉ');
-                        console.log('Champ email:', emailInput ? emailInput.value : 'NON TROUVÉ');
-                    } catch (e) {
-                        console.error('Erreur de parsing:', e);
-                    }
-                } else {
-                    console.log('Aucune donnée utilisateur trouvée dans localStorage');
-                }
-            }, 1000);
         });
+
+        // Initialisation au chargement de la page
+        document.addEventListener('DOMContentLoaded', initializeUserProfile);
     </script>
 </body>
 </html>

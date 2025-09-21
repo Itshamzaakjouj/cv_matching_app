@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentScope</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+    <style>
+        /* Animations de transition */
+        .main-content, .sidebar {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Style pour l'animation du sélecteur de langue */
+        select[name="langue"] {
+            transition: all 0.3s ease;
+        }
+
+        select[name="langue"]:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <img src="{{ url_for('static', filename='images/TalentScope.png') }}" alt="TalentScope" class="logo">
+                    <img src="{{ url_for('static', filename='images/MEF2.png') }}" alt="MEF" class="logo-secondary">
+                </div>
+                <h1>TalentScope</h1>
+                <p>Ministère de l'Économie et des Finances</p>
+                <p>Plateforme de gestion des talents</p>
+            </div>
+
+            <div class="nav-section">
+                <h2>NAVIGATION</h2>
+                <ul class="nav-menu">
+                    <li>
+                        <a href="{{ url_for('home') }}" class="nav-link">
+                            <i class="icon-home"></i>
+                            <div class="nav-text">
+                                <span>Accueil</span>
+                                <small>Page principale</small>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('dashboard') }}" class="nav-link">
+                            <i class="icon-dashboard"></i>
+                            <div class="nav-text">
+                                <span>Tableau de Bord</span>
+                                <small>Vue d'ensemble</small>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('new_analysis') }}" class="nav-link">
+                            <i class="icon-analysis"></i>
+                            <div class="nav-text">
+                                <span>Nouvelle Analyse</span>
+                                <small>Analyser des CVs</small>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('treated_cvs') }}" class="nav-link">
+                            <i class="icon-history"></i>
+                            <div class="nav-text">
+                                <span>CVs Traités</span>
+                                <small>Historique des analyses</small>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('settings') }}" class="nav-link">
+                            <i class="icon-settings"></i>
+                            <div class="nav-text">
+                                <span>Configuration</span>
+                                <small>Paramètres</small>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialiser le système de traduction
+        if (window.i18n) {
+            window.i18n.init();
+        }
+
+        // Appliquer le thème sauvegardé
+        const savedTheme = localStorage.getItem('app_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    });
+    </script>
+</body>
+</html>

@@ -5,18 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CVs Traités - TalentScope</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <script src="analysis_storage.js"></script>
-    <script src="history_manager.js"></script>
-    <style>
-        .update-animation {
-            animation: highlight 1s ease-in-out;
-        }
-        @keyframes highlight {
-            0% { background-color: rgba(59, 130, 246, 0.1); }
-            100% { background-color: transparent; }
-        }
-    </style>
+    <script src="treated_cvs.js"></script>
 </head>
 <body class="bg-gray-50">
     <div class="min-h-screen">
@@ -56,7 +47,7 @@
                         Historique Complet
                     </h3>
                     <button onclick="window.historyManager.clearHistory()"
-                            class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
+                            class="clear-history-btn px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
                         <i class="fas fa-trash-alt mr-2"></i>
                         Supprimer l'historique
                     </button>
@@ -76,22 +67,12 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
-                            <!-- Le contenu sera inséré dynamiquement par HistoryManager -->
+                            <!-- Le contenu sera généré dynamiquement par JavaScript -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </main>
     </div>
-
-    <script>
-        // Initialiser le nom de l'utilisateur
-        document.addEventListener('DOMContentLoaded', () => {
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            if (currentUser) {
-                document.getElementById('user-fullname').textContent = currentUser.fullName;
-            }
-        });
-    </script>
 </body>
 </html>

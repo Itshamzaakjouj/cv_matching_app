@@ -44,11 +44,18 @@ class CVMatchingClient {
             // Simuler les résultats
             const results = this.generateSimulatedResults(jobData, cvFiles);
 
-            // Sauvegarder et afficher les résultats
-            window.analysisStorage.saveAnalysis({
-                jobData: jobData,
-                results: results
-            });
+            try {
+                // Sauvegarder les résultats si le stockage est disponible
+                if (window.analysisStorage && typeof window.analysisStorage.saveAnalysis === 'function') {
+                    window.analysisStorage.saveAnalysis({
+                        jobData: jobData,
+                        results: results
+                    });
+                }
+            } catch (storageError) {
+                console.warn('Erreur lors de la sauvegarde des résultats:', storageError);
+                // Continue même si la sauvegarde échoue
+            }
             
             // Afficher les résultats
             this.displayResults(results);
