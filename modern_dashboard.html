@@ -170,12 +170,13 @@
         .profile-name {
             font-weight: 600;
             color: var(--text-primary);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             margin-bottom: 2px;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 120px;
+            overflow: visible;
+            text-overflow: unset;
+            max-width: none;
+            width: 100%;
         }
 
         .profile-role {
@@ -659,6 +660,7 @@
 
         .profile-info {
             text-align: center;
+            margin-top: 15px;
         }
 
         .profile-name {
@@ -666,6 +668,8 @@
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 5px;
+            text-align: center;
+            width: 100%;
         }
 
         .profile-role {
@@ -1441,7 +1445,7 @@
                             <button type="button" class="btn btn-secondary" onclick="resetProfileForm()">
                                 <i class="fas fa-undo"></i> Annuler
                             </button>
-                            <button type="button" class="btn btn-primary" onclick="updateUserProfile()">
+                            <button type="button" class="btn btn-primary" onclick="saveProfileChanges()">
                                 <i class="fas fa-save"></i> Enregistrer
                             </button>
                         </div>
@@ -1776,8 +1780,10 @@
             }
         });
 
-        // Function to update user profile in database
-        function updateUserProfile() {
+        // Function to save profile changes
+        function saveProfileChanges() {
+            console.log('saveProfileChanges called');
+            
             const currentUser = window.userDatabase?.getCurrentUser();
             if (!currentUser) {
                 alert('Erreur: Utilisateur non connecté');
@@ -1790,6 +1796,8 @@
             const department = document.getElementById('department').value;
             const position = document.getElementById('position').value.trim();
             const phone = document.getElementById('phone').value.trim();
+
+            console.log('Form data:', { fullName, email, department, position, phone });
 
             // Validation basique
             if (!fullName || !email) {
@@ -1807,6 +1815,7 @@
 
             const updatedUser = window.userDatabase.updateCurrentUserProfile(profileData);
             if (updatedUser) {
+                console.log('User updated successfully:', updatedUser);
                 // Mettre à jour tous les éléments UI
                 updateAllUserInfo(updatedUser);
                 alert('Profil mis à jour avec succès !');
@@ -1815,26 +1824,51 @@
             }
         }
 
+        // Function to update user profile in database (legacy)
+        function updateUserProfile() {
+            saveProfileChanges();
+        }
+
         // Function to update all user info across the entire site
         function updateAllUserInfo(user) {
+            console.log('Updating all user info with:', user);
+            
             // Mettre à jour la sidebar
             const sidebarName = document.getElementById('user-fullname');
             const sidebarRole = document.getElementById('user-role');
-            if (sidebarName) sidebarName.textContent = user.fullName;
-            if (sidebarRole) sidebarRole.textContent = user.department;
+            if (sidebarName) {
+                sidebarName.textContent = user.fullName;
+                console.log('Sidebar name updated to:', user.fullName);
+            }
+            if (sidebarRole) {
+                sidebarRole.textContent = user.department;
+                console.log('Sidebar role updated to:', user.department);
+            }
 
             // Mettre à jour la section profil
             const profileName = document.getElementById('profile-name');
             const profileRole = document.getElementById('profile-role');
-            if (profileName) profileName.textContent = user.fullName;
-            if (profileRole) profileRole.textContent = user.position;
+            if (profileName) {
+                profileName.textContent = user.fullName;
+                console.log('Profile name updated to:', user.fullName);
+            }
+            if (profileRole) {
+                profileRole.textContent = user.position;
+                console.log('Profile role updated to:', user.position);
+            }
 
             // Mettre à jour les champs du formulaire
-            document.getElementById('full-name').value = user.fullName;
-            document.getElementById('email').value = user.email;
-            document.getElementById('department').value = user.department;
-            document.getElementById('position').value = user.position;
-            document.getElementById('phone').value = user.phone || '';
+            const fullNameField = document.getElementById('full-name');
+            const emailField = document.getElementById('email');
+            const departmentField = document.getElementById('department');
+            const positionField = document.getElementById('position');
+            const phoneField = document.getElementById('phone');
+            
+            if (fullNameField) fullNameField.value = user.fullName;
+            if (emailField) emailField.value = user.email;
+            if (departmentField) departmentField.value = user.department;
+            if (positionField) positionField.value = user.position;
+            if (phoneField) phoneField.value = user.phone || '';
 
             // Mettre à jour l'avatar si une photo existe
             if (user.profilePicture) {
@@ -2367,6 +2401,21 @@
             
             // Mettre à jour les métriques avec les vraies données
             updateRealMetrics();
+            
+            // Ajouter un gestionnaire global pour le bouton enregistrer
+            setTimeout(() => {
+                const saveButton = document.querySelector('button[onclick="saveProfileChanges()"]');
+                if (saveButton) {
+                    console.log('Save button found and ready');
+                    saveButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('Save button clicked via event listener');
+                        saveProfileChanges();
+                    });
+                } else {
+                    console.log('Save button not found');
+                }
+            }, 1000);
             
             // Initialiser les graphiques après un court délai pour s'assurer que les canvas sont créés
             setTimeout(() => {
