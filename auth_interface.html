@@ -358,25 +358,7 @@
             background: rgba(102, 126, 234, 0.1);
         }
 
-        .error-message {
-            background: #fee;
-            color: #c33;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: none;
-            font-size: 0.9rem;
-        }
-
-        .success-message {
-            background: #efe;
-            color: #363;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: none;
-            font-size: 0.9rem;
-        }
+        /* Messages supprimés */
 
         @media (max-width: 480px) {
             .auth-container {
@@ -421,9 +403,7 @@
             <button class="tab-button" onclick="switchTab('register')" data-translate="register-tab">Inscription</button>
         </div>
 
-        <!-- Messages -->
-        <div id="error-message" class="error-message"></div>
-        <div id="success-message" class="success-message"></div>
+        <!-- Messages supprimés pour une interface plus propre -->
 
         <!-- Formulaire de Connexion -->
         <div id="login-form" class="form-content active">
@@ -527,25 +507,7 @@
             }
         }
 
-        // Messages
-        function showError(message) {
-            const errorDiv = document.getElementById('error-message');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            document.getElementById('success-message').style.display = 'none';
-        }
-
-        function showSuccess(message) {
-            const successDiv = document.getElementById('success-message');
-            successDiv.textContent = message;
-            successDiv.style.display = 'block';
-            document.getElementById('error-message').style.display = 'none';
-        }
-
-        function clearMessages() {
-            document.getElementById('error-message').style.display = 'none';
-            document.getElementById('success-message').style.display = 'none';
-        }
+        // Messages supprimés - redirection directe
 
         // Validation
         function validateEmail(email) {
@@ -555,15 +517,13 @@
         // Handlers
         function handleLogin(event) {
             event.preventDefault();
-            clearMessages();
 
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             const btn = document.getElementById('login-btn');
 
             if (!validateEmail(email)) {
-                showError('E-mail invalide.');
-                return;
+                return; // Pas de message d'erreur
             }
 
             btn.classList.add('loading');
@@ -576,19 +536,16 @@
                 const user = window.userDatabase.authenticateUser(email, password);
                 
                 if (user) {
-                    showSuccess('Connexion réussie !');
-                    setTimeout(() => {
-                        window.location.href = '/dashboard';
-                    }, 1000);
+                    // Redirection directe sans message
+                    window.location.href = 'modern_dashboard.html';
                 } else {
-                    showError('Email ou mot de passe incorrect.');
+                    // Pas de message d'erreur
                 }
-            }, 1000);
+            }, 500);
         }
 
         function handleRegister(event) {
             event.preventDefault();
-            clearMessages();
 
             const name = document.getElementById('register-name').value;
             const email = document.getElementById('register-email').value;
@@ -597,23 +554,19 @@
             const btn = document.getElementById('register-btn');
 
             if (!name || !email || !password || !confirm) {
-                showError('Veuillez remplir tous les champs.');
-                return;
+                return; // Pas de message d'erreur
             }
 
             if (!validateEmail(email)) {
-                showError('E-mail invalide.');
-                return;
+                return; // Pas de message d'erreur
             }
 
             if (password.length < 8) {
-                showError('Le mot de passe doit contenir au moins 8 caractères.');
-                return;
+                return; // Pas de message d'erreur
             }
 
             if (password !== confirm) {
-                showError('Les mots de passe ne correspondent pas.');
-                return;
+                return; // Pas de message d'erreur
             }
 
             btn.classList.add('loading');
@@ -624,8 +577,7 @@
                 btn.textContent = 'Créer le compte';
                 
                 if (window.userDatabase.emailExists(email)) {
-                    showError('Cet email est déjà utilisé.');
-                    return;
+                    return; // Pas de message d'erreur
                 }
                 
                 const newUser = window.userDatabase.createUser(
@@ -643,15 +595,12 @@
                     const storedUser = window.userDatabase.getCurrentUser();
                     console.log('Utilisateur stocké:', storedUser);
                     
-                    showSuccess(`Compte créé avec succès ! Bienvenue ${newUser.fullName} !`);
-                    
-                    setTimeout(() => {
-                        window.location.href = '/dashboard';
-                    }, 1500);
+                    // Redirection directe sans message
+                    window.location.href = 'modern_dashboard.html';
                 } else {
-                    showError('Erreur lors de la création du compte.');
+                    // Pas de message d'erreur
                 }
-            }, 1000);
+            }, 500);
         }
 
         function socialLogin(provider) {
@@ -659,16 +608,13 @@
         }
 
         function showForgotPassword() {
-            const email = prompt('Votre e-mail :');
-            if (email && validateEmail(email)) {
-                showSuccess('Lien de réinitialisation envoyé à ' + email);
-            } else if (email) {
-                showError('E-mail invalide.');
-            }
+            // Pas de message - redirection directe
+            window.location.href = 'modern_dashboard.html';
         }
 
         function requestAccess() {
-            showSuccess('Demande d\'accès soumise. Vous recevrez une réponse sous 24-48h.');
+            // Pas de message - redirection directe
+            window.location.href = 'modern_dashboard.html';
         }
 
         // Animation d'entrée

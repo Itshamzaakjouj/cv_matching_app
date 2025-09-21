@@ -45,7 +45,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
             margin-bottom: 8px;
         }
@@ -59,55 +59,55 @@
             margin-bottom: 30px;
         }
 
-        .nav-section h3 {
+        .nav-title {
             color: #333;
             font-size: 0.9rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
             margin-bottom: 15px;
-            padding-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .nav-item {
-            margin: 8px 0;
-        }
-
-        .nav-link {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 15px;
-            color: #555;
-            text-decoration: none;
-            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
+            color: #666;
+            text-decoration: none;
+            gap: 45px;
         }
 
-        .nav-link:hover {
+        .nav-item:hover {
             background: rgba(102, 126, 234, 0.1);
             color: #667eea;
             transform: translateX(5px);
         }
 
-        .nav-link.active {
+        .nav-item.active {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
-        .nav-link i {
-            width: 20px;
+        .nav-item i {
+            font-size: 1.2rem;
+            width: 24px;
             text-align: center;
-            font-size: 1.1rem;
+            min-width: 24px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .nav-link .nav-text {
-            flex: 1;
+        .nav-item span {
+            font-weight: 500;
         }
 
-        .nav-link .nav-subtitle {
+        .nav-item .subtitle {
             font-size: 0.8rem;
             opacity: 0.8;
             margin-top: 2px;
@@ -479,13 +479,11 @@
         }
 
         /* User Profile */
-        .user-profile {
-            margin-top: auto;
-            padding-top: 20px;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
         .user-info {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -507,20 +505,27 @@
             font-size: 1.2rem;
         }
 
-        .user-details h4 {
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
             color: #333;
             font-size: 0.9rem;
             font-weight: 600;
             margin-bottom: 2px;
         }
 
-        .user-details p {
+        .user-role {
             color: #666;
             font-size: 0.8rem;
         }
 
         .logout-btn {
-            width: 100%;
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            right: 20px;
             padding: 10px;
             background: #EF4444;
             color: white;
@@ -749,77 +754,65 @@
         </div>
 
         <div class="nav-section">
-            <h3>Navigation</h3>
-            <div class="nav-item">
-                <a href="modern_dashboard.html" class="nav-link">
-                    <i class="fas fa-home"></i>
-                    <div class="nav-text">
-                        <div>Accueil</div>
-                        <div class="nav-subtitle">Page principale</div>
+            <div class="nav-title">NAVIGATION</div>
+            <a href="modern_dashboard.html" class="nav-item">
+                <i class="fas fa-home fa-fw"></i>
+                <div>
+                    <div>Accueil</div>
+                    <div class="subtitle">Page principale</div>
                 </div>
             </a>
-                </div>
-            <div class="nav-item">
-                <a href="modern_dashboard.html" class="nav-link">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <div class="nav-text">
-                        <div>Tableau de Bord</div>
-                        <div class="nav-subtitle">Vue d'ensemble</div>
+            <a href="modern_dashboard.html" class="nav-item">
+                <i class="fas fa-chart-bar fa-fw"></i>
+                <div>
+                    <div>Tableau de Bord</div>
+                    <div class="subtitle">Vue d'ensemble</div>
                 </div>
             </a>
+            <a href="analysis_interface.html" class="nav-item">
+                <i class="fas fa-rocket fa-fw"></i>
+                <div>
+                    <div>Nouvelle Analyse</div>
+                    <div class="subtitle">Analyser des CVs</div>
                 </div>
-            <div class="nav-item">
-                <a href="analysis_interface.html" class="nav-link">
-                    <i class="fas fa-rocket"></i>
-                    <div class="nav-text">
-                        <div>Nouvelle Analyse</div>
-                        <div class="nav-subtitle">Analyser des CVs</div>
+            </a>
+            <a href="analysis-history.html" class="nav-item">
+                <i class="fas fa-folder fa-fw"></i>
+                <div>
+                    <div>CVs Traités</div>
+                    <div class="subtitle">Historique des analyses</div>
+                </div>
+            </a>
+            <a href="configuration.html" class="nav-item">
+                <i class="fas fa-cog fa-fw"></i>
+                <div>
+                    <div>Configuration</div>
+                    <div class="subtitle">Paramètres système</div>
+                </div>
+            </a>
+            <a href="profile_management.html" class="nav-item active">
+                <i class="fas fa-user-cog fa-fw"></i>
+                <div>
+                    <div>Gestion du Profil</div>
+                    <div class="subtitle">Informations personnelles</div>
                 </div>
             </a>
         </div>
-            <div class="nav-item">
-                <a href="analysis-history.html" class="nav-link">
-                    <i class="fas fa-history"></i>
-                    <div class="nav-text">
-                        <div>Historique</div>
-                        <div class="nav-subtitle">Analyses précédentes</div>
-                </div>
-                </a>
-                </div>
-            <div class="nav-item">
-                <a href="translation-widget.html" class="nav-link">
-                    <i class="fas fa-language"></i>
-                    <div class="nav-text">
-                        <div>Traducteur</div>
-                        <div class="nav-subtitle">Traduction multilingue</div>
-                        </div>
-                </a>
-                        </div>
-            <div class="nav-item">
-                <a href="profile_management.html" class="nav-link active">
-                    <i class="fas fa-user-cog"></i>
-                    <div class="nav-text">
-                        <div>Configuration</div>
-                        <div class="nav-subtitle">Gestion du compte</div>
-                        </div>
-                </a>
-                        </div>
-                    </div>
 
-        <div class="user-profile">
-            <div class="user-info">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-details">
-                    <h4 id="user-name">Akjouj Hamza</h4>
-                    <p id="user-role">Ministère des Finances</p>
+        <!-- User Profile Section -->
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
             </div>
+            <div class="user-details">
+                <div class="user-name" id="user-name">Akjouj Hamza</div>
+                <div class="user-role" id="user-role">Développement</div>
             </div>
-            <button class="logout-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> Déconnexion
-            </button>
         </div>
+        
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Se Déconnecter
+        </button>
     </div>
 
     <!-- Main Content -->
@@ -830,8 +823,8 @@
                     <i class="fas fa-user-cog"></i>
                 </div>
                 <div>
-                    <h1 data-translate="config.title">Configuration du Profil</h1>
-                    <p class="page-subtitle" data-translate="config.subtitle">
+                    <h1>Gestion du Profil</h1>
+                    <p class="page-subtitle">
                         Gérez vos informations personnelles, paramètres de sécurité et préférences. 
                         Personnalisez votre expérience sur TalentScope selon vos besoins professionnels.
                     </p>
