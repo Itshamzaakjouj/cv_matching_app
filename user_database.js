@@ -49,7 +49,7 @@ class UserDatabase {
     /**
      * Crée un nouvel utilisateur
      */
-    createUser(email, password, fullName, department = 'Ministère des Finances', position = 'Utilisateur', phone = '') {
+    createUser(email, password, fullName, department = 'Ministère des Finances', position = 'Utilisateur', phone = '', profilePicture = null) {
         const users = this.getAllUsers();
         const userId = this.generateUserId();
         
@@ -60,6 +60,7 @@ class UserDatabase {
             department: department,
             position: position,
             phone: phone,
+            profilePicture: profilePicture,
             password: password, // En production, il faudrait hasher le mot de passe
             createdAt: new Date().toISOString(),
             lastLogin: new Date().toISOString(),
@@ -107,7 +108,27 @@ class UserDatabase {
             users[userId] = { ...users[userId], ...updateData };
             if (this.saveAllUsers(users)) {
                 console.log('Utilisateur mis à jour:', users[userId].fullName);
+                // Mettre à jour l'utilisateur actuel si c'est le même
+                const currentUser = this.getCurrentUser();
+                if (currentUser && currentUser.id === userId) {
+                    this.setCurrentUser(users[userId]);
+                }
                 return users[userId];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Met à jour le profil de l'utilisateur actuel
+     */
+    updateCurrentUserProfile(profileData) {
+        const currentUser = this.getCurrentUser();
+        if (currentUser) {
+            const updatedUser = this.updateUser(currentUser.id, profileData);
+            if (updatedUser) {
+                this.setCurrentUser(updatedUser);
+                return updatedUser;
             }
         }
         return null;

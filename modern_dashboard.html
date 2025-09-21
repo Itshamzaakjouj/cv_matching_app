@@ -170,11 +170,12 @@
         .profile-name {
             font-weight: 600;
             color: var(--text-primary);
-            font-size: 0.95rem;
+            font-size: 0.8rem;
             margin-bottom: 2px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            max-width: 120px;
         }
 
         .profile-role {
@@ -1639,6 +1640,44 @@
             synchronizeConfigSelectors();
         }
 
+        // Mettre à jour les informations utilisateur
+        function updateUserInfo() {
+            const currentUser = window.userDatabase?.getCurrentUser();
+            if (currentUser) {
+                document.getElementById('user-fullname').textContent = currentUser.fullName || 'Utilisateur';
+                document.getElementById('user-role').textContent = currentUser.department || 'Ministère des Finances';
+                
+                // Mettre à jour l'avatar si une photo de profil existe
+                const sidebarAvatar = document.querySelector('.profile-avatar');
+                if (currentUser.profilePicture && sidebarAvatar) {
+                    sidebarAvatar.src = currentUser.profilePicture;
+                }
+            }
+        }
+
+        // Charger le profil utilisateur
+        function loadUserProfile() {
+            const currentUser = window.userDatabase?.getCurrentUser();
+            if (currentUser) {
+                // Mettre à jour l'avatar principal
+                const mainAvatar = document.getElementById('profile-avatar-large');
+                if (currentUser.profilePicture && mainAvatar) {
+                    mainAvatar.innerHTML = `<img src="${currentUser.profilePicture}" alt="Photo de profil">`;
+                }
+                
+                // Mettre à jour les champs du formulaire
+                document.getElementById('full-name').value = currentUser.fullName || '';
+                document.getElementById('email').value = currentUser.email || '';
+                document.getElementById('department').value = currentUser.department || 'development';
+                document.getElementById('position').value = currentUser.position || '';
+                document.getElementById('phone').value = currentUser.phone || '';
+                
+                // Mettre à jour l'affichage du profil
+                document.getElementById('profile-name').textContent = currentUser.fullName || 'Utilisateur';
+                document.getElementById('profile-role').textContent = currentUser.position || 'Utilisateur';
+            }
+        }
+
         // Fonction pour synchroniser les sélecteurs de configuration
         function synchronizeConfigSelectors() {
             // Synchroniser le thème
@@ -1722,10 +1761,36 @@
             input.onchange = function(e) {
                 const file = e.target.files[0];
                 if (file) {
+                    // Vérifier la taille du fichier (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('La taille du fichier ne doit pas dépasser 5MB');
+                        return;
+                    }
+
                     const reader = new FileReader();
                     reader.onload = function(e) {
+                        const imageData = e.target.result;
+                        
+                        // Mettre à jour l'affichage
                         const avatar = document.getElementById('profile-avatar-large');
-                        avatar.innerHTML = `<img src="${e.target.result}" alt="Photo de profil">`;
+                        avatar.innerHTML = `<img src="${imageData}" alt="Photo de profil">`;
+                        
+                        // Mettre à jour l'avatar dans la sidebar
+                        const sidebarAvatar = document.querySelector('.profile-avatar');
+                        if (sidebarAvatar) {
+                            sidebarAvatar.src = imageData;
+                        }
+                        
+                        // Sauvegarder dans la base de données
+                        const currentUser = window.userDatabase?.getCurrentUser();
+                        if (currentUser) {
+                            const updatedUser = window.userDatabase.updateCurrentUserProfile({
+                                profilePicture: imageData
+                            });
+                            if (updatedUser) {
+                                console.log('Photo de profil mise à jour');
+                            }
+                        }
                     };
                     reader.readAsDataURL(file);
                 }
@@ -1774,10 +1839,53 @@
             if (profileForm) {
                 profileForm.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    alert('Profil mis à jour avec succès !');
+                    updateUserProfile();
                 });
             }
         });
+
+        // Function to update user profile in database
+        function updateUserProfile() {
+            const currentUser = window.userDatabase?.getCurrentUser();
+            if (!currentUser) {
+                alert('Erreur: Utilisateur non connecté');
+                return;
+            }
+
+            const profileData = {
+                fullName: document.getElementById('full-name').value,
+                email: document.getElementById('email').value,
+                department: document.getElementById('department').value,
+                position: document.getElementById('position').value,
+                phone: document.getElementById('phone').value
+            };
+
+            const updatedUser = window.userDatabase.updateCurrentUserProfile(profileData);
+            if (updatedUser) {
+                // Update UI elements
+                updateUserInfo();
+                updateProfileDisplay();
+                alert('Profil mis à jour avec succès !');
+            } else {
+                alert('Erreur lors de la mise à jour du profil');
+            }
+        }
+
+        // Function to update profile display
+        function updateProfileDisplay() {
+            const currentUser = window.userDatabase?.getCurrentUser();
+            if (currentUser) {
+                document.getElementById('profile-name').textContent = currentUser.fullName;
+                document.getElementById('profile-role').textContent = currentUser.position;
+                
+                // Update form fields
+                document.getElementById('full-name').value = currentUser.fullName;
+                document.getElementById('email').value = currentUser.email;
+                document.getElementById('department').value = currentUser.department;
+                document.getElementById('position').value = currentUser.position;
+                document.getElementById('phone').value = currentUser.phone || '';
+            }
+        }
 
         function viewSettings() {
             showSection('config');
@@ -2276,6 +2384,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
             initializeUserProfile();
+            updateUserInfo();
+            loadUserProfile();
             showSection('dashboard');
             loadHistoryFromStorage();
             
