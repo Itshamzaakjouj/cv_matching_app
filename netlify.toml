@@ -2,6 +2,10 @@
   publish = "."
   command = "npm install"
 
+[build.environment]
+  NODE_VERSION = "18"
+  PYTHON_VERSION = "3.8"
+
 [[redirects]]
   from = "/*"
   to = "/auth_interface.html"
