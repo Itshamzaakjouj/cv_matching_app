@@ -1,34 +1,43 @@
-from http.server import HTTPServer, SimpleHTTPRequestHandler
-import os
+#!/usr/bin/env python3
+"""
+Script de test pour vérifier que toutes les pages sont accessibles
+"""
 
-def run_server(port=8000):
-    try:
-        # Afficher le répertoire actuel
-        current_dir = os.getcwd()
-        print(f"Répertoire actuel : {current_dir}")
-        
-        # Lister les fichiers
-        print("\nFichiers disponibles :")
-        for file in os.listdir(current_dir):
-            print(f"- {file}")
-        
-        # Créer et démarrer le serveur
-        server_address = ('', port)
-        httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
-        
-        print(f"\n✅ Serveur démarré sur http://localhost:{port}")
-        print(f"📄 Test page: http://localhost:{port}/test.html")
-        print("\n💡 Appuyez sur Ctrl+C pour arrêter le serveur")
-        
-        httpd.serve_forever()
-        
-    except Exception as e:
-        print(f"\n❌ Erreur : {str(e)}")
-        
-    except KeyboardInterrupt:
-        print("\n🛑 Arrêt du serveur...")
-        httpd.server_close()
+import requests
+import time
 
-if __name__ == '__main__':
-    run_server()
+def test_server():
+    base_url = "http://localhost:8080"
+    
+    # Pages à tester
+    pages = [
+        ("/", "Page d'accueil"),
+        ("/auth", "Page d'authentification"),
+        ("/dashboard", "Dashboard"),
+        ("/analysis", "Page d'analyse"),
+        ("/profile", "Gestion du profil"),
+        ("/settings", "Paramètres"),
+        ("/processed", "CVs traités")
+    ]
+    
+    print("🧪 Test des pages du serveur TalentScope")
+    print("=" * 50)
+    
+    for path, description in pages:
+        try:
+            url = base_url + path
+            response = requests.get(url, timeout=5)
+            
+            if response.status_code == 200:
+                print(f"✅ {description}: {url} - OK")
+            else:
+                print(f"❌ {description}: {url} - Erreur {response.status_code}")
+                
+        except requests.exceptions.RequestException as e:
+            print(f"❌ {description}: {url} - Erreur de connexion: {e}")
+    
+    print("=" * 50)
+    print("🎉 Test terminé !")
 
+if __name__ == "__main__":
+    test_server()

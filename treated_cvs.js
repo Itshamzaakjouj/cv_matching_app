@@ -289,3 +289,5 @@ ${index + 1}. ${candidate.name}
 document.addEventListener('DOMContentLoaded', () => {
     window.historyManager = new HistoryManager();
 });
+
+

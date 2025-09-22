@@ -1,7 +1,0 @@
-[build]
-  publish = "."
-
-[[redirects]]
-  from = "/*"
-  to = "/auth_interface.html"
-  status = 200

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Lanceur final pour TalentScope
+Lanceur pour la page d'authentification TalentScope
 """
 
 import subprocess
@@ -30,16 +30,17 @@ def open_browser():
     """Ouvre le navigateur après un délai"""
     time.sleep(3)  # Attendre que le serveur démarre
     try:
-        webbrowser.open('http://localhost:8080/auth')
-        print("🌐 Interface d'authentification ouverte dans le navigateur")
+        # Ouvrir directement le fichier d'authentification
+        webbrowser.open('http://localhost:8080/auth_interface.html')
+        print("🌐 Page d'authentification ouverte dans le navigateur")
     except Exception as e:
         print(f"⚠️ Impossible d'ouvrir le navigateur: {e}")
 
 def main():
     print("=" * 70)
-    print("🏛️  TALENTSCOPE - APPLICATION MODERNE")
+    print("🏛️  TALENTSCOPE - PAGE D'AUTHENTIFICATION")
     print("=" * 70)
-    print("🚀 Démarrage de l'application...")
+    print("🚀 Démarrage du serveur...")
     print("=" * 70)
     
     # Démarrer le serveur
@@ -54,18 +55,13 @@ def main():
     browser_thread.start()
     
     print("✅ Serveur démarré avec succès !")
-    print("\n🌐 Interfaces disponibles:")
-    print("   🔐 Authentification: http://localhost:8080/auth")
-    print("   🏛️  Dashboard: http://localhost:8080/dashboard")
-    print("   🔍 Analyse (4 étapes): http://localhost:8080/analysis")
-    print("   📁 CVs Traités: http://localhost:8080/processed")
-    print("   👤 Profil: http://localhost:8080/profile")
-    print("   ⚙️  Paramètres: http://localhost:8080/settings")
+    print("\n🌐 Page d'authentification:")
+    print("   🔐 URL: http://localhost:8080/auth_interface.html")
     print("\n🔑 Identifiants de test:")
-    print("   Email: akjouj17@gmail.com")
-    print("   Mot de passe: Hamza12345")
+    print("   👨‍💼 Admin: akjouj17@gmail.com / Hamza12345")
+    print("   👩‍💼 User: elhafsaghazouani@gmail.com / Hafsa2003")
     print("\n" + "=" * 70)
-    print("✨ Application TalentScope prête !")
+    print("✨ Page d'authentification disponible !")
     print("💡 Utilisez Ctrl+C pour arrêter l'application")
     print("=" * 70)
     

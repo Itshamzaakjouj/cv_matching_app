@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TalentScope - Ministère de l'Économie et des Finances</title>
     <link rel="icon" type="image/png" href="Logos/TalentScope.png">
-    <link rel="stylesheet" href="professional-icons.css">
-    <script src="user_database.js"></script>
-    <script src="translations-system.js"></script>
-    <script src="icon-replacer.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -28,290 +25,411 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            position: relative;
+            overflow-x: hidden;
         }
-        
-        body::before {
+
+        /* Animations de fond */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 0.9; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInFromTop {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(102, 126, 234, 0.6); }
+        }
+
+        /* Éléments de fond flottants */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .bg-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite, fadeIn 3s ease-out;
+        }
+
+        .bg-element:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            font-size: 3rem;
+            animation-delay: 0s, 0.5s;
+        }
+
+        .bg-element:nth-child(2) {
+            top: 20%;
+            right: 15%;
+            font-size: 2.5rem;
+            animation-delay: 2s, 1s;
+        }
+
+        .bg-element:nth-child(3) {
+            bottom: 30%;
+            left: 20%;
+            font-size: 2rem;
+            animation-delay: 4s, 1.5s;
+        }
+
+        .bg-element:nth-child(4) {
+            bottom: 20%;
+            right: 25%;
+            font-size: 2.5rem;
+            animation-delay: 1s, 2s;
+        }
+
+        .bg-element:nth-child(5) {
+            top: 50%;
+            left: 5%;
+            font-size: 1.8rem;
+            animation-delay: 3s, 2.5s;
+        }
+
+        /* Conteneur principal */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 450px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Carte d'authentification */
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.8s ease-out 0.2s both;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .auth-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(102, 126, 234, 0.7);
-            z-index: 1;
-        }
-
-        .auth-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 40px;
+            left: -100%;
             width: 100%;
-            max-width: 420px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: transform 0.3s ease;
-            position: relative;
-            z-index: 2;
-        }
-
-        .top-controls {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            z-index: 10;
-            align-items: center;
-        }
-
-        .language-selector {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 30px;
-            overflow: hidden;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            position: relative;
-            padding: 2px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            min-width: 120px;
-        }
-
-        .language-selector select {
-            border: none;
-            padding: 4px 30px 4px 15px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #1a1a1a;
-            background: transparent;
-            cursor: pointer;
-            outline: none;
             height: 100%;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            letter-spacing: 0.3px;
-        }
-        
-        .language-selector::after {
-            content: '';
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;
-            height: 8px;
-            border: 2px solid #1a1a1a;
-            border-top: 0;
-            border-left: 0;
-            transform: translateY(-70%) rotate(45deg);
-            pointer-events: none;
-            transition: transform 0.2s ease;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            animation: shimmer 3s infinite;
         }
 
-        .language-selector:hover {
-            background: rgba(255, 255, 255, 1);
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
-        .language-selector:hover::after {
-            transform: translateY(-30%) rotate(45deg);
-        }
-
-        /* Animation du changement de langue */
-        .language-change {
-            animation: languageChange 0.5s ease;
-        }
-
-        @keyframes languageChange {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            }
-            50% {
-                transform: scale(1.1);
-                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-                background: rgba(255, 255, 255, 1);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            }
-        }
-
-        /* Transitions pour le conteneur principal */
-        .auth-container {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .auth-container:hover {
-            transform: translateY(-5px);
-        }
-
-        .logo {
+        /* En-tête */
+        .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
         }
 
-        .logo h1 {
+        .logos-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            gap: 15px;
+            animation: slideInFromTop 0.8s ease-out;
+        }
+
+        .logo-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+        }
+
+        .talent-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+            animation: logoFloat 4s ease-in-out infinite;
+        }
+
+        .talent-logo:hover {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 6px 12px rgba(102, 126, 234, 0.3));
+        }
+
+        .mef-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+            animation: logoFloat 4s ease-in-out infinite 2s;
+        }
+
+        .mef-logo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 6px 12px rgba(0, 100, 0, 0.3));
+        }
+
+        .title-section {
+            flex: 1;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+
+        .title {
+            font-size: 1.8rem;
+            font-weight: 700;
             background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-size: 2.5rem;
-            font-weight: 700;
             margin-bottom: 8px;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
         }
 
-        .logo p {
+        .subtitle {
             color: #666;
             font-size: 0.9rem;
-            line-height: 1.4;
+            margin-bottom: 3px;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
         }
 
-        .form-tabs {
+        .description {
+            color: #888;
+            font-size: 0.8rem;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        /* Onglets */
+        .tabs {
             display: flex;
-            margin-bottom: 30px;
-            background: #f8f9fa;
-            border-radius: 12px;
+            margin-bottom: 20px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 15px;
             padding: 4px;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
         }
 
-        .tab-button {
+        .tab {
             flex: 1;
-            padding: 12px 20px;
+            padding: 10px 16px;
             text-align: center;
-            border: none;
-            background: transparent;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: 500;
-            color: #666;
             transition: all 0.3s ease;
-            font-size: 0.95rem;
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+            animation: fadeInUp 0.8s ease-out 0.7s both;
         }
 
-        .tab-button.active {
-            background: white;
-            color: #667eea;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        .tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+            animation: glow 2s infinite;
         }
 
-        .form-content {
+        /* Formulaires */
+        .form-container {
+            position: relative;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .form {
             display: none;
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        .form-content.active {
+        .form.active {
             display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            animation: fadeInUp 0.6s ease-out;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            animation: fadeInUp 0.6s ease-out;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: #333;
-            font-weight: 500;
-            font-size: 0.9rem;
+            font-weight: 600;
+            font-size: 0.85rem;
         }
 
-        .input-wrapper {
+        .input-group {
             position: relative;
         }
 
-        .form-control {
+        .input-group input {
             width: 100%;
             padding: 12px 16px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 10px;
             font-size: 0.9rem;
             transition: all 0.3s ease;
-            background: white;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        .form-control:focus {
+        .input-group input:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+            animation: glow 2s infinite;
         }
 
-        .password-toggle {
+        .input-group i {
             position: absolute;
             right: 12px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
-            border: none;
+            color: #667eea;
             cursor: pointer;
-            font-size: 1.1rem;
-            color: #666;
-            padding: 4px;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+            font-size: 0.9rem;
+            z-index: 10;
         }
 
+        .input-group i:hover {
+            color: #764ba2;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Boutons */
         .btn {
             width: 100%;
-            padding: 14px 20px;
+            padding: 12px;
             border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-bottom: 10px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
+            animation: fadeInUp 0.8s ease-out 0.9s both;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            animation: glow 2s infinite, pulse 1s ease-in-out infinite;
         }
 
-        .btn-secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
+        .btn-primary:active {
+            transform: translateY(0) scale(0.98);
         }
 
-        .btn-secondary:hover {
-            background: #f8f9fa;
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            animation: none;
         }
 
-        .forgot-password {
-            text-align: right;
-            margin: 10px 0 20px;
-        }
-
-        .forgot-password a {
+        /* Liens */
+        .link {
             color: #667eea;
             text-decoration: none;
-            font-size: 0.85rem;
-            padding: 5px 10px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out 1s both;
         }
 
-        .forgot-password a:hover {
-            background: rgba(102, 126, 234, 0.1);
-            color: #4a5dc4;
+        .link:hover {
+            color: #764ba2;
+            transform: translateY(-1px) scale(1.05);
         }
 
+        .link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+            animation: fadeInUp 0.8s ease-out 1.1s both;
+        }
+
+        .link:hover::after {
+            width: 100%;
+            animation: shimmer 0.5s ease-out;
+        }
+
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 12px;
+            animation: fadeInUp 0.8s ease-out 1.2s both;
+        }
+
+        /* Séparateur */
         .divider {
             text-align: center;
             margin: 20px 0;
             position: relative;
+            color: #666;
+            animation: fadeInUp 0.8s ease-out 1.3s both;
         }
 
         .divider::before {
@@ -321,338 +439,1313 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: #ddd;
+            background: rgba(102, 126, 234, 0.2);
+            animation: shimmer 2s ease-in-out infinite;
         }
 
         .divider span {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             padding: 0 15px;
-            color: #666;
-            font-size: 0.85rem;
             position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease-out 1.4s both;
         }
 
-        .social-login {
+        /* Boutons alternatifs */
+        .alt-buttons {
             display: flex;
+            gap: 8px;
             justify-content: center;
+            animation: fadeInUp 0.8s ease-out 1.5s both;
         }
 
-        .social-btn {
-            padding: 12px 24px;
-            border: 1px solid #667eea;
-            border-radius: 8px;
-            background: white;
-            color: #667eea;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
+        .alt-btn.centered {
+            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            min-width: 180px;
-            font-weight: 500;
         }
 
-        .social-btn:hover {
+        .alt-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #667eea;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            animation: fadeInUp 0.8s ease-out 1.6s both;
+        }
+
+        .alt-btn:hover {
             background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            transform: translateY(-2px) scale(1.02);
+            animation: glow 2s infinite, pulse 1s ease-in-out infinite;
         }
 
-        /* Messages supprimés */
+        /* Messages */
+        .message {
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: none;
+            animation: fadeInUp 0.5s ease-out, pulse 2s ease-in-out infinite;
+        }
 
-        @media (max-width: 480px) {
-            .auth-container {
-                padding: 30px 20px;
-                margin: 10px;
+        .message.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            animation: fadeInUp 0.5s ease-out, glow 2s infinite;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            animation: fadeInUp 0.5s ease-out, pulse 1s ease-in-out infinite;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            animation: fadeInUp 0.5s ease-out, pulse 2s ease-in-out infinite;
+        }
+
+        .spinner {
+            border: 3px solid rgba(102, 126, 234, 0.3);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite, pulse 2s ease-in-out infinite, glow 3s ease-in-out infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Styles spécifiques pour l'inscription */
+        .form-container.register-form {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .form-container.register-form .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-container.register-form .form-group label {
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+        }
+
+        .form-container.register-form .input-group input {
+            padding: 10px 14px;
+            font-size: 0.85rem;
+        }
+
+        .form-container.register-form .btn {
+            padding: 10px;
+            font-size: 0.85rem;
+        }
+
+        /* Sélecteur de langue */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: slideInFromTop 0.8s ease-out 0.1s both;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .language-toggle {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #667eea;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            min-width: 80px;
+        }
+
+        .language-toggle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .language-toggle:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .language-toggle:hover::before {
+            left: 100%;
+        }
+
+        .language-toggle i {
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .language-toggle:hover i {
+            transform: rotate(180deg) scale(1.1);
+        }
+
+        .language-flag {
+            width: 24px;
+            height: 18px;
+            border-radius: 4px;
+            object-fit: cover;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .language-toggle:hover .language-flag {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .language-name {
+            font-weight: 700;
+            color: #667eea;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Password toggle button styles */
+        .password-toggle {
+            position: absolute !important;
+            right: 12px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+            border: 1px solid rgba(102, 126, 234, 0.2) !important;
+            color: #667eea !important;
+            cursor: pointer !important;
+            font-size: 0.9rem !important;
+            transition: all 0.3s ease !important;
+            z-index: 15 !important;
+            padding: 6px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 28px !important;
+            height: 28px !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            backdrop-filter: blur(10px) !important;
+        }
+
+        .password-toggle:hover {
+            background: rgba(102, 126, 234, 0.1) !important;
+            color: #5a67d8 !important;
+            transform: translateY(-50%) scale(1.1) !important;
+            border-color: #667eea !important;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.2) !important;
+        }
+
+        .password-toggle:active {
+            transform: translateY(-50%) scale(0.95) !important;
+        }
+
+        /* RTL Support for password toggle */
+        [dir="rtl"] .password-toggle,
+        body[dir="rtl"] .password-toggle,
+        .rtl .password-toggle {
+            right: auto !important;
+            left: 12px !important;
+        }
+
+        /* Ensure input has proper padding for the button */
+        .input-group input[type="password"] {
+            padding-right: 50px !important;
+        }
+
+        [dir="rtl"] .input-group input[type="password"],
+        body[dir="rtl"] .input-group input[type="password"],
+        .rtl .input-group input[type="password"] {
+            padding-right: 16px !important;
+            padding-left: 50px !important;
+        }
+
+        /* Additional RTL support for better compatibility */
+        body[style*="direction: rtl"] .password-toggle {
+            right: auto !important;
+            left: 12px !important;
+        }
+
+        body[style*="direction: rtl"] .input-group input[type="password"] {
+            padding-right: 16px !important;
+            padding-left: 50px !important;
+        }
+
+        /* Enhanced animations for form elements */
+        .form-group {
+            animation: slideInUp 0.6s ease-out both;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+
+        .btn {
+            animation: slideInUp 0.6s ease-out 0.5s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Input field animations */
+        .form-control {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .form-control:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-control:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Label animations */
+        label {
+            transition: all 0.3s ease;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-control:focus + label,
+        .form-control:not(:placeholder-shown) + label {
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        /* Link animations */
+        .link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: #667eea;
+            transition: width 0.3s ease;
+        }
+
+        .link:hover::after {
+            width: 100%;
+        }
+
+        .link:hover {
+            color: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        /* Tab animations */
+        .tab-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .tab-btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn.active {
+            animation: pulse 2s infinite;
+        }
+
+        /* Card animations */
+        .auth-card {
+            animation: slideInUp 0.8s ease-out both;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Background element animations */
+        .bg-element {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .bg-element:nth-child(1) { animation-delay: 0s; }
+        .bg-element:nth-child(2) { animation-delay: 1s; }
+        .bg-element:nth-child(3) { animation-delay: 2s; }
+        .bg-element:nth-child(4) { animation-delay: 3s; }
+        .bg-element:nth-child(5) { animation-delay: 4s; }
+        .bg-element:nth-child(6) { animation-delay: 5s; }
+
+        /* Keyframe animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: calc(200px + 100%) 0;
+            }
+        }
+
+        /* Loading animation for form submission */
+        .btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-width: 160px;
+            z-index: 1000;
+            display: none;
+            overflow: hidden;
+            margin-top: 8px;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .language-dropdown.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+        }
+
+        .language-option:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            transform: translateX(4px);
+        }
+
+        .language-option.active {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .language-option.active::before {
+            content: '✓';
+            position: absolute;
+            right: 16px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .language-option .language-flag {
+            width: 24px;
+            height: 18px;
+        }
+
+        .language-option .language-name {
+            flex: 1;
+        }
+
+        .language-option .language-code {
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .language-option:hover .language-code {
+            color: #667eea;
+        }
+
+        /* Animation pour le changement de langue */
+        @keyframes languageChange {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .language-changing {
+            animation: languageChange 0.6s ease-in-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
             }
             
-            .logo h1 {
-                font-size: 2rem;
+            .auth-card {
+                padding: 20px 15px;
+                max-height: 95vh;
+            }
+            
+            .title {
+                font-size: 1.6rem;
+            }
+
+            .logos-container {
+                gap: 10px;
+            }
+
+            .talent-logo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .mef-logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .form-container.register-form {
+                max-height: 50vh;
+            }
+
+            .language-selector {
+                top: 15px;
+                right: 15px;
+            }
+
+            .language-toggle {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            .language-flag {
+                width: 18px;
+                height: 13px;
+            }
+
+            .language-dropdown {
+                min-width: 140px;
+            }
+
+            .language-option {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .auth-card {
+                padding: 20px 15px;
+                max-height: 95vh;
+            }
+            
+            .title {
+                font-size: 1.4rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Contrôles de thème et langue -->
-    <div class="top-controls">
+    <!-- Éléments de fond -->
+    <div class="bg-elements">
+        <div class="bg-element">💡</div>
+        <div class="bg-element">📊</div>
+        <div class="bg-element">🚀</div>
+        <div class="bg-element">⚡</div>
+        <div class="bg-element">🔍</div>
+    </div>
+
+    <!-- Sélecteur de langue -->
         <div class="language-selector">
-            <select id="languageSelector">
-                <option value="fr" data-translate="french">Français</option>
-                <option value="en" data-translate="english">English</option>
-            </select>
+        <div class="language-toggle" onclick="toggleLanguageDropdown()">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgiIGhlaWdodD0iMTgiIGZpbGw9IiMwMDI0OTUiLz4KPHJlY3QgeD0iOCIgd2lkdGg9IjgiIGhlaWdodD0iMTgiIGZpbGw9IiNmZmZmZmYiLz4KPHJlY3QgeD0iMTYiIHdpZHRoPSI4IiBoZWlnaHQ9IjE4IiBmaWxsPSIjZWQyOTM3Ii8+Cjwvc3ZnPgo=" alt="Français" class="language-flag">
+            <span class="language-name">FR</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="language-dropdown" id="languageDropdown">
+            <div class="language-option active" onclick="changeLanguage('fr')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgiIGhlaWdodD0iMTgiIGZpbGw9IiMwMDI0OTUiLz4KPHJlY3QgeD0iOCIgd2lkdGg9IjgiIGhlaWdodD0iMTgiIGZpbGw9IiNmZmZmZmYiLz4KPHJlY3QgeD0iMTYiIHdpZHRoPSI4IiBoZWlnaHQ9IjE4IiBmaWxsPSIjZWQyOTM3Ii8+Cjwvc3ZnPgo=" alt="Français" class="language-flag">
+                <div>
+                    <div class="language-name">Français</div>
+                    <div class="language-code">FR</div>
+                </div>
+            </div>
+            <div class="language-option" onclick="changeLanguage('en')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0idWsiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMDAyNDk1O3N0b3Atb3BhY2l0eToxIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSIxOCIgZmlsbD0iIzAwMjQ5NSIvPgo8IS0tIENyb2l4IGRpYWdvbmFsZXMgYmxhbmNoZXMgZGUgU2FpbnQtQW5kcsOpIC0tPgo8bGluZSB4MT0iMCIgeTE9IjAiIHgyPSIyNCIgeTI9IjE4IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiLz4KPGxpbmUgeDE9IjAiIHkxPSIxOCIgeDI9IjI0IiB5Mj0iMCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIi8+CjwhLS0gQ3JvaXggZGlhZ29uYWxlcyByb3VnZXMgZGUgU2FpbnQtUGF0cmljayAtLT4KPGxpbmUgeDE9IjEiIHkxPSIxIiB4Mj0iMjMiIHkyPSIxNyIgc3Ryb2tlPSIjREMyNjI2IiBzdHJva2Utd2lkdGg9IjEiLz4KPGxpbmUgeDE9IjEiIHkxPSIxNyIgeDI9IjIzIiB5Mj0iMSIgc3Ryb2tlPSIjREMyNjI2IiBzdHJva2Utd2lkdGg9IjEiLz4KPCEtLSBDcm9peCBjZW50cmFsZSBibGFuY2hlIC0tPgo8cmVjdCB4PSIxMSIgeT0iMCIgd2lkdGg9IjIiIGhlaWdodD0iMTgiIGZpbGw9IndoaXRlIi8+CjxyZWN0IHg9IjAiIHk9IjgiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyIiBmaWxsPSJ3aGl0ZSIvPgo8IS0tIENyb2l4IGNlbnRyYWxlIHJvdWdlIGRlIFNhaW50LUdlb3JnZXMgLS0+CjxyZWN0IHg9IjEwLjUiIHk9IjAiIHdpZHRoPSIzIiBoZWlnaHQ9IjE4IiBmaWxsPSIjREMyNjI2Ii8+CjxyZWN0IHg9IjAiIHk9IjcuNSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjMiIGZpbGw9IiNEQzI2MjYiLz4KPC9zdmc+" alt="English" class="language-flag">
+                <div>
+                    <div class="language-name">English</div>
+                    <div class="language-code">EN</div>
+                </div>
+            </div>
+            <div class="language-option" onclick="changeLanguage('ar')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjYiIGZpbGw9IiNGRjAwMDAiLz4KPHJlY3QgeT0iNiIgd2lkdGg9IjI0IiBoZWlnaHQ9IjYiIGZpbGw9IiNmZmZmZmYiLz4KPHJlY3QgeT0iMTIiIHdpZHRoPSIyNCIgaGVpZ2h0PSI2IiBmaWxsPSIjMDAwMDAwIi8+Cjwvc3ZnPgo=" alt="العربية" class="language-flag">
+                <div>
+                    <div class="language-name">العربية</div>
+                    <div class="language-code">AR</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="auth-container">
-        <!-- Logo -->
-        <div class="logo">
-            <div class="logo-icon" style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 15px;">
-                <img src="Logos/TalentScope.png" alt="TalentScope Logo" style="width: 80px; height: 80px; object-fit: contain;">
-                <img src="Logos/MEF2.png" alt="Ministère Logo" style="width: 80px; height: 80px; object-fit: contain;">
+    <!-- Conteneur principal -->
+    <div class="container">
+        <div class="auth-card">
+            <!-- En-tête -->
+            <div class="header">
+                <div class="logos-container">
+                    <div class="logo-item">
+                        <img src="Logos/TalentScope.png" alt="TalentScope" class="talent-logo">
             </div>
-            <h1 data-translate="app-title">TalentScope</h1>
-            <p>
-                <span data-translate="ministry-name">Ministère de l'Économie et des Finances</span><br>
-                <span data-translate="platform-description">Plateforme de gestion des talents</span>
-            </p>
+                    <div class="title-section">
+                        <h1 class="title">TalentScope</h1>
+                        <p class="subtitle">Ministère de l'Économie et des Finances</p>
+                        <p class="description">Plateforme de gestion des talents</p>
+                    </div>
+                    <div class="logo-item">
+                        <img src="Logos/MEF2.png" alt="Ministère de l'Économie et des Finances" class="mef-logo">
+                    </div>
+        </div>
+    </div>
+
+            <!-- Messages -->
+            <div id="message" class="message" style="display: none;"></div>
+
+            <!-- Loading -->
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Connexion en cours...</p>
         </div>
 
         <!-- Onglets -->
-        <div class="form-tabs">
-            <button class="tab-button active" onclick="switchTab('login')" data-translate="login-tab">Connexion</button>
-            <button class="tab-button" onclick="switchTab('register')" data-translate="register-tab">Inscription</button>
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('login')">
+                    Connexion
+                </div>
+                <div class="tab" onclick="switchTab('register')">
+                    Inscription
+                </div>
         </div>
 
-        <!-- Messages supprimés pour une interface plus propre -->
-
-        <!-- Formulaire de Connexion -->
-        <div id="login-form" class="form-content active">
-            <form onsubmit="handleLogin(event)">
+            <!-- Formulaires -->
+            <div class="form-container register-form">
+                <!-- Formulaire de connexion -->
+                <form id="loginForm" class="form active">
                 <div class="form-group">
-                    <label for="login-email" data-translate="email-label">Adresse mail</label>
-                    <input type="email" id="login-email" class="form-control" data-translate-placeholder="email-placeholder" placeholder="Entrez votre adresse e-mail" required>
+                        <label for="loginEmail">Adresse mail</label>
+                        <div class="input-group">
+                            <input type="email" id="loginEmail" name="email" placeholder="Entrez votre adresse e-mail" value="akjouj17@gmail.com" required>
+                        </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="login-password" data-translate="password-label">Mot de passe</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="login-password" class="form-control" data-translate-placeholder="password-placeholder" placeholder="Entrez votre mot de passe" required>
-                        <button type="button" class="password-toggle" onclick="togglePassword('login-password')">👁️</button>
+                        <label for="loginPassword">Mot de passe</label>
+                        <div class="input-group">
+                            <input type="password" id="loginPassword" name="password" placeholder="Entrez votre mot de passe" value="Hamza12345" required>
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('loginPassword')"></i>
                     </div>
                 </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        → Se connecter
+                    </button>
 
                 <div class="forgot-password">
-                    <a href="#" onclick="showForgotPassword()" data-translate="forgot-password">Mot de passe oublié ?</a>
+                        <a href="#" class="link" onclick="showForgotPassword()">Mot de passe oublié ?</a>
                 </div>
-
-                <button type="submit" class="btn btn-primary" id="login-btn" data-translate="login-button">Se connecter</button>
             </form>
 
-            <div class="divider"><span data-translate="auth.or">ou</span></div>
-
-            <div class="social-login">
-                <button type="button" class="social-btn" onclick="socialLogin('ministry')">
-                    🏛️ <span data-translate="ministry-sso">Ministère</span>
-                </button>
+                <!-- Formulaire d'inscription -->
+                <form id="registerForm" class="form">
+                    <div class="form-group">
+                        <label for="registerName">Nom complet</label>
+                        <div class="input-group">
+                            <input type="text" id="registerName" name="name" placeholder="Entrez votre nom complet" required>
             </div>
         </div>
 
-        <!-- Formulaire d'Inscription -->
-        <div id="register-form" class="form-content">
-            <form onsubmit="handleRegister(event)">
                 <div class="form-group">
-                    <label for="register-name" data-translate="name-label">Nom complet</label>
-                    <input type="text" id="register-name" class="form-control" data-translate-placeholder="name-placeholder" placeholder="Entrez votre nom complet" required>
+                        <label for="registerEmail">Adresse mail</label>
+                        <div class="input-group">
+                            <input type="email" id="registerEmail" name="email" placeholder="Entrez votre adresse e-mail" required>
+                </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="register-email" data-translate="email-label">Adresse mail</label>
-                    <input type="email" id="register-email" class="form-control" data-translate-placeholder="email-placeholder" placeholder="Entrez votre adresse e-mail" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="register-password" data-translate="password-label">Mot de passe</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="register-password" class="form-control" data-translate-placeholder="password-placeholder" placeholder="Entrez votre mot de passe" required minlength="8">
-                        <button type="button" class="password-toggle" onclick="togglePassword('register-password')">👁️</button>
+                        <label for="registerPassword">Mot de passe</label>
+                        <div class="input-group">
+                            <input type="password" id="registerPassword" name="password" placeholder="Créez un mot de passe" required>
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('registerPassword')"></i>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="register-confirm" data-translate="confirm-password-label">Confirmer le mot de passe</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="register-confirm" class="form-control" data-translate-placeholder="confirm-password-placeholder" placeholder="Confirmez votre mot de passe" required>
-                        <button type="button" class="password-toggle" onclick="togglePassword('register-confirm')">👁️</button>
+                        <label for="confirmPassword">Confirmer le mot de passe</label>
+                        <div class="input-group">
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmez votre mot de passe" required>
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('confirmPassword')"></i>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" id="register-btn" data-translate="register-button">S'inscrire</button>
-                <button type="button" class="btn btn-secondary" onclick="requestAccess()" data-translate="access-request-button">Demander l'accès</button>
+                    <button type="submit" class="btn btn-primary">
+                        → Créer un compte
+                    </button>
             </form>
+            </div>
+
+            <!-- Séparateur -->
+            <div class="divider">
+                <span>ou</span>
+            </div>
+
+            <!-- Boutons alternatifs -->
+            <div class="alt-buttons">
+                <a href="#" class="alt-btn centered" onclick="loginWithMinistry()">
+                    <i class="fas fa-info-circle"></i>
+                    À propos
+                </a>
+            </div>
         </div>
     </div>
 
     <script>
-        // Le système de traduction est maintenant géré par translations-system.js
-        // Pas besoin de code de traduction supplémentaire ici
+        // Variables globales
+        let currentTab = 'login';
+        let currentLanguage = 'fr';
+        let isLanguageDropdownOpen = false;
 
-        // Changement d'onglet
-        function switchTab(tab) {
-            // MAJ des onglets
-            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        // Traductions
+        const translations = {
+            fr: {
+                title: 'TalentScope',
+                subtitle: 'Ministère de l\'Économie et des Finances',
+                description: 'Plateforme de gestion des talents',
+                login: 'Connexion',
+                register: 'Inscription',
+                email: 'Adresse mail',
+                password: 'Mot de passe',
+                fullName: 'Nom complet',
+                confirmPassword: 'Confirmer le mot de passe',
+                loginButton: '→ Se connecter',
+                registerButton: '→ Créer un compte',
+                forgotPassword: 'Mot de passe oublié ?',
+                or: 'ou',
+                ministry: 'À propos',
+                emailPlaceholder: 'Entrez votre adresse e-mail',
+                passwordPlaceholder: 'Entrez votre mot de passe',
+                namePlaceholder: 'Entrez votre nom complet',
+                createPasswordPlaceholder: 'Créez un mot de passe',
+                confirmPasswordPlaceholder: 'Confirmez votre mot de passe'
+            },
+            en: {
+                title: 'TalentScope',
+                subtitle: 'Ministry of Economy and Finance',
+                description: 'Talent management platform',
+                login: 'Login',
+                register: 'Register',
+                email: 'Email address',
+                password: 'Password',
+                fullName: 'Full name',
+                confirmPassword: 'Confirm password',
+                loginButton: '→ Sign in',
+                registerButton: '→ Create account',
+                forgotPassword: 'Forgot password?',
+                or: 'or',
+                ministry: 'About',
+                emailPlaceholder: 'Enter your email address',
+                passwordPlaceholder: 'Enter your password',
+                namePlaceholder: 'Enter your full name',
+                createPasswordPlaceholder: 'Create a password',
+                confirmPasswordPlaceholder: 'Confirm your password'
+            },
+            ar: {
+                title: 'TalentScope',
+                subtitle: 'وزارة الاقتصاد والمالية',
+                description: 'منصة إدارة المواهب',
+                login: 'تسجيل الدخول',
+                register: 'إنشاء حساب',
+                email: 'عنوان البريد الإلكتروني',
+                password: 'كلمة المرور',
+                fullName: 'الاسم الكامل',
+                confirmPassword: 'تأكيد كلمة المرور',
+                loginButton: '→ تسجيل الدخول',
+                registerButton: '→ إنشاء حساب',
+                forgotPassword: 'نسيت كلمة المرور؟',
+                or: 'أو',
+                ministry: 'حول',
+                emailPlaceholder: 'أدخل عنوان بريدك الإلكتروني',
+                passwordPlaceholder: 'أدخل كلمة المرور',
+                namePlaceholder: 'أدخل اسمك الكامل',
+                createPasswordPlaceholder: 'أنشئ كلمة مرور',
+                confirmPasswordPlaceholder: 'أكد كلمة المرور'
+            }
+        };
 
-            // MAJ du contenu
-            document.querySelectorAll('.form-content').forEach(form => form.classList.remove('active'));
-            document.getElementById(tab + '-form').classList.add('active');
-
-            // Vider les champs
-            prefillUserFields();
+        // Fonction pour basculer le menu déroulant de langue
+        function toggleLanguageDropdown() {
+            const dropdown = document.getElementById('languageDropdown');
+            isLanguageDropdownOpen = !isLanguageDropdownOpen;
             
-            // Effacer les messages
-            clearMessages();
-        }
-
-        // Toggle mot de passe
-        function togglePassword(inputId) {
-            const input = document.getElementById(inputId);
-            const button = input.parentNode.querySelector('.password-toggle');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                button.textContent = '🙈';
+            if (isLanguageDropdownOpen) {
+                dropdown.classList.add('show');
             } else {
-                input.type = 'password';
-                button.textContent = '👁️';
+                dropdown.classList.remove('show');
             }
         }
 
-        // Messages supprimés - redirection directe
-
-        // Validation
-        function validateEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        }
-
-        // Handlers
-        function handleLogin(event) {
-            event.preventDefault();
-
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            const btn = document.getElementById('login-btn');
-
-            if (!validateEmail(email)) {
-                return; // Pas de message d'erreur
-            }
-
-            btn.classList.add('loading');
-            btn.textContent = 'Connexion...';
-
+        // Fonction pour changer de langue
+        function changeLanguage(lang) {
+            if (lang === currentLanguage) return;
+            
+            currentLanguage = lang;
+            
+            // Animation de changement avec effet de rotation
+            const toggle = document.querySelector('.language-toggle');
+            const authCard = document.querySelector('.auth-card');
+            
+            // Ajouter l'animation de rotation au toggle
+            toggle.classList.add('language-changing');
+            
+            // Animation de transition pour la carte d'authentification
+            authCard.style.transition = 'all 0.5s ease';
+            authCard.style.transform = 'scale(0.95)';
+            authCard.style.opacity = '0.7';
+            
+            // Mettre à jour les options actives avec animation
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            const activeOption = document.querySelector(`.language-option[onclick="changeLanguage('${lang}')"]`);
+            activeOption.classList.add('active');
+            
+            // Animation de mise en surbrillance de l'option active
+            activeOption.style.animation = 'pulse 0.5s ease';
+            
+            // Mettre à jour le bouton principal avec animation
+            const flag = toggle.querySelector('.language-flag');
+            const name = toggle.querySelector('.language-name');
+            
+            // Animation de rotation du drapeau
+            flag.style.transition = 'all 0.3s ease';
+            flag.style.transform = 'rotateY(180deg)';
+            
             setTimeout(() => {
-                btn.classList.remove('loading');
-                btn.textContent = 'Se connecter';
+                if (lang === 'fr') {
+                    flag.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgiIGhlaWdodD0iMTgiIGZpbGw9IiMwMDI0OTUiLz4KPHJlY3QgeD0iOCIgd2lkdGg9IjgiIGhlaWdodD0iMTgiIGZpbGw9IiNmZmZmZmYiLz4KPHJlY3QgeD0iMTYiIHdpZHRoPSI4IiBoZWlnaHQ9IjE4IiBmaWxsPSIjZWQyOTM3Ii8+Cjwvc3ZnPgo=";
+                    name.textContent = 'FR';
+                } else if (lang === 'en') {
+                    flag.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0idWsiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMDAyNDk1O3N0b3Atb3BhY2l0eToxIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSIxOCIgZmlsbD0iIzAwMjQ5NSIvPgo8IS0tIENyb2l4IGRpYWdvbmFsZXMgYmxhbmNoZXMgZGUgU2FpbnQtQW5kcsOpIC0tPgo8bGluZSB4MT0iMCIgeTE9IjAiIHgyPSIyNCIgeTI9IjE4IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiLz4KPGxpbmUgeDE9IjAiIHkxPSIxOCIgeDI9IjI0IiB5Mj0iMCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIi8+CjwhLS0gQ3JvaXggZGlhZ29uYWxlcyByb3VnZXMgZGUgU2FpbnQtUGF0cmljayAtLT4KPGxpbmUgeDE9IjEiIHkxPSIxIiB4Mj0iMjMiIHkyPSIxNyIgc3Ryb2tlPSIjREMyNjI2IiBzdHJva2Utd2lkdGg9IjEiLz4KPGxpbmUgeDE9IjEiIHkxPSIxNyIgeDI9IjIzIiB5Mj0iMSIgc3Ryb2tlPSIjREMyNjI2IiBzdHJva2Utd2lkdGg9IjEiLz4KPCEtLSBDcm9peCBjZW50cmFsZSBibGFuY2hlIC0tPgo8cmVjdCB4PSIxMSIgeT0iMCIgd2lkdGg9IjIiIGhlaWdodD0iMTgiIGZpbGw9IndoaXRlIi8+CjxyZWN0IHg9IjAiIHk9IjgiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyIiBmaWxsPSJ3aGl0ZSIvPgo8IS0tIENyb2l4IGNlbnRyYWxlIHJvdWdlIGRlIFNhaW50LUdlb3JnZXMgLS0+CjxyZWN0IHg9IjEwLjUiIHk9IjAiIHdpZHRoPSIzIiBoZWlnaHQ9IjE4IiBmaWxsPSIjREMyNjI2Ii8+CjxyZWN0IHg9IjAiIHk9IjcuNSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjMiIGZpbGw9IiNEQzI2MjYiLz4KPC9zdmc+";
+                    name.textContent = 'EN';
+                } else if (lang === 'ar') {
+                    flag.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjYiIGZpbGw9IiNGRjAwMDAiLz4KPHJlY3QgeT0iNiIgd2lkdGg9IjI0IiBoZWlnaHQ9IjYiIGZpbGw9IiNmZmZmZmYiLz4KPHJlY3QgeT0iMTIiIHdpZHRoPSIyNCIgaGVpZ2h0PSI2IiBmaWxsPSIjMDAwMDAwIi8+Cjwvc3ZnPgo=";
+                    name.textContent = 'AR';
+                }
                 
-                const user = window.userDatabase.authenticateUser(email, password);
+                // Retourner le drapeau à sa position normale
+                flag.style.transform = 'rotateY(0deg)';
+            }, 150);
+            
+            // Appliquer les traductions avec animation
+            setTimeout(() => {
+                applyTranslations(lang);
                 
-                if (user) {
-                    // Redirection directe sans message
-                    window.location.href = 'modern_dashboard.html';
+                // Forcer la mise à jour des styles RTL pour le bouton de mot de passe
+                updatePasswordTogglePosition(lang);
+                
+                // Restaurer la carte d'authentification
+                authCard.style.transform = 'scale(1)';
+                authCard.style.opacity = '1';
+            }, 300);
+            
+            // Sauvegarder la langue
+            localStorage.setItem('selectedLanguage', lang);
+            
+            // Fermer le menu déroulant avec animation
+            document.getElementById('languageDropdown').classList.remove('show');
+            isLanguageDropdownOpen = false;
+            
+            // Retirer l'animation après un délai
+            setTimeout(() => {
+                toggle.classList.remove('language-changing');
+                activeOption.style.animation = '';
+            }, 600);
+        }
+
+        // Fonction pour mettre à jour la position du bouton de mot de passe selon la langue
+        function updatePasswordTogglePosition(lang) {
+            const passwordToggles = document.querySelectorAll('.password-toggle');
+            const passwordInputs = document.querySelectorAll('input[type="password"]');
+            
+            passwordToggles.forEach(toggle => {
+                if (lang === 'ar') {
+                    // Position à gauche pour l'arabe
+                    toggle.style.right = 'auto';
+                    toggle.style.left = '12px';
                 } else {
-                    // Pas de message d'erreur
+                    // Position à droite pour le français et l'anglais
+                    toggle.style.left = 'auto';
+                    toggle.style.right = '12px';
                 }
-            }, 500);
-        }
-
-        function handleRegister(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('register-name').value;
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-            const confirm = document.getElementById('register-confirm').value;
-            const btn = document.getElementById('register-btn');
-
-            if (!name || !email || !password || !confirm) {
-                return; // Pas de message d'erreur
-            }
-
-            if (!validateEmail(email)) {
-                return; // Pas de message d'erreur
-            }
-
-            if (password.length < 8) {
-                return; // Pas de message d'erreur
-            }
-
-            if (password !== confirm) {
-                return; // Pas de message d'erreur
-            }
-
-            btn.classList.add('loading');
-            btn.textContent = 'Création...';
-
-            setTimeout(() => {
-                btn.classList.remove('loading');
-                btn.textContent = 'Créer le compte';
-                
-                if (window.userDatabase.emailExists(email)) {
-                    return; // Pas de message d'erreur
-                }
-                
-                const newUser = window.userDatabase.createUser(
-                    email,
-                    password,
-                    name,
-                    'Ministère des Finances',
-                    'Utilisateur'
-                );
-                
-                if (newUser) {
-                    const setUserResult = window.userDatabase.setCurrentUser(newUser);
-                    console.log('Utilisateur défini comme actuel:', setUserResult);
-                    
-                    const storedUser = window.userDatabase.getCurrentUser();
-                    console.log('Utilisateur stocké:', storedUser);
-                    
-                    // Redirection directe sans message
-                    window.location.href = 'modern_dashboard.html';
+            });
+            
+            passwordInputs.forEach(input => {
+                if (lang === 'ar') {
+                    // Padding à gauche pour l'arabe
+                    input.style.paddingRight = '16px';
+                    input.style.paddingLeft = '50px';
                 } else {
-                    // Pas de message d'erreur
-                }
-            }, 500);
-        }
-
-        function socialLogin(provider) {
-            window.location.href = '/dashboard';
-        }
-
-        function showForgotPassword() {
-            // Pas de message - redirection directe
-            window.location.href = 'modern_dashboard.html';
-        }
-
-        function requestAccess() {
-            // Pas de message - redirection directe
-            window.location.href = 'modern_dashboard.html';
-        }
-
-        // Animation d'entrée
-        document.addEventListener('DOMContentLoaded', function() {
-            const container = document.querySelector('.auth-container');
-            container.style.opacity = '0';
-            container.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                container.style.transition = 'all 0.6s ease';
-                container.style.opacity = '1';
-                container.style.transform = 'translateY(0)';
-            }, 100);
-            
-            // Vider les champs
-            prefillUserFields();
-
-            // L'initialisation de la langue est gérée par TranslationSystem
-        });
-
-        // S'assurer que les champs sont vides à chaque chargement de la page
-        function prefillUserFields() {
-            const formFields = [
-                'login-email',
-                'login-password',
-                'register-name',
-                'register-email',
-                'register-password',
-                'register-confirm'
-            ];
-            
-            formFields.forEach(fieldId => {
-                const field = document.getElementById(fieldId);
-                if (field) {
-                    field.value = '';
+                    // Padding à droite pour le français et l'anglais
+                    input.style.paddingLeft = '16px';
+                    input.style.paddingRight = '50px';
                 }
             });
         }
+
+        // Fonction pour gérer le toggle du mot de passe
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const toggle = input.parentElement.querySelector('.password-toggle');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.classList.remove('fa-eye');
+                toggle.classList.add('fa-eye-slash');
+                
+                // Animation de changement
+                toggle.style.transform = 'translateY(-50%) rotate(180deg) scale(1.2)';
+                setTimeout(() => {
+                    toggle.style.transform = 'translateY(-50%) scale(1)';
+                }, 200);
+            } else {
+                input.type = 'password';
+                toggle.classList.remove('fa-eye-slash');
+                toggle.classList.add('fa-eye');
+                
+                // Animation de changement
+                toggle.style.transform = 'translateY(-50%) rotate(-180deg) scale(1.2)';
+                setTimeout(() => {
+                    toggle.style.transform = 'translateY(-50%) scale(1)';
+                }, 200);
+            }
+        }
+
+        // Fonction pour gérer l'animation de soumission de formulaire
+        function handleFormSubmission(form) {
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            // Ajouter l'animation de chargement
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            
+            // Simuler le traitement (remplacer par votre logique réelle)
+            setTimeout(() => {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+                
+                // Animation de succès
+                submitBtn.style.background = '#10b981';
+                submitBtn.textContent = '✓ Succès';
+                
+                setTimeout(() => {
+                    submitBtn.style.background = '';
+                    submitBtn.textContent = originalText;
+                }, 2000);
+            }, 2000);
+        }
+
+        // Fonction pour appliquer les traductions
+        function applyTranslations(lang) {
+            const t = translations[lang];
+            
+            // Mettre à jour les textes
+            document.querySelector('.title').textContent = t.title;
+            document.querySelector('.subtitle').textContent = t.subtitle;
+            document.querySelector('.description').textContent = t.description;
+            
+            // Mettre à jour les onglets
+            document.querySelectorAll('.tab')[0].textContent = t.login;
+            document.querySelectorAll('.tab')[1].textContent = t.register;
+            
+            // Mettre à jour les labels
+            document.querySelector('label[for="loginEmail"]').textContent = t.email;
+            document.querySelector('label[for="loginPassword"]').textContent = t.password;
+            document.querySelector('label[for="registerName"]').textContent = t.fullName;
+            document.querySelector('label[for="registerEmail"]').textContent = t.email;
+            document.querySelector('label[for="registerPassword"]').textContent = t.password;
+            document.querySelector('label[for="confirmPassword"]').textContent = t.confirmPassword;
+            
+            // Mettre à jour les placeholders
+            document.getElementById('loginEmail').placeholder = t.emailPlaceholder;
+            document.getElementById('loginPassword').placeholder = t.passwordPlaceholder;
+            document.getElementById('registerName').placeholder = t.namePlaceholder;
+            document.getElementById('registerEmail').placeholder = t.emailPlaceholder;
+            document.getElementById('registerPassword').placeholder = t.createPasswordPlaceholder;
+            document.getElementById('confirmPassword').placeholder = t.confirmPasswordPlaceholder;
+            
+            // Mettre à jour les boutons
+            document.querySelector('#loginForm .btn').textContent = t.loginButton;
+            document.querySelector('#registerForm .btn').textContent = t.registerButton;
+            
+            // Mettre à jour les liens
+            document.querySelector('.forgot-password .link').textContent = t.forgotPassword;
+            document.querySelector('.divider span').textContent = t.or;
+            
+            // Mettre à jour les boutons alternatifs
+            document.querySelectorAll('.alt-btn')[0].innerHTML = `<i class="fas fa-at"></i> ${t.sso}`;
+            document.querySelectorAll('.alt-btn')[1].innerHTML = `<i class="fas fa-building"></i> ${t.ministry}`;
+            
+            // Changer la direction du texte pour l'arabe
+            if (lang === 'ar') {
+                document.body.style.direction = 'rtl';
+                document.body.style.textAlign = 'right';
+                document.body.setAttribute('dir', 'rtl');
+                } else {
+                document.body.style.direction = 'ltr';
+                document.body.style.textAlign = 'left';
+                document.body.setAttribute('dir', 'ltr');
+            }
+        }
+
+        // Fonction pour changer d'onglet
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Mettre à jour les onglets
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+            
+            // Mettre à jour les formulaires
+            document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+            document.getElementById(tab + 'Form').classList.add('active');
+            
+            // Appliquer la classe CSS spécifique pour l'inscription
+            const formContainer = document.querySelector('.form-container');
+            if (tab === 'register') {
+                formContainer.classList.add('register-form');
+            } else {
+                formContainer.classList.remove('register-form');
+            }
+            
+            // Masquer les messages
+            hideMessage();
+        }
+
+        // Fonction pour basculer la visibilité du mot de passe
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Fonction pour afficher un message
+        // Fonction pour valider la confirmation du mot de passe
+        function validatePasswordConfirmation() {
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showMessage('Les mots de passe ne correspondent pas', 'error');
+                return false;
+            }
+            return true;
+        }
+
+        function showMessage(text, type = 'error') {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            
+            // Masquer après 5 secondes
+            setTimeout(hideMessage, 5000);
+        }
+
+        // Fonction pour masquer le message
+        function hideMessage() {
+            document.getElementById('message').style.display = 'none';
+        }
+
+        // Fonction pour afficher le loading
+        function showLoading(show = true) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        // Gestion du formulaire de connexion
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const email = formData.get('email');
+            const password = formData.get('password');
+            
+            showLoading(true);
+            hideMessage();
+            
+            try {
+                // Simuler une connexion (pour la démo)
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Vérifier les identifiants
+                 if ((email === 'akjouj17@gmail.com' && password === 'Hamza12345') ||
+                     (email === 'elhafsaghazouani@gmail.com' && password === 'Hafsa2003')) {
+                     
+                     // Stocker l'email de l'utilisateur connecté
+                     localStorage.setItem('userEmail', email);
+                     sessionStorage.setItem('userEmail', email);
+                     
+                     // Redirection directe sans message de succès
+                     setTimeout(() => {
+                         window.location.href = '/dashboard';
+                     }, 1000);
+                } else {
+                    showMessage('Identifiants incorrects. Veuillez vérifier votre email et mot de passe.', 'error');
+                }
+            } catch (error) {
+                showMessage('Erreur de connexion. Veuillez réessayer.', 'error');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Gestion du formulaire d'inscription
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Valider la confirmation du mot de passe
+            if (!validatePasswordConfirmation()) {
+                return;
+            }
+            
+            showLoading(true);
+            hideMessage();
+            
+            try {
+                // Simuler l'inscription
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                showMessage('Compte créé avec succès ! Vous pouvez maintenant vous connecter.', 'success');
+
+            setTimeout(() => {
+                    switchTab('login');
+                }, 2000);
+            } catch (error) {
+                showMessage('Erreur lors de la création du compte. Veuillez réessayer.', 'error');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Fonctions pour les connexions alternatives
+        function loginWithMinistry() {
+            // Redirection vers la page du ministère
+            window.location.href = 'ministry_page.html';
+        }
+
+        function showForgotPassword() {
+            showMessage('Fonctionnalité de réinitialisation en cours de développement', 'error');
+        }
+
+        // Validation en temps réel pour la confirmation du mot de passe
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            if (confirmPasswordInput) {
+                confirmPasswordInput.addEventListener('input', function() {
+                    const password = document.getElementById('registerPassword').value;
+                    const confirmPassword = this.value;
+                    
+                    if (confirmPassword && password !== confirmPassword) {
+                        this.style.borderColor = '#dc2626';
+                        this.style.boxShadow = '0 0 0 3px rgba(220, 38, 38, 0.1)';
+                    } else {
+                        this.style.borderColor = 'rgba(102, 126, 234, 0.2)';
+                        this.style.boxShadow = 'none';
+                    }
+                });
+            }
+            
+            // Initialiser la langue
+            const savedLanguage = localStorage.getItem('selectedLanguage') || 'fr';
+            if (savedLanguage !== 'fr') {
+                changeLanguage(savedLanguage);
+            } else {
+                // Appliquer la position correcte pour le français par défaut
+                updatePasswordTogglePosition('fr');
+            }
+            
+            // Fermer le menu déroulant en cliquant à l'extérieur
+            document.addEventListener('click', function(event) {
+                const languageSelector = document.querySelector('.language-selector');
+                if (!languageSelector.contains(event.target) && isLanguageDropdownOpen) {
+                    document.getElementById('languageDropdown').classList.remove('show');
+                    isLanguageDropdownOpen = false;
+                }
+            });
+            
+            // Ajouter des données de test pour la démo
+            console.log('TalentScope - Interface d\'authentification chargée');
+        });
     </script>
 </body>
 </html>
