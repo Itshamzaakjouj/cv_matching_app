@@ -1686,7 +1686,7 @@
                 await new Promise(resolve => setTimeout(resolve, 1500));
                 
                 showMessage('Compte créé avec succès ! Vous pouvez maintenant vous connecter.', 'success');
-
+            
             setTimeout(() => {
                     switchTab('login');
                 }, 2000);
@@ -1721,9 +1721,9 @@
                     } else {
                         this.style.borderColor = 'rgba(102, 126, 234, 0.2)';
                         this.style.boxShadow = 'none';
-                    }
-                });
-            }
+                }
+            });
+        }
             
             // Initialiser la langue
             const savedLanguage = localStorage.getItem('selectedLanguage') || 'fr';

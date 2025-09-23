@@ -2797,42 +2797,85 @@
 
     <script>
         function showSection(sectionName) {
-            // Hide all sections
-            const sections = document.querySelectorAll('.content-section');
-            sections.forEach(section => {
-                section.style.display = 'none';
-            });
+            try {
+                console.log('🔄 === CHANGEMENT DE SECTION ===');
+                console.log('🎯 Section demandée:', sectionName);
+                
+                // Hide all sections
+                const sections = document.querySelectorAll('.content-section');
+                console.log('📊 Sections trouvées:', sections.length);
+                
+                sections.forEach(section => {
+                    section.style.display = 'none';
+                    console.log('❌ Section cachée:', section.id);
+                });
 
-            // Show selected section
-            const targetSection = document.getElementById(sectionName + '-section');
-            if (targetSection) {
-                targetSection.style.display = 'block';
-            }
+                // Show selected section
+                const targetSection = document.getElementById(sectionName + '-section');
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                    console.log('✅ Section affichée:', targetSection.id);
+                } else {
+                    console.log('❌ Section non trouvée:', sectionName + '-section');
+                    console.log('🔍 Sections disponibles:');
+                    sections.forEach(section => {
+                        console.log('  -', section.id);
+                    });
+                    return false;
+                }
 
-            // Update navigation
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => {
-                item.classList.remove('active');
-            });
+                // Update navigation
+                const navItems = document.querySelectorAll('.nav-item');
+                console.log('📊 Éléments de navigation trouvés:', navItems.length);
+                
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                });
 
-            // Find and activate the corresponding nav item
-            const activeNavItem = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
-            if (activeNavItem) {
-                activeNavItem.classList.add('active');
-            }
-            
-            // Charger les données spécifiques à chaque section
-            if (sectionName === 'processed') {
-                console.log('Chargement de l\'historique des CVs...');
-                loadHistoryFromStorage();
-                updateHistoryTable();
-            } else if (sectionName === 'dashboard') {
-                console.log('Mise à jour du dashboard...');
-                updateRealMetrics();
-            } else if (sectionName === 'config') {
-                synchronizeConfigSelectors();
+                // Find and activate the corresponding nav item
+                const activeNavItem = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
+                if (activeNavItem) {
+                    activeNavItem.classList.add('active');
+                    console.log('✅ Navigation activée pour:', sectionName);
+                } else {
+                    console.log('❌ Élément de navigation non trouvé pour:', sectionName);
+                }
+                
+                // Charger les données spécifiques à chaque section
+                if (sectionName === 'processed') {
+                    console.log('📁 Chargement de l\'historique des CVs...');
+                    if (typeof loadHistoryFromStorage === 'function') {
+                        loadHistoryFromStorage();
+                    }
+                    if (typeof updateHistoryTable === 'function') {
+                        updateHistoryTable();
+                    }
+                } else if (sectionName === 'dashboard') {
+                    console.log('📊 Mise à jour du dashboard...');
+                    if (typeof updateRealMetrics === 'function') {
+                        updateRealMetrics();
+                    }
+                    if (typeof forceDashboardUpdate === 'function') {
+                        forceDashboardUpdate();
+                    }
+                } else if (sectionName === 'config') {
+                    console.log('⚙️ Chargement de la configuration...');
+                    if (typeof synchronizeConfigSelectors === 'function') {
+                        synchronizeConfigSelectors();
+                    }
+                }
+                
+                console.log('✅ === CHANGEMENT DE SECTION TERMINÉ ===');
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Erreur dans showSection:', error);
+                return false;
             }
         }
+
+        // Exposer la fonction globalement
+        window.showSection = showSection;
 
         // Fonction pour gérer le changement de thème depuis la configuration
         function handleThemeChange() {
@@ -2896,13 +2939,7 @@
         }
 
         // Fonction d'initialisation au chargement de la page
-        function initializeApp() {
-            console.log('Initialisation de l\'application...');
-            
-            // Le système de traduction est déjà initialisé dans force-translation.js
-            // Synchroniser les sélecteurs de configuration
-            synchronizeConfigSelectors();
-        }
+        // Fonction supprimée - remplacée par la version complète plus bas
 
         // Mettre à jour les informations utilisateur
         function updateUserInfo() {
@@ -3511,6 +3548,18 @@
 
         // Handle profile form submission
         document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'état de connexion
+            const isLoggedIn = localStorage.getItem('isLoggedIn') || sessionStorage.getItem('isLoggedIn');
+            const userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
+            
+            if (!isLoggedIn || !userEmail) {
+                console.log('❌ Utilisateur non connecté, redirection vers l\'authentification');
+                window.location.href = '/auth';
+                return;
+            }
+            
+            console.log('✅ Utilisateur connecté:', userEmail);
+            
             const profileForm = document.getElementById('profile-form');
             if (profileForm) {
                 profileForm.addEventListener('submit', function(e) {
@@ -3522,7 +3571,11 @@
             // Initialiser le thème
             initializeTheme();
             
+            // Initialiser l'application
+            initializeApp();
+            
             // Initialiser des données de test si nécessaire
+            console.log('🧪 Initialisation des données de test...');
             initializeTestData();
             
             // Afficher les graphiques instantanément
@@ -4516,21 +4569,31 @@
         function initializeUserProfile() {
             console.log('=== INITIALISATION PROFIL DASHBOARD ===');
             
+            // Vérifier que la base de données est chargée
+            if (typeof window.userDatabase === 'undefined') {
+                console.log('❌ Base de données non chargée, report de l\'initialisation du profil');
+                return;
+            }
+            
             // Récupérer l'utilisateur actuel depuis la base de données
             const currentUser = window.userDatabase.getCurrentUser();
             
             if (currentUser) {
-                console.log('Utilisateur actuel dans le dashboard:', currentUser);
+                console.log('✅ Utilisateur actuel dans le dashboard:', currentUser);
                 
                 const userFullNameElement = document.getElementById('user-fullname');
                 if (userFullNameElement) {
                     userFullNameElement.textContent = currentUser.fullName;
+                    console.log('✅ Nom utilisateur mis à jour dans la sidebar:', currentUser.fullName);
                 }
                 
                 // Sauvegarder le nom pour compatibilité
                 localStorage.setItem('userFullName', currentUser.fullName);
+                
+                // Mettre à jour toutes les informations utilisateur
+                updateAllUserInfo(currentUser);
             } else {
-                console.log('Aucun utilisateur connecté dans le dashboard');
+                console.log('❌ Aucun utilisateur connecté dans le dashboard');
                 
                 const userFullNameElement = document.getElementById('user-fullname');
                 if (userFullNameElement) {
@@ -4826,17 +4889,189 @@
             const savedTheme = localStorage.getItem('talentscope_theme') || 'light';
             const body = document.body;
             
+            console.log('🎨 Thème sauvegardé:', savedTheme);
+            
             if (savedTheme === 'dark') {
                 body.setAttribute('data-theme', 'dark');
-                console.log('Thème sombre chargé');
+                console.log('✅ Thème sombre chargé - data-theme="dark"');
             } else {
                 body.removeAttribute('data-theme');
-                console.log('Thème clair chargé');
+                console.log('✅ Thème clair chargé - data-theme supprimé');
             }
             
             // Mettre à jour les boutons de thème dans la configuration
             updateThemeButtons(savedTheme);
+            
+            // Vérification finale
+            setTimeout(() => {
+                const currentTheme = body.getAttribute('data-theme') || 'light';
+                console.log('🔍 Thème final vérifié:', currentTheme);
+            }, 100);
         }
+
+        // Fonction de test pour vérifier le thème
+        function testTheme() {
+            console.log('🧪 TEST DU THÈME');
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme') || 'light';
+            const savedTheme = localStorage.getItem('talentscope_theme') || 'light';
+            const themeButtons = document.querySelectorAll('.theme-option');
+            
+            console.log('📊 État actuel:');
+            console.log('  - Thème du body:', currentTheme);
+            console.log('  - Thème sauvegardé:', savedTheme);
+            console.log('  - Nombre de boutons:', themeButtons.length);
+            
+            themeButtons.forEach((button, index) => {
+                const theme = button.getAttribute('data-theme');
+                const isActive = button.classList.contains('active');
+                console.log(`  - Bouton ${index + 1} (${theme}): ${isActive ? 'ACTIF' : 'INACTIF'}`);
+            });
+        }
+
+        // Fonction de test pour vérifier la navigation et le profil
+        function testNavigation() {
+            console.log('🧪 TEST DE LA NAVIGATION ET DU PROFIL');
+            
+            // Vérifier l'état de connexion
+            const isLoggedIn = localStorage.getItem('isLoggedIn') || sessionStorage.getItem('isLoggedIn');
+            const userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
+            console.log('📊 État de connexion:');
+            console.log('  - Connecté:', isLoggedIn);
+            console.log('  - Email:', userEmail);
+            
+            // Vérifier la base de données
+            console.log('📊 Base de données:');
+            console.log('  - userDatabase chargée:', typeof window.userDatabase !== 'undefined');
+            if (window.userDatabase) {
+                const currentUser = window.userDatabase.getCurrentUser();
+                console.log('  - Utilisateur actuel:', currentUser);
+            }
+            
+            // Vérifier les éléments de navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            console.log('📊 Navigation:');
+            console.log('  - Nombre d\'éléments de navigation:', navItems.length);
+            navItems.forEach((item, index) => {
+                const onclick = item.getAttribute('onclick');
+                const isActive = item.classList.contains('active');
+                console.log(`  - Item ${index + 1}: ${onclick} (${isActive ? 'ACTIF' : 'INACTIF'})`);
+            });
+            
+            // Vérifier les sections
+            const sections = document.querySelectorAll('.content-section');
+            console.log('📊 Sections:');
+            sections.forEach((section, index) => {
+                const id = section.id;
+                const isVisible = section.style.display !== 'none';
+                console.log(`  - Section ${index + 1}: ${id} (${isVisible ? 'VISIBLE' : 'CACHÉE'})`);
+            });
+            
+            // Vérifier le profil
+            const profileName = document.getElementById('user-fullname');
+            const profileAvatar = document.getElementById('sidebar-profile-avatar');
+            console.log('📊 Profil:');
+            console.log('  - Nom affiché:', profileName ? profileName.textContent : 'NON TROUVÉ');
+            console.log('  - Avatar:', profileAvatar ? profileAvatar.innerHTML : 'NON TROUVÉ');
+        }
+
+        // Fonction pour initialiser des données de test
+        function initializeTestData() {
+            console.log('🧪 INITIALISATION DES DONNÉES DE TEST');
+            
+            // Créer des données de test réalistes
+            const testStats = {
+                totalAnalyses: 15,
+                totalCVs: 47,
+                averageScore: 82.3,
+                successRate: 87.5,
+                weekAnalyses: 3,
+                weekCVs: 8,
+                weekScoreChange: 2.1,
+                weekSuccessChange: 1.8
+            };
+            
+            // Sauvegarder dans localStorage
+            localStorage.setItem('dashboardStats', JSON.stringify(testStats));
+            
+            // Créer un historique de test
+            const testHistory = [
+                { id: 1, name: 'Analyse CVs Développeurs', totalCVs: 5, averageScore: 85.2, date: new Date().toISOString() },
+                { id: 2, name: 'Analyse CVs Designers', totalCVs: 3, averageScore: 78.9, date: new Date().toISOString() },
+                { id: 3, name: 'Analyse CVs Managers', totalCVs: 4, averageScore: 91.1, date: new Date().toISOString() }
+            ];
+            
+            localStorage.setItem('analysisHistory', JSON.stringify(testHistory));
+            
+            console.log('✅ Données de test initialisées:', testStats);
+            
+            // Forcer la mise à jour immédiate
+            updateRealMetrics();
+        }
+
+        // Fonction de test rapide pour la navigation
+        function testNav() {
+            console.log('🧪 TEST RAPIDE DE LA NAVIGATION');
+            console.log('🔄 Test de showSection("config")...');
+            showSection('config');
+            setTimeout(() => {
+                console.log('🔄 Test de showSection("dashboard")...');
+                showSection('dashboard');
+            }, 1000);
+        }
+
+        // Fonction de test complète de l'application
+        function testApp() {
+            console.log('🧪 === TEST COMPLET DE L\'APPLICATION ===');
+            
+            // Test 1: Vérifier la navigation
+            console.log('1️⃣ Test de la navigation...');
+            const navItems = document.querySelectorAll('.nav-item');
+            console.log('   - Éléments de navigation trouvés:', navItems.length);
+            
+            // Test 2: Vérifier les sections
+            console.log('2️⃣ Test des sections...');
+            const sections = document.querySelectorAll('.content-section');
+            console.log('   - Sections trouvées:', sections.length);
+            sections.forEach(section => {
+                console.log('   - Section:', section.id, 'Visible:', section.style.display !== 'none');
+            });
+            
+            // Test 3: Vérifier les métriques
+            console.log('3️⃣ Test des métriques...');
+            const metrics = ['analyses-count', 'cvs-count', 'average-score', 'success-rate'];
+            metrics.forEach(id => {
+                const element = document.getElementById(id);
+                console.log(`   - ${id}:`, element ? element.textContent : 'NON TROUVÉ');
+            });
+            
+            // Test 4: Vérifier les données
+            console.log('4️⃣ Test des données...');
+            const stats = JSON.parse(localStorage.getItem('dashboardStats') || '{}');
+            const history = JSON.parse(localStorage.getItem('analysisHistory') || '[]');
+            console.log('   - Stats sauvegardées:', Object.keys(stats).length > 0);
+            console.log('   - Historique sauvegardé:', history.length > 0);
+            
+            // Test 5: Test de navigation
+            console.log('5️⃣ Test de navigation...');
+            console.log('   - Test showSection("config")...');
+            const result = showSection('config');
+            console.log('   - Résultat:', result ? 'SUCCÈS' : 'ÉCHEC');
+            
+            setTimeout(() => {
+                console.log('   - Retour au dashboard...');
+                showSection('dashboard');
+            }, 1000);
+            
+            console.log('✅ === TEST COMPLET TERMINÉ ===');
+        }
+
+        // Exposer les fonctions de test globalement
+        window.testTheme = testTheme;
+        window.testNavigation = testNavigation;
+        window.testNav = testNav;
+        window.initializeTestData = initializeTestData;
+        window.testApp = testApp;
 
         // Fonction pour définir le thème
         function setTheme(theme) {
@@ -4850,15 +5085,21 @@
             if (theme === 'dark') {
                 body.setAttribute('data-theme', 'dark');
                 localStorage.setItem('talentscope_theme', 'dark');
-                console.log('Thème sombre activé');
+                console.log('✅ Thème sombre activé - data-theme="dark"');
             } else {
                 body.removeAttribute('data-theme');
                 localStorage.setItem('talentscope_theme', 'light');
-                console.log('Thème clair activé');
+                console.log('✅ Thème clair activé - data-theme supprimé');
             }
             
             // Mettre à jour les boutons
             updateThemeButtons(theme);
+            
+            // Vérifier que le thème a été appliqué
+            setTimeout(() => {
+                const currentTheme = body.getAttribute('data-theme') || 'light';
+                console.log('🔍 Thème actuel vérifié:', currentTheme);
+            }, 100);
             
             // Retirer l'animation après la transition
             setTimeout(() => {
@@ -4871,13 +5112,20 @@
 
         // Fonction pour mettre à jour les boutons de thème
         function updateThemeButtons(activeTheme) {
+            console.log('🔄 Mise à jour des boutons de thème pour:', activeTheme);
             const themeButtons = document.querySelectorAll('.theme-option');
-            themeButtons.forEach(button => {
+            console.log('📊 Nombre de boutons trouvés:', themeButtons.length);
+            
+            themeButtons.forEach((button, index) => {
                 const theme = button.getAttribute('data-theme');
+                console.log(`🔘 Bouton ${index + 1}: data-theme="${theme}"`);
+                
                 if (theme === activeTheme) {
                     button.classList.add('active');
+                    console.log(`✅ Bouton "${theme}" activé`);
                 } else {
                     button.classList.remove('active');
+                    console.log(`❌ Bouton "${theme}" désactivé`);
                 }
             });
         }
@@ -5001,8 +5249,21 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeApp();
+        // Initialisation consolidée dans le premier DOMContentLoaded
+        function initializeApp() {
+            console.log('🚀 Initialisation de l\'application...');
+            
+            // Attendre que la base de données soit chargée
+            if (typeof window.userDatabase === 'undefined') {
+                console.log('⏳ Attente du chargement de la base de données...');
+                setTimeout(() => {
+                    initializeApp();
+                }, 100);
+                return;
+            }
+            
+            console.log('✅ Base de données chargée, initialisation...');
+            
             initializeUserProfile();
             updateUserInfo();
             loadUserProfile();

@@ -301,3 +301,5 @@ Le projet s'inscrit dans une volonté de modernisation de l'administration publi
 Les chapitres suivants détailleront l'analyse technique approfondie, la conception de la solution, l'implémentation et les résultats obtenus, démontrant ainsi la réussite de cette initiative d'innovation technologique au service de l'administration publique.
 
 
+
+
