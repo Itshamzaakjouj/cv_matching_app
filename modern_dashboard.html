@@ -9,6 +9,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
     <link rel="stylesheet" href="themes.css">
     <link rel="stylesheet" href="professional-icons.css">
+    
+    <!-- SCRIPT DE NAVIGATION IMMÉDIAT -->
+    <script>
+        // Fonction de navigation disponible immédiatement
+        window.showSection = function(sectionName) {
+            console.log('🔄 Navigation vers:', sectionName);
+            
+            // Cacher toutes les sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Afficher la section demandée
+            const targetSection = document.getElementById(sectionName + '-section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                console.log('✅ Section affichée:', sectionName);
+            } else {
+                console.log('❌ Section non trouvée:', sectionName);
+            }
+            
+            // Mettre à jour la navigation active
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const activeItem = document.querySelector(`[onclick*="${sectionName}"]`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+        };
+        
+        console.log('✅ Fonction showSection chargée dans le HEAD');
+    </script>
     <script src="user_database.js"></script>
     <script src="direct-translation.js"></script>
     <script src="icon-replacer.js"></script>
@@ -2796,86 +2831,37 @@
     </div>
 
     <script>
-        function showSection(sectionName) {
-            try {
-                console.log('🔄 === CHANGEMENT DE SECTION ===');
-                console.log('🎯 Section demandée:', sectionName);
-                
-                // Hide all sections
-                const sections = document.querySelectorAll('.content-section');
-                console.log('📊 Sections trouvées:', sections.length);
-                
-                sections.forEach(section => {
-                    section.style.display = 'none';
-                    console.log('❌ Section cachée:', section.id);
-                });
+        // FONCTION DE NAVIGATION - CHARGEMENT IMMÉDIAT
+        window.showSection = function(sectionName) {
+            console.log('🔄 Navigation vers:', sectionName);
+            
+            // Cacher toutes les sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
 
-                // Show selected section
-                const targetSection = document.getElementById(sectionName + '-section');
-                if (targetSection) {
-                    targetSection.style.display = 'block';
-                    console.log('✅ Section affichée:', targetSection.id);
-                } else {
-                    console.log('❌ Section non trouvée:', sectionName + '-section');
-                    console.log('🔍 Sections disponibles:');
-                    sections.forEach(section => {
-                        console.log('  -', section.id);
-                    });
-                    return false;
-                }
-
-                // Update navigation
-                const navItems = document.querySelectorAll('.nav-item');
-                console.log('📊 Éléments de navigation trouvés:', navItems.length);
-                
-                navItems.forEach(item => {
-                    item.classList.remove('active');
-                });
-
-                // Find and activate the corresponding nav item
-                const activeNavItem = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
-                if (activeNavItem) {
-                    activeNavItem.classList.add('active');
-                    console.log('✅ Navigation activée pour:', sectionName);
-                } else {
-                    console.log('❌ Élément de navigation non trouvé pour:', sectionName);
-                }
-                
-                // Charger les données spécifiques à chaque section
-                if (sectionName === 'processed') {
-                    console.log('📁 Chargement de l\'historique des CVs...');
-                    if (typeof loadHistoryFromStorage === 'function') {
-                        loadHistoryFromStorage();
-                    }
-                    if (typeof updateHistoryTable === 'function') {
-                        updateHistoryTable();
-                    }
-                } else if (sectionName === 'dashboard') {
-                    console.log('📊 Mise à jour du dashboard...');
-                    if (typeof updateRealMetrics === 'function') {
-                        updateRealMetrics();
-                    }
-                    if (typeof forceDashboardUpdate === 'function') {
-                        forceDashboardUpdate();
-                    }
-                } else if (sectionName === 'config') {
-                    console.log('⚙️ Chargement de la configuration...');
-                    if (typeof synchronizeConfigSelectors === 'function') {
-                        synchronizeConfigSelectors();
-                    }
-                }
-                
-                console.log('✅ === CHANGEMENT DE SECTION TERMINÉ ===');
-                return true;
-                
-            } catch (error) {
-                console.error('❌ Erreur dans showSection:', error);
-                return false;
+            // Afficher la section demandée
+            const targetSection = document.getElementById(sectionName + '-section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                console.log('✅ Section affichée:', sectionName);
+            } else {
+                console.log('❌ Section non trouvée:', sectionName);
             }
-        }
-
-        // Exposer la fonction globalement
-        window.showSection = showSection;
+            
+            // Mettre à jour la navigation active
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const activeItem = document.querySelector(`[onclick*="${sectionName}"]`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+        };
+        
+        console.log('✅ Fonction showSection chargée immédiatement');
 
         // Fonction pour gérer le changement de thème depuis la configuration
         function handleThemeChange() {
@@ -3533,7 +3519,7 @@
                 window.userDatabase.logout();
                 
                 alert('Compte supprimé avec succès. Vous allez être redirigé vers la page de connexion.');
-                window.location.href = 'auth_interface.html';
+                window.location.href = '/auth';
             }
         }
 
@@ -4005,7 +3991,7 @@
 
         function logout() {
             if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-                window.location.href = 'auth_interface.html';
+                window.location.href = '/auth';
             }
             document.getElementById('profileDropdown').classList.remove('show');
         }
@@ -4484,7 +4470,7 @@
                 
                 // Rediriger vers la page d'authentification
                 setTimeout(() => {
-                    window.location.href = 'auth_interface.html';
+                    window.location.href = '/auth';
                 }, 2000);
             }
         }
@@ -5066,12 +5052,27 @@
             console.log('✅ === TEST COMPLET TERMINÉ ===');
         }
 
+        // Fonction de test rapide pour vérifier showSection
+        function testShowSection() {
+            console.log('🧪 TEST RAPIDE DE showSection');
+            console.log('showSection est définie:', typeof showSection === 'function');
+            console.log('window.showSection est définie:', typeof window.showSection === 'function');
+            
+            if (typeof showSection === 'function') {
+                console.log('✅ Test de showSection("config")...');
+                showSection('config');
+            } else {
+                console.error('❌ showSection n\'est pas définie !');
+            }
+        }
+
         // Exposer les fonctions de test globalement
         window.testTheme = testTheme;
         window.testNavigation = testNavigation;
         window.testNav = testNav;
         window.initializeTestData = initializeTestData;
         window.testApp = testApp;
+        window.testShowSection = testShowSection;
 
         // Fonction pour définir le thème
         function setTheme(theme) {
@@ -5257,7 +5258,7 @@
             if (typeof window.userDatabase === 'undefined') {
                 console.log('⏳ Attente du chargement de la base de données...');
                 setTimeout(() => {
-                    initializeApp();
+            initializeApp();
                 }, 100);
                 return;
             }

@@ -21,6 +21,8 @@ class TalentScopeHandler(http.server.SimpleHTTPRequestHandler):
         routes = {
             '/': 'auth_interface.html',
             '/auth': 'auth_interface.html',
+            '/acceuil': 'auth_interface.html',  # Route manquante
+            '/home': 'auth_interface.html',     # Alias
             '/dashboard': 'modern_dashboard.html',
             '/analysis': 'analysis_interface.html',
             '/analysis/step1': 'analysis_interface.html',
@@ -29,7 +31,9 @@ class TalentScopeHandler(http.server.SimpleHTTPRequestHandler):
             '/analysis/step4': 'analysis_interface.html',
             '/profile': 'profile_management.html',
             '/settings': 'settings.html',
-            '/processed': 'treated_cvs.html'
+            '/processed': 'treated_cvs.html',
+            '/ministry': 'ministry_page.html',  # Page du ministère
+            '/config': 'modern_dashboard.html'  # Configuration via dashboard
         }
         
         # Si c'est une route connue, servir le fichier correspondant
@@ -37,7 +41,16 @@ class TalentScopeHandler(http.server.SimpleHTTPRequestHandler):
             self.path = routes[path]
             print(f"🌐 Route: {path} -> {routes[path]}")
         else:
-            print(f"🌐 Fichier direct: {path}")
+            # Vérifier si c'est un fichier existant
+            if os.path.exists(path[1:]) and not path.startswith('/api/'):
+                print(f"🌐 Fichier direct: {path}")
+            else:
+                # Rediriger vers la page d'accueil pour les routes inconnues
+                print(f"❌ Route inconnue: {path} -> Redirection vers /auth")
+                self.send_response(302)
+                self.send_header('Location', '/auth')
+                self.end_headers()
+                return
         
         # Servir le fichier
         return http.server.SimpleHTTPRequestHandler.do_GET(self)

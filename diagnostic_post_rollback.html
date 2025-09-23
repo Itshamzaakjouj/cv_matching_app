@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentScope - Diagnostic Post-Rollback</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .problem-box {
+            background: #fff5f5;
+            border: 2px solid #feb2b2;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .solution-box {
+            background: #f0fff4;
+            border: 2px solid #9ae6b4;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .warning-box {
+            background: #fffbeb;
+            border: 2px solid #fbd38d;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .command-box {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            position: relative;
+        }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        .action-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .action-btn:hover {
+            background: #764ba2;
+        }
+        .critical {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+        .success {
+            color: #38a169;
+            font-weight: bold;
+        }
+        .warning {
+            color: #d69e2e;
+            font-weight: bold;
+        }
+        ul {
+            line-height: 1.8;
+        }
+        .checklist {
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .checklist input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🔧 TalentScope - Diagnostic Post-Rollback</div>
+            <div>Résolution des problèmes après retour Git</div>
+        </div>
+
+        <div class="problem-box">
+            <h2>🚨 Problème Identifié</h2>
+            <p><strong>Situation :</strong> Après un <code>git checkout</code> vers une version qui marchait avant, l'authentification fonctionne mais tous les boutons de la page d'accueil ne répondent plus.</p>
+            
+            <h3>Causes Probables :</h3>
+            <ul>
+                <li><span class="critical">Cache navigateur</span> - Les anciens fichiers JS/CSS sont en cache</li>
+                <li><span class="warning">Fichiers temporaires</span> - Des fichiers .pyc ou __pycache__ corrompus</li>
+                <li><span class="warning">Session utilisateur</span> - Session corrompue ou incohérente</li>
+                <li><span class="critical">Serveur non redémarré</span> - L'ancien code est toujours en mémoire</li>
+            </ul>
+        </div>
+
+        <div class="solution-box">
+            <h2>✅ Plan de Résolution Étape par Étape</h2>
+            
+            <div class="step">
+                <h3>🔄 Étape 1 : Nettoyage Serveur (CRITIQUE) ✅ FAIT</h3>
+                <p>Redémarrer complètement le serveur Python :</p>
+                
+                <div class="command-box">
+# 1. Arrêter le serveur actuel ✅
+taskkill /F /PID 10904
+
+# 2. Nettoyer les fichiers Python temporaires ✅
+Remove-Item -Recurse -Force __pycache__ -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force *.pyc -ErrorAction SilentlyContinue
+
+# 3. Redémarrer le serveur ✅
+python simple_server.py
+# Nouveau PID: 12692
+                </div>
+                
+                <div class="checklist">
+                    <label><input type="checkbox" checked> Serveur arrêté</label><br>
+                    <label><input type="checkbox" checked> Fichiers .pyc supprimés</label><br>
+                    <label><input type="checkbox" checked> Serveur redémarré</label><br>
+                    <label><input type="checkbox" checked> Port 8080 accessible</label>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>🧹 Étape 2 : Nettoyage Cache Navigateur (CRITIQUE)</h3>
+                <p>Vider complètement le cache du navigateur :</p>
+                
+                <div class="warning-box">
+                    <strong>Méthodes de nettoyage :</strong>
+                    <ul>
+                        <li><strong>Chrome :</strong> Ctrl+Shift+Delete → Tout sélectionner → Effacer</li>
+                        <li><strong>Firefox :</strong> Ctrl+Shift+Delete → Tout cocher → OK</li>
+                        <li><strong>Edge :</strong> Ctrl+Shift+Delete → Choisir les éléments → Effacer</li>
+                    </ul>
+                </div>
+                
+                <div class="checklist">
+                    <label><input type="checkbox"> Cache vidé</label><br>
+                    <label><input type="checkbox"> Cookies supprimés</label><br>
+                    <label><input type="checkbox"> Données de site effacées</label><br>
+                    <label><input type="checkbox"> Navigateur redémarré</label>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>🔍 Étape 3 : Vérification des Fichiers</h3>
+                <p>S'assurer que tous les fichiers sont bien présents :</p>
+                
+                <div class="command-box">
+# Vérifier les fichiers critiques
+ls -la modern_dashboard.html
+ls -la simple_server.py
+ls -la static/
+ls -la templates/
+
+# Vérifier l'état git
+git status
+git log --oneline -5
+                </div>
+                
+                <div class="checklist">
+                    <label><input type="checkbox"> modern_dashboard.html présent</label><br>
+                    <label><input type="checkbox"> Fichiers static/ OK</label><br>
+                    <label><input type="checkbox"> Git status propre</label><br>
+                    <label><input type="checkbox"> Bonne branche active</label>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>🧪 Étape 4 : Test Navigateur Propre</h3>
+                <p>Tester avec un navigateur "propre" :</p>
+                
+                <div class="command-box">
+# Ouvrir en mode incognito/privé
+chrome --incognito http://localhost:8080
+firefox --private-window http://localhost:8080
+
+# OU utiliser un autre navigateur
+# Edge si vous utilisez Chrome, Chrome si vous utilisez Firefox
+                </div>
+                
+                <div class="checklist">
+                    <label><input type="checkbox"> Mode incognito testé</label><br>
+                    <label><input type="checkbox"> Autre navigateur testé</label><br>
+                    <label><input type="checkbox"> Page se charge</label><br>
+                    <label><input type="checkbox"> Connexion fonctionne</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h2>⚡ Solution d'Urgence - Hard Reset</h2>
+            <p>Si les étapes précédentes ne fonctionnent pas, voici le "hard reset" :</p>
+            
+            <div class="command-box">
+# 1. TOUT ARRÊTER
+taskkill /F /IM python.exe
+taskkill /F /IM chrome.exe
+taskkill /F /IM firefox.exe
+
+# 2. NETTOYER COMPLÈTEMENT
+rm -rf __pycache__/
+rm -rf *.pyc
+rm -rf .pytest_cache/
+rm -rf static/__pycache__/
+
+# 3. VÉRIFIER GIT
+git clean -fd  # ATTENTION: supprime les fichiers non trackés
+git checkout HEAD -- .  # Restaure tous les fichiers
+
+# 4. REDÉMARRER TOUT
+python simple_server.py &
+sleep 5
+chrome --new-window --incognito http://localhost:8080/auth
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>🔧 Étape 5 : Debug JavaScript en Direct</h3>
+            <p>Une fois connecté, ouvrir la console et taper :</p>
+            
+            <div class="command-box">
+// Dans la console du navigateur (F12)
+console.clear();
+console.log("=== DEBUG TALENTSCOPE ===");
+
+// Vérifier les fonctions
+console.log("showSection:", typeof showSection);
+console.log("navigateToSection:", typeof navigateToSection);
+
+// Lister tous les boutons
+const buttons = document.querySelectorAll('button, [onclick]');
+console.log("Boutons trouvés:", buttons.length);
+buttons.forEach((btn, i) => {
+    console.log(`${i}: ${btn.tagName} - onclick: ${btn.getAttribute('onclick')}`);
+});
+
+// Tester un bouton manuellement
+// Remplacer 'home' par la vraie section
+if (typeof navigateToSection === 'function') {
+    navigateToSection('home');
+    console.log("✅ Navigation test OK");
+} else {
+    console.log("❌ navigateToSection non définie");
+}
+            </div>
+            
+            <button class="action-btn" onclick="copyDebugScript()">📋 Copier le Script Debug</button>
+        </div>
+
+        <div class="solution-box">
+            <h2>🎯 Checklist Finale</h2>
+            <div class="checklist">
+                <label><input type="checkbox" checked> Serveur Python redémarré</label><br>
+                <label><input type="checkbox"> Cache navigateur vidé</label><br>
+                <label><input type="checkbox"> Test en mode incognito</label><br>
+                <label><input type="checkbox"> Console JavaScript vérifiée</label><br>
+                <label><input type="checkbox"> Fonctions de navigation présentes</label><br>
+                <label><input type="checkbox"> Boutons onclick fonctionnels</label><br>
+                <label><input type="checkbox"> Navigation entre sections OK</label>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h2>📞 Si Rien Ne Marche</h2>
+            <p>En dernier recours, voici les commandes d'urgence :</p>
+            
+            <div class="command-box">
+# Créer une sauvegarde d'urgence
+git stash
+git stash push -m "backup avant diagnostic"
+
+# Revenir à un commit stable connu
+git log --oneline -10
+git checkout [HASH_DU_COMMIT_QUI_MARCHAIT]
+
+# Forcer un refresh complet
+rm -rf node_modules/ 2>/dev/null || true
+pip cache purge
+python -m py_compile *.py
+            </div>
+        </div>
+
+        <div id="debug-output" style="margin-top: 20px; padding: 20px; background: #2d3748; color: #e2e8f0; border-radius: 8px; font-family: monospace; display: none;">
+            <h3>🔍 Sortie Debug</h3>
+            <div id="debug-content"></div>
+        </div>
+    </div>
+
+    <script>
+        function copyDebugScript() {
+            const script = `console.clear();
+console.log("=== DEBUG TALENTSCOPE ===");
+console.log("showSection:", typeof showSection);
+console.log("navigateToSection:", typeof navigateToSection);
+
+const buttons = document.querySelectorAll('button, [onclick]');
+console.log("Boutons trouvés:", buttons.length);
+buttons.forEach((btn, i) => {
+    console.log(\`\${i}: \${btn.tagName} - onclick: \${btn.getAttribute('onclick')}\`);
+});
+
+if (typeof navigateToSection === 'function') {
+    navigateToSection('home');
+    console.log("✅ Navigation test OK");
+} else {
+    console.log("❌ navigateToSection non définie");
+}`;
+
+            navigator.clipboard.writeText(script).then(() => {
+                alert('Script copié ! Collez-le dans la console du navigateur (F12)');
+            });
+        }
+
+        // Auto-check certains éléments après 2 secondes
+        setTimeout(() => {
+            const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
+            // Simuler quelques vérifications automatiques
+            if (checkboxes.length > 0) {
+                document.getElementById('debug-output').style.display = 'block';
+                document.getElementById('debug-content').innerHTML = 
+                    '<div style="color: #4299e1;">[INFO] Page de diagnostic chargée</div>' +
+                    '<div style="color: #ed8936;">[WARN] Vérifications manuelles requises</div>' +
+                    '<div style="color: #48bb78;">[SUCCESS] Guide de résolution prêt</div>';
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
